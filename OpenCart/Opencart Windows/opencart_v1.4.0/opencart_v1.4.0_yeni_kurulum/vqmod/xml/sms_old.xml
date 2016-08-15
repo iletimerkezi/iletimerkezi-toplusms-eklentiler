@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+        <id>Deleting old sms ext.</id>
+        <version>1.0.0</version>
+        <vqmver>1.0.9</vqmver>
+        <author>ahk</author>
+        
+            <file name="catalog\controller\account\create.php">
+                <operation error="skip">
+                    <search position="after">
+                        <![CDATA[
+                        $this->customer->login($this->request->post['email'], $this->request->post['password']);
+                        ]]>
+                    </search>
+                    <add><![CDATA[
+                        /*
+                        ]]></add>
+                </operation>
+                <operation error="skip">
+                    <search position="after">
+                        <![CDATA[
+                        $sms->send($message_info['iletimerkezi_username'],$message_info['iletimerkezi_password'],$message,$admin_number,$message_info['iletimerkezi_originator']);
+                        ]]>
+                    </search>
+                </operation>
+            </file>
+
+            <file name="catalog/controller/checkout/success.php">
+                <operation>
+                    
+                    <search position="before"><![CDATA[
+                          
+
+                            //Send sms admin
+                           
+
+                            ]]></search>
+                            
+                            <add><![CDATA[
+                            /*
+
+                            ]]></add>
+                            
+                    </operation>
+            </file>
+
+</modification>

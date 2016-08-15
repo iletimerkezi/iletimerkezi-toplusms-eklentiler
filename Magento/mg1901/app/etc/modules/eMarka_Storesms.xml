@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Emarka_Storesms>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Emarka_Storesms>
+    </modules>
+</config>

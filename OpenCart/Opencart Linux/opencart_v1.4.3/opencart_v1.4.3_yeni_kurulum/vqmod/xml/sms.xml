@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+        <id>Adding menu sms gönder</id>
+        <version>1.0.0</version>
+        <vqmver>1.0.9</vqmver>
+        <author>ahk</author>
+        
+        <file name="catalog/controller/account/create.php">
+                <operation>
+                
+                        <search position="after"><![CDATA[
+                        $this->customer->login($this->request->post['email'], $this->request->post['password']);
+                        ]]></search>
+                        
+                        <add><![CDATA[
+                        $this->load->model('setting/setting');
+                        $message_info = $this->model_setting_setting->getSetting('iletimerkezisms');
+
+                        $message = str_replace(array('%firstname%','%lastname%','%telephone%','%email%','%password%'),array($this->request->post['firstname'],$this->request->post['lastname'],$this->request->post['telephone'],$this->request->post['email'], $this->request->post['password']),$message_info['iletimerkezi_sms_password_text']);
+
+                        $this->load->library('sms');
+
+                        $sms = new Sms();
+                        //Send sms user         
+                        $sms->send($message_info['iletimerkezi_username'],$message_info['iletimerkezi_password'],$message,$this->request->post['telephone'],$message_info['iletimerkezi_originator']);
+                        
+                        //Send sms admin
+                        $message = str_replace(array('%firstname%','%lastname%','%telephone%','%email%','%password%'),array($this->request->post['firstname'],$this->request->post['lastname'],$this->request->post['telephone'],$this->request->post['email'], $this->request->post['password']),$message_info['iletimerkezi_member_login_text']);
+                        
+                        $admin_numbers = explode(',',$message_info['iletimerkezi_order_notify_gsm']);
+                        foreach ($admin_numbers as $admin_number) {
+                        $sms->send($message_info['iletimerkezi_username'],$message_info['iletimerkezi_password'],$message,$admin_number,$message_info['iletimerkezi_originator']);
+                        }
+
+                        ]]></add>
+                        
+                </operation>
+        </file> 
+        <file name="catalog/controller/checkout/success.php">
+                <operation>
+                
+                        <search position="after"><![CDATA[
+                        $this->cart->clear();
+                        ]]></search>
+                        
+                        <add><![CDATA[
+                        $this->load->model('setting/setting');
+                        $message_info = $this->model_setting_setting->getSetting('iletimerkezisms');
+
+
+
+                        $this->load->library('sms');
+                        $sms = new Sms();
+
+                        $this->load->model('account/order');
+                        $account_order = $this->model_account_order->getOrderProducts($this->session->data['order_id']);
+
+                        //Send sms admin            
+                        $product_name     = "";
+                        $product_model    = "";
+                        $product_quantity = "";                                                                    
+                        foreach ($account_order as $key => $value) {
+                            if ($key==0)
+                                $virgul = "";
+                            else
+                                $virgul = ",";
+                            $product_name     .= $virgul.$value['name'];
+                            $product_model    .= $virgul.$value['model'];
+                            $product_quantity .= $virgul.$value['quantity'];      
+
+                        }
+
+                        if(isset($message_info['iletimerkezi_order_notify_text'])) {
+                            $message = str_replace(array('%orderid%','%productname%','%productmodel%','%productquantity%'),array($this->session->data['order_id'],$product_name,$product_model,$product_quantity),$message_info['iletimerkezi_order_notify_text']);
+                            
+                            $admin_numbers = explode(',',$message_info['iletimerkezi_order_notify_gsm']);
+                            foreach ($admin_numbers as $admin_number) {
+                                $sms->send($message_info['iletimerkezi_username'],$message_info['iletimerkezi_password'],$message,$admin_number,$message_info['iletimerkezi_originator']);  
+                            }
+                        }
+                        
+                        //Send sms catalog
+                        if(isset($message_info['iletimerkezi_order_customer_notify_text'])) {
+                            $this->load->model('account/customer');
+                            if ($this->customer->isLogged()) {
+                            $customer_info = $this->model_account_customer->getCustomer($this->session->data['customer_id']);
+                            $telephone = $customer_info['telephone'];
+                            $order_id = $this->session->data['order_id'];
+                        }else{
+                            $telephone = $this->session->data['guest']['telephone'];
+                            $order_id = $this->session->data['order_id'];
+                        }
+                            $message       = str_replace(array('%orderid%','%productname%','%productmodel%','%productquantity%'),array($order_id,$product_name,$product_model,$product_quantity),$message_info['iletimerkezi_order_customer_notify_text']);
+                            $sms->send($message_info['iletimerkezi_username'],$message_info['iletimerkezi_password'],$message,$telephone,$message_info['iletimerkezi_originator']);
+                        }
+
+                        ]]></add>
+                        
+                </operation>
+        </file>
+        <file name="admin/controller/sale/order.php">
+                <operation>
+                
+                        <search position="after"><![CDATA[
+                        $url .= '&order=' . $this->request->get['order'];
+                        ]]></search>
+                        
+                        <add><![CDATA[
+                            $this->load->model('setting/setting');
+                            $this->load->model('localisation/order_status');
+
+
+                            $order_info = $this->model_sale_order->getOrder($this->request->get['order_id']);       
+                            $order_status = $this->model_localisation_order_status->getOrderStatus($this->request->post['order_status_id']);
+                            $message_info = $this->model_setting_setting->getSetting('iletimerkezisms');
+
+                            $message = $message_info['iletimerkezi_shipping_text_'.$this->request->post['order_status_id']];
+                            $message = str_replace(array('%firstname%','%lastname%','%orderid%','%status%','%comment%'),
+                                                       array($order_info['firstname'],$order_info['lastname'],$this->request->get['order_id'],$order_status['name'],$this->request->post['comment']),
+                                                       $message);
+
+                            $this->load->library('sms');
+                            $sms = new Sms();
+                            
+                            //Send sms user
+                            $sms->send($message_info['iletimerkezi_username'],
+                                           $message_info['iletimerkezi_password'],
+                                           $message,
+                                           $order_info['telephone'],
+                                           $message_info['iletimerkezi_originator']);
+
+                        ]]></add>
+                        
+                </operation>
+        </file>
+        <file name="admin/controller/common/header.php">
+                <operation>
+                
+                        <search position="after"><![CDATA[
+                        $this->data['text_setting'] = $this->language->get('text_setting');
+                        ]]></search>
+                        
+                        <add><![CDATA[
+                         $this->data['text_sms'] = $this->language->get('text_sms');
+                        ]]></add>
+                        
+                </operation>
+        </file>
+                <file name="admin/controller/common/header.php">
+                <operation>
+                
+                        <search position="after"><![CDATA[
+                        $this->data['contact'] = HTTPS_SERVER . 'index.php?route=sale/contact';
+                        ]]></search>
+                        
+                        <add><![CDATA[
+                        $this->data['sms'] = HTTPS_SERVER . 'index.php?route=sale/sms';
+                        ]]></add>
+                        
+                </operation>
+        </file>
+                <file name="admin/view/template/common/header.tpl">
+                <operation>
+                
+                        <search position="after"><![CDATA[
+                        <li><a href="<?php echo $contact; ?>"><?php echo $text_contact; ?></a></li>
+                        ]]></search>
+                        
+                        <add><![CDATA[
+                         <li><a href="<?php echo $sms; ?>"><?php echo $text_sms; ?></a></li>
+                        ]]></add>
+                        
+                </operation>
+        </file>
+                <file name="admin/language/english/common/header.php">
+                <operation>
+                
+                        <search position="before"><![CDATA[
+                        $_['text_stock_status'];
+                        ]]></search>
+                        
+                        <add><![CDATA[
+                         $_['text_sms']                                            = 'SMS Gönder';
+                        ]]></add>
+                        
+                </operation>
+        </file>
+                <file name="admin/language/turkish/common/header.php">
+                <operation>
+                
+                        <search position="before"><![CDATA[
+                        $_['text_stock_status']
+                        ]]></search>
+                        
+                        <add><![CDATA[
+                         $_['text_sms']                                                 = 'SMS Gönder';
+                        ]]></add>
+                        
+                </operation>
+        </file>
+
+</modification>

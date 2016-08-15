@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+    <modules>
+        <Emarka_Storesms>
+            <version>1.0.0</version>
+        </Emarka_Storesms>
+    </modules>
+
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <storesms before="Mage_Adminhtml">Emarka_Storesms_Adminhtml</storesms>
+                    </modules>
+                </args>
+            </adminhtml>
+            <storesms>
+                <use>admin</use>
+                <args>
+                    <module>Emarka_Storesms</module>
+                    <frontName>storesms</frontName>
+                </args>
+            </storesms>
+        </routers>
+    </admin>
+
+   <adminhtml>
+        <acl>
+            <resources>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <storesms>
+                                            <title>Emarka SMS</title>
+                                            <sort_order>101</sort_order>
+                                        </storesms>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                        <storesms>
+                            <title>Emarka SMS</title>
+                            <children>
+                                <storesms translate="title" module="storesms">
+                                    <title>SMS Raporu</title>
+                                </storesms>
+                                <manual translate="title" module="storesms">
+                                        <title>Toplu SMS Gönderimi</title>
+                                        <sort_order>10</sort_order>
+                                </manual>
+                            </children>
+                        </storesms>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+
+        <menu>
+            <storesms translate="title" module="storesms">
+                <title>Emarka SMS</title>
+                <sort_order>500</sort_order>
+                <children>
+                    <smssummary translate="title" module="storesms">
+                        <title>SMS Raporu</title>
+                        <sort_order>5</sort_order>
+                        <action>adminhtml/storesms/index</action>
+                    </smssummary>
+                    <manual translate="title" module="storesms">
+                        <title>Toplu SMS Gönderimi</title>
+                        <sort_order>10</sort_order>
+                        <action>storesms/adminhtml_storesms/new</action>
+                    </manual>
+                    <settings translate="title" module="storesms">
+                        <title>SMS Ayarları</title>
+                        <sort_order>15</sort_order>
+                        <action>adminhtml/system_config/edit/section/storesms</action>
+                    </settings>
+                </children>
+            </storesms>
+       </menu>
+
+        <layout>
+            <updates>
+                <storesms>
+                    <file>Emarka_Storesms.xml</file>
+                </storesms>
+            </updates>
+        </layout>
+
+        <translate>
+            <modules>
+                <Emarka_Storesms>
+                    <files>
+                        <default>Emarka_Storesms.csv</default>
+                    </files>
+                </Emarka_Storesms>
+            </modules>
+        </translate>
+
+        <events>
+            <admin_system_config_changed_section_storesms>
+                <observers>
+                    <storesms_check_authorization_data>
+                        <class>Emarka_Storesms_Model_Observer</class>
+                        <method>checkAuthorizationData</method>
+                    </storesms_check_authorization_data>
+                </observers>
+            </admin_system_config_changed_section_storesms>
+            <admin_session_user_login_success>
+                <observers>
+                    <storesms_check_limits>
+                        <class>Emarka_Storesms_Model_Observer</class>
+                        <method>checkCreditLimit</method>
+                    </storesms_check_limits>
+                </observers>
+            </admin_session_user_login_success>
+        </events>
+
+
+    </adminhtml>
+
+
+    <global>
+        <models>
+            <storesms>
+                <class>Emarka_Storesms_Model</class>
+                <resourceModel>storesms_mysql4</resourceModel>
+            </storesms>
+             <storesms_resource>
+                <class>Emarka_Storesms_Model_Resource</class>
+                <entities>
+                    <emarka_storesms>
+                        <table>emarka_storesms</table>
+                    </emarka_storesms>
+                </entities>
+            </storesms_resource>
+        </models>
+
+        <helpers>
+            <storesms>
+                <class>Emarka_Storesms_Helper</class>
+            </storesms>
+        </helpers>
+
+        <blocks>
+            <storesms>
+                <class>Emarka_Storesms_Block</class>
+            </storesms>
+        </blocks>
+
+        <events>
+            <sales_order_status_history_save_before>
+                <observers>
+                    <order_new_status>
+                        <class>Emarka_Storesms_Model_Observer</class>
+                        <method>orderStatusHistorySave</method>
+                    </order_new_status>
+                </observers>
+            </sales_order_status_history_save_before>
+            <customer_register_success>
+                <observers>
+                    <hook_new_customer>
+                        <class>Emarka_Storesms_Model_Observer</class>
+                        <method>hookNewCustomer</method>
+                    </hook_new_customer>
+                </observers>
+            </customer_register_success>
+            <checkout_onepage_controller_success_action>
+                <observers>
+                    <hook_new_order>
+                        <class>Emarka_Storesms_Model_Observer</class>
+                        <method>hookNewOrder</method>
+                    </hook_new_order>
+                </observers>
+            </checkout_onepage_controller_success_action>
+        </events>
+
+        <resources>
+ 
+      <!-- Declaring module setup handler -->
+      <!-- [start] -->
+      <storesms_setup>
+        <setup>
+          <module>Emarka_Storesms</module>
+        </setup>
+        <connection>
+          <use>core_setup</use>
+        </connection>
+      </storesms_setup>
+      <!-- [End] -->
+ 
+      <storesms_write>
+        <connection>
+          <use>core_write</use>
+        </connection>
+      </storesms_write>
+ 
+      <storesms_read>
+        <connection>
+          <use>core_read</use>
+        </connection>
+      </storesms_read>
+ 
+    </resources>
+
+
+    </global>
+
+    <default>
+        <storesms>
+            <main_conf>
+                <credit_alert_limit>0</credit_alert_limit>
+            </main_conf>
+        </storesms>
+    </default>
+
+    <crontab>
+        <jobs>
+            <storesms_getreports>
+                <schedule>
+                    <cron_expr>0/1 * * * *</cron_expr>
+                </schedule>
+                <run><model>storesms/cron::getDelieveryReport</model></run>
+            </storesms_getreports>
+        </jobs>
+    </crontab>
+
+
+</config>

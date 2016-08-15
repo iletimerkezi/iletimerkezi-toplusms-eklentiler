@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+    <id>Deleting old sms ext.</id>
+    <version>1.0.0</version>
+   	<vqmver>2.4.1</vqmver>
+    <author>ahk</author>
+
+        <file name="catalog\controller\account\register.php">
+            <operation error="skip">
+                <search position="before">
+                    <![CDATA[
+                    $this->load->model('setting/setting');
+                    ]]>
+                </search>
+                <add><![CDATA[
+                    /*
+                    ]]></add>
+            </operation>
+            <operation error="skip">
+                <search position="after">
+                    <![CDATA[
+                    $sms->send($message_info['iletimerkezi_username'],$message_info['iletimerkezi_password'],$message,$admin_number,$message_info['iletimerkezi_originator']);
+                        }
+                    ]]>
+                </search>
+                <add><![CDATA[
+                    */
+                    ]]>
+                </add>
+    	    </operation>
+        </file>
+        <file name="catalog\controller\checkout\success.php">
+            <operation error="skip">
+                <search position="before">
+                    <![CDATA[
+                    $this->load->model('setting/setting');
+                    ]]>
+                </search>
+                <add><![CDATA[
+                    /*
+                    ]]></add>
+            </operation>
+            <operation error="skip">
+                <search position="after">
+                    <![CDATA[
+                    $sms->send($message_info['iletimerkezi_username'],$message_info['iletimerkezi_password'],$message,$telephone,$message_info['iletimerkezi_originator']);
+                        }
+                    ]]>
+                </search>
+                <add><![CDATA[
+                    */
+                    ]]>
+                </add>
+    	    </operation>
+        </file>
+        <file name="admin\controller\sale\order.php">
+            <operation error="skip">
+                <search position="after">
+                    <![CDATA[
+                    $this->model_sale_order->addOrderHistory($this->request->get['order_id'], $this->request->post);
+                    ]]>
+                </search>
+                <add><![CDATA[
+                    /*
+                    ]]></add>
+            </operation>
+            <operation error="skip">
+                <search position="after">
+                    <![CDATA[
+                    $message_info['iletimerkezi_originator']);
+                    ]]>
+                </search>
+                <add><![CDATA[
+                    */
+                    ]]>
+                </add>
+    	    </operation>
+        </file>
+</modification>

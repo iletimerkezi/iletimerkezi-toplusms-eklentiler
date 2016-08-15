@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+  <tabs>
+      <Emarka translate="label">
+          <label>Emarka</label>
+          <sort_order>1</sort_order>
+      </Emarka>
+  </tabs>
+  <sections>
+    <storesms translate="label" module="storesms">
+      <label><![CDATA[<span class="Emarkaadmin-menu">Emarka SMS</span>]]></label>
+      <tab>Emarka</tab>
+      <frontend_type>text</frontend_type>
+      <sort_order>0</sort_order>
+      <show_in_default>1</show_in_default>
+      <show_in_website>1</show_in_website>
+      <show_in_store>1</show_in_store>
+        <groups>
+            <!-- <branding_header translate="label" module="storesms">
+                <frontend_model>storesms/adminhtml_system_config_fieldset_branding</frontend_model>
+                <sort_order>0</sort_order>
+                <show_in_default>1</show_in_default>
+                <show_in_website>1</show_in_website>
+                <show_in_store>1</show_in_store>
+            </branding_header> -->
+
+            <main_conf translate="label">
+                <label>İletimerkezi - Genel Ayarlar</label>
+                <frontend_type>text</frontend_type>
+                <sort_order>1</sort_order>
+                <show_in_default>1</show_in_default>
+                <show_in_website>1</show_in_website>
+                <show_in_store>1</show_in_store>
+                <expanded>1</expanded>
+                <fields>
+                    <active translate="label">
+                        <label>Aktifleştir - Pasifleştir</label>
+                        <frontend_type>select</frontend_type>
+                        <source_model>adminhtml/system_config_source_yesno</source_model>
+                        <sort_order>1</sort_order>
+                        <show_in_default>1</show_in_default>
+                        <show_in_website>1</show_in_website>
+                        <show_in_store>1</show_in_store>
+                    </active>
+
+                   <apilogin translate="label">
+                        <label>iletimerkezi.com kullanıcı adı:</label>
+                        <frontend_type>text</frontend_type>
+                        <sort_order>2</sort_order>
+                        <show_in_default>1</show_in_default>
+                        <show_in_website>1</show_in_website>
+                        <show_in_store>1</show_in_store>
+                   </apilogin>
+
+                   <apipassword translate="label">
+                        <label>iletimerkezi.com şifreniz:</label>
+                        <frontend_type>obscure</frontend_type>
+                        <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                        <sort_order>3</sort_order>
+                        <show_in_default>1</show_in_default>
+                        <show_in_website>1</show_in_website>
+                        <show_in_store>1</show_in_store>
+                   </apipassword>
+
+                   <storename translate="label">
+                        <label>Yönetici Numarası</label>
+                        <frontend_type>text</frontend_type>
+                        <sort_order>4</sort_order>
+                        <show_in_default>1</show_in_default>
+                        <show_in_website>1</show_in_website>
+                        <show_in_store>1</show_in_store>
+                   </storename>
+
+                   <sender translate="label">
+                        <label>Başlık Bilgisi</label>
+                        <frontend_type>text</frontend_type>
+                        <sort_order>6</sort_order>
+                        <show_in_default>1</show_in_default>
+                        <show_in_website>1</show_in_website>
+                        <show_in_store>1</show_in_store>
+                        <!-- <validate>validate-length maximum-length-11</validate> -->
+                   </sender>
+
+                </fields>
+            </main_conf>
+
+            <templates translate="label comment" module="storesms">
+                 <label>Mesaj Ayarları</label>
+                 <frontend_type>text</frontend_type>
+                 <comment><![CDATA[<div style="padding:10px;background-color:#fff;border:1px solid #CCC;margin-bottom:7px;">
+                    Mesajlarınızda aşağıdaki değişkenleri kullanabilirsiniz. <br />- %firstname% - Müşteri Adı <br />- %lastname% - Müşteri Soyadı <br />- %telephone% - Müşteri Telefonu <br />- %email% - Müşteri E-Postası <br />- %password% - Müşteri Şifresi <br />- %orderstatus% - Sipariş durumu <br />- %orderid% - Sipariş numarası<br />- %trackingnumber% - Eğer bir takip numarası eklediyseniz kullanabilirsiniz<br />- %productname% - Ürün Adı<br />- %productmodel% - Ürün Modeli<br />- %productquantity% - Ürün Miktarı<br />
+                    <p align="right">İletimerkezi SMS 1.0.2</p>
+                </div><br />]]></comment>
+                 <sort_order>100</sort_order>
+                 <show_in_default>1</show_in_default>
+                 <show_in_website>1</show_in_website>
+                 <show_in_store>1</show_in_store>
+                 <expanded>1</expanded>
+                 <fields>
+
+                    <new_customer_active translate="label">
+                         <label>Yeni müşteri kayıt olduğunda yönetici numarasına gönderilecek mesaj</label>
+                         <frontend_type>select</frontend_type>
+                         <source_model>adminhtml/system_config_source_yesno</source_model>
+                         <sort_order>1</sort_order>
+                         <show_in_default>1</show_in_default>
+                         <show_in_website>1</show_in_website>
+                         <show_in_store>1</show_in_store>
+                    </new_customer_active>
+                    <new_customer translate="label">
+                         <label>Mesaj (Mesaj içerisinde %firstname% %lastname% %telephone% degişkenlerini kullanabilirsiniz.)</label>
+                         <frontend_type>textarea</frontend_type>
+                         <sort_order>2</sort_order>
+                         <show_in_default>1</show_in_default>
+                         <show_in_website>1</show_in_website>
+                         <show_in_store>1</show_in_store>
+                         <depends><new_customer_active>1</new_customer_active></depends>
+                    </new_customer>
+<!--
+                    <new_customer_to_member_active translate="label">
+                         <label>Yeni müşteri kayıt olduğunda müşteri numarasına gönderilecek mesaj</label>
+                         <frontend_type>select</frontend_type>
+                         <source_model>adminhtml/system_config_source_yesno</source_model>
+                         <sort_order>3</sort_order>
+                         <show_in_default>1</show_in_default>
+                         <show_in_website>1</show_in_website>
+                         <show_in_store>1</show_in_store>
+                    </new_customer_to_member_active>
+                    <new_customer_to_member translate="label">
+                         <label>Mesaj (Mesaj içerisinde %firstname% %lastname% %telephone% %email% %password% degişkenlerini kullanabilirsiniz.)</label>
+                         <frontend_type>textarea</frontend_type>
+                         <sort_order>4</sort_order>
+                         <show_in_default>1</show_in_default>
+                         <show_in_website>1</show_in_website>
+                         <show_in_store>1</show_in_store>
+                         <depends><new_customer_to_member_active>1</new_customer_to_member_active></depends>
+                    </new_customer_to_member>
+-->
+                    <new_order_active translate="label">
+                         <label>Yeni sipariş geldiğinde yönetici numarasına gönderilecek mesaj</label>
+                         <frontend_type>select</frontend_type>
+                         <source_model>adminhtml/system_config_source_yesno</source_model>
+                         <sort_order>5</sort_order>
+                         <show_in_default>1</show_in_default>
+                         <show_in_website>1</show_in_website>
+                         <show_in_store>1</show_in_store>
+                    </new_order_active>
+                    <new_order translate="label">
+                         <label>Mesaj (Mesaj içerisinde %firstname% %lastname% %orderid% %productname% %productmodel% %productquantity% degişkenlerini kullanabilirsiniz.)</label>
+                         <frontend_type>textarea</frontend_type>
+                         <sort_order>6</sort_order>
+                         <show_in_default>1</show_in_default>
+                         <show_in_website>1</show_in_website>
+                         <show_in_store>1</show_in_store>
+                         <depends><new_order_active>1</new_order_active></depends>
+                    </new_order>
+
+                    <new_order_to_member_active translate="label">
+                         <label>Yeni sipariş geldiğinde müşteri numarasına gönderilecek mesaj</label>
+                         <frontend_type>select</frontend_type>
+                         <source_model>adminhtml/system_config_source_yesno</source_model>
+                         <sort_order>7</sort_order>
+                         <show_in_default>1</show_in_default>
+                         <show_in_website>1</show_in_website>
+                         <show_in_store>1</show_in_store>
+                    </new_order_to_member_active>
+                    <new_order_to_member translate="label">
+                         <label>Mesaj (Mesaj içerisinde %firstname% %lastname% %orderid% %productname% %productmodel% %productquantity% degişkenlerini kullanabilirsiniz.)</label>
+                         <frontend_type>textarea</frontend_type>
+                         <sort_order>8</sort_order>
+                         <show_in_default>1</show_in_default>
+                         <show_in_website>1</show_in_website>
+                         <show_in_store>1</show_in_store>
+                         <depends><new_order_to_member_active>1</new_order_to_member_active></depends>
+                    </new_order_to_member>
+
+                    <status_pending_payment_active translate="label">
+                         <label>Sipariş Durumu "Pending Payment" olarak değiştirildiğinde müşteriye gönderilecek mesaj</label>
+                         <frontend_type>select</frontend_type>
+                         <source_model>adminhtml/system_config_source_yesno</source_model>
+                         <sort_order>9</sort_order>
+                         <show_in_default>1</show_in_default>
+                         <show_in_website>1</show_in_website>
+                         <show_in_store>1</show_in_store>
+                    </status_pending_payment_active>
+                    <status_pending_payment translate="label">
+                         <label>Mesaj (Sipariş durumu mesajları içinde %firstname% %lastname% %orderid% %orderstatus% %trackingnumber% %firstname% %lastname% degişkenlerini kullanabilirsiniz.)</label>
+                         <frontend_type>textarea</frontend_type>
+                         <sort_order>10</sort_order>
+                         <show_in_default>1</show_in_default>
+                         <show_in_website>1</show_in_website>
+                         <show_in_store>1</show_in_store>
+                         <depends><status_pending_payment_active>1</status_pending_payment_active></depends>
+                    </status_pending_payment>
+
+                    <status_holded_active translate="label">
+                         <label>Sipariş Durumu "On Hold" olarak değiştirildiğinde müşteriye gönderilecek mesaj</label>
+                         <frontend_type>select</frontend_type>
+                         <source_model>adminhtml/system_config_source_yesno</source_model>
+                         <sort_order>11</sort_order>
+                         <show_in_default>1</show_in_default>
+                         <show_in_website>1</show_in_website>
+                         <show_in_store>1</show_in_store>
+                    </status_holded_active>
+                    <status_holded translate="label">
+                         <label>Mesaj</label>
+                         <frontend_type>textarea</frontend_type>
+                         <sort_order>12</sort_order>
+                         <show_in_default>1</show_in_default>
+                         <show_in_website>1</show_in_website>
+                         <show_in_store>1</show_in_store>
+                         <depends><status_holded_active>1</status_holded_active></depends>
+                    </status_holded>
+
+                    <status_processing_active translate="label">
+                         <label>Sipariş Durumu "Processing" olarak değiştirildiğinde müşteriye gönderilecek mesaj</label>
+                         <frontend_type>select</frontend_type>
+                         <source_model>adminhtml/system_config_source_yesno</source_model>
+                         <sort_order>13</sort_order>
+                         <show_in_default>1</show_in_default>
+                         <show_in_website>1</show_in_website>
+                         <show_in_store>1</show_in_store>
+                    </status_processing_active>
+                    <status_processing translate="label">
+                         <label>Mesaj</label>
+                         <frontend_type>textarea</frontend_type>
+                         <sort_order>14</sort_order>
+                         <show_in_default>1</show_in_default>
+                         <show_in_website>1</show_in_website>
+                         <show_in_store>1</show_in_store>
+                         <depends><status_processing_active>1</status_processing_active></depends>
+                    </status_processing>
+
+                    <status_canceled_active translate="label">
+                         <label>Sipariş Durumu "Canceled" olarak değiştirildiğinde müşteriye gönderilecek mesaj</label>
+                         <frontend_type>select</frontend_type>
+                         <source_model>adminhtml/system_config_source_yesno</source_model>
+                         <sort_order>15</sort_order>
+                         <show_in_default>1</show_in_default>
+                         <show_in_website>1</show_in_website>
+                         <show_in_store>1</show_in_store>
+                    </status_canceled_active>
+                    <status_canceled translate="label">
+                         <label>Mesaj</label>
+                         <frontend_type>textarea</frontend_type>
+                         <sort_order>16</sort_order>
+                         <show_in_default>1</show_in_default>
+                         <show_in_website>1</show_in_website>
+                         <show_in_store>1</show_in_store>
+                         <depends><status_canceled_active>1</status_canceled_active></depends>
+                    </status_canceled>
+
+                    <status_complete_active translate="label">
+                         <label>Sipariş Durumu "Complete" olarak değiştirildiğinde müşteriye gönderilecek mesaj</label>
+                         <frontend_type>select</frontend_type>
+                         <source_model>adminhtml/system_config_source_yesno</source_model>
+                         <sort_order>17</sort_order>
+                         <show_in_default>1</show_in_default>
+                         <show_in_website>1</show_in_website>
+                         <show_in_store>1</show_in_store>
+                    </status_complete_active>
+                    <status_complete translate="label">
+                         <label>Mesaj</label>
+                         <frontend_type>textarea</frontend_type>
+                         <sort_order>18</sort_order>
+                         <show_in_default>1</show_in_default>
+                         <show_in_website>1</show_in_website>
+                         <show_in_store>1</show_in_store>
+                         <depends><status_complete_active>1</status_complete_active></depends>
+                    </status_complete>
+
+                    <status_closed_active translate="label">
+                         <label>Sipariş Durumu "Closed" olarak değiştirildiğinde müşteriye gönderilecek mesaj</label>
+                         <frontend_type>select</frontend_type>
+                         <source_model>adminhtml/system_config_source_yesno</source_model>
+                         <sort_order>19</sort_order>
+                         <show_in_default>1</show_in_default>
+                         <show_in_website>1</show_in_website>
+                         <show_in_store>1</show_in_store>
+                    </status_closed_active>
+                    <status_closed translate="label">
+                         <label>Mesaj</label>
+                         <frontend_type>textarea</frontend_type>
+                         <sort_order>20</sort_order>
+                         <show_in_default>1</show_in_default>
+                         <show_in_website>1</show_in_website>
+                         <show_in_store>1</show_in_store>
+                         <depends><status_closed_active>1</status_closed_active></depends>
+                    </status_closed>
+                 </fields>
+             </templates>
+
+             <contact translate="label"  module="storesms">
+                 <label>İletişime Geçin</label>
+                 <frontend_type>text</frontend_type>
+                 <sort_order>200</sort_order>
+                 <show_in_default>1</show_in_default>
+                 <show_in_website>1</show_in_website>
+                 <show_in_store>1</show_in_store>
+                 <fields>
+                     <contactbutton translate="label">
+                         <label>İletişime Geçin</label>
+                         <frontend_model>storesms/buttons_contact</frontend_model>
+                         <sort_order>101</sort_order>
+                         <show_in_default>1</show_in_default>
+                         <show_in_website>1</show_in_website>
+                         <show_in_store>1</show_in_store>
+                     </contactbutton>
+                 </fields>
+             </contact>
+
+             <newaccount translate="label comment"  module="storesms">
+                 <label>Üye olun</label>
+                 <comment><![CDATA[<p><strong>Eklentinin Kullanımı</strong><br /><br />Sms gönderimi Emarka api entegrasyonu ile sağlanır, Emarka sms gönderimini kullanabilmek için kayıt olmanız gerekmektedir.Kayıt için (<a href="http://www.iletimerkezi.com/" target="_blank">www.iletimerkezi.com</a>) adresini kullanabilirsiniz. Kayıt olunduktan sonra kullanıcı bilgilerinizi ayarlar bölümünden ayarladıktan sonra sms gönderimine başlayabilirsiniz.</p>]]></comment>
+                 <frontend_type>text</frontend_type>
+                 <sort_order>210</sort_order>
+                 <show_in_default>1</show_in_default>
+                 <show_in_website>1</show_in_website>
+                 <show_in_store>1</show_in_store>
+                 <fields>
+                     <newaccountbutton translate="label">
+                         <label>Üye Ol</label>
+                         <frontend_model>storesms/buttons_newAccount</frontend_model>
+                         <sort_order>101</sort_order>
+                         <show_in_default>1</show_in_default>
+                         <show_in_website>1</show_in_website>
+                         <show_in_store>1</show_in_store>
+                     </newaccountbutton>
+                 </fields>
+             </newaccount>
+        </groups>
+    </storesms>
+  </sections>
+</config>
