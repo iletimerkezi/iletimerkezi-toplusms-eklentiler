@@ -9,7 +9,7 @@ $hook = array(
     'type' => 'client',
     'extra' => '',
     'defaultmessage' => 'Sayin {firstname} {lastname}, {duedate} son odeme tarihli bir faturaniz bulunmaktadir. Detayli bilgi icin sitemizi ziyaret edin. www.whmcssms.com',
-    'variables' => '{firstname}, {lastname}, {duedate}'
+    'variables' => '{firstname}, {lastname}, {duedate}, {total}'
 );
 
 if(!function_exists('InvoicePaymentReminder_Reminder')){
@@ -30,7 +30,7 @@ if(!function_exists('InvoicePaymentReminder_Reminder')){
         }
 
         $userSql = "
-        SELECT a.duedate,b.id as userid,b.firstname,b.lastname,`c`.`value` as `gsmnumber` FROM `tblinvoices` as `a`
+        SELECT a.duedate,a.total,b.id as userid,b.firstname,b.lastname,`c`.`value` as `gsmnumber` FROM `tblinvoices` as `a`
         JOIN tblclients as b ON b.id = a.userid
         JOIN `tblcustomfieldsvalues` as `c` ON `c`.`relid` = `a`.`userid`
         JOIN `tblcustomfieldsvalues` as `d` ON `d`.`relid` = `a`.`userid`
@@ -47,7 +47,7 @@ if(!function_exists('InvoicePaymentReminder_Reminder')){
             $UserInformation = mysql_fetch_assoc($result);
             $template['variables'] = str_replace(" ","",$template['variables']);
             $replacefrom = explode(",",$template['variables']);
-            $replaceto = array($UserInformation['firstname'],$UserInformation['lastname'],$class->changeDateFormat($UserInformation['duedate']));
+            $replaceto = array($UserInformation['firstname'],$UserInformation['lastname'],$class->changeDateFormat($UserInformation['duedate']),$UserInformation['duedate']);
             $message = str_replace($replacefrom,$replaceto,$template['template']);
 
             $class->setGsmnumber($UserInformation['gsmnumber']);
