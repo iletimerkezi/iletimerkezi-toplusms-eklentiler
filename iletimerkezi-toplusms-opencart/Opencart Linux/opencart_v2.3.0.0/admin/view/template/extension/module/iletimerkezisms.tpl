@@ -239,13 +239,13 @@
             </td>
             <td> 
                  <?php
-                if(!empty($iletimerkezisms['iletimerkezisms_order_notify_gsm'])) {
-                  $iletimerkezisms_order_notify_gsm = $iletimerkezisms['iletimerkezisms_order_notify_gsm'];
+                if(!empty($iletimerkezisms['iletimerkezisms_order_return_gsm'])) {
+                  $iletimerkezisms_order_return_gsm = $iletimerkezisms['iletimerkezisms_order_return_gsm'];
                 } else {
-                  $iletimerkezisms_order_notify_gsm = '';
+                  $iletimerkezisms_order_return_gsm = '';
                 }
                 ?>
-                <input value="<?php echo $iletimerkezisms_order_notify_gsm; ?>" type="text" name="iletimerkezisms_order_notify_gsm" placeholder="Gsm Numarası"/>
+                <input value="<?php echo $iletimerkezisms_order_return_gsm; ?>" type="text" name="iletimerkezisms_order_return_gsm" placeholder="Gsm Numarası"/>
                 <br>               
                 <?php
                 if(!empty($iletimerkezisms['iletimerkezisms_sms_return_text'])) {
