@@ -642,10 +642,31 @@ function iletimerkezi_output($vars){
         </form>';        
     
     } elseif($tab == "notifications") {   
+        $total_permited_user = $class->getUserPermited();
+        $total_user = $class->getUserUnpermitedId();
+        $total_unpermited_user = $total_user['total'] - count($total_permited_user);
         $settings = $class->getSettings();     
-        echo '<div >';
+        echo '<div><br>';
+        if (empty($total_unpermited_user)) {
+            echo '<p><h2> Tüm kullıcılarınıza izin verilmiştir.</h2></p>';
+        }else{
+        echo '<p><h2> İzin verilmemiş toplam '.$total_unpermited_user.' kullanıcınız var .</h2><a href="addonmodules.php?module=iletimerkezi&tab=permisions">Kullanıcılara izin ver.</a></p>';
+        }
         echo file_get_contents('https://dev.iletimerkezi.com/programs/whmcs/info.php?version='.urlencode($settings['version']));
         echo '</div>';
+    } elseif($tab == "permisions"){
+        $users = $class->getUsersTotal();
+        $total_permited_user = $class->getUserPermited();
+        $fieldid = $class->getFieldId();
+        foreach ($users as $value) {
+            if (!in_array(array('relid' => $value['id']),$total_permited_user)) {
+                $give_permision = $class->giveUserPermision($value,$fieldid['fieldid']);
+            }
+        }
+        echo '<div><br>';
+        echo '<p><h2>'.$give_permision. '</h2><a href="addonmodules.php?module=iletimerkezi&tab=notifications">Devam Et.</a></p>';
+        echo file_get_contents('https://dev.iletimerkezi.com/programs/whmcs/info.php?version='.urlencode($settings['version']));
+        echo '</div>'; 
     }
 
     echo '</div>';

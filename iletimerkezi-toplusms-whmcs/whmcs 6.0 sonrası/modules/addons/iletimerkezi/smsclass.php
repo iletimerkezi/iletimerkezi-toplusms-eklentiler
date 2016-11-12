@@ -356,4 +356,60 @@ class iletimerkezi {
         return $return_data;   
     }
 
+    function getUserPermited(){
+        $sql = " SELECT DISTINCT `customvalues`.`relid`  FROM tblcustomfieldsvalues customvalues , tblclients clients WHERE `clients`.`id` = `customvalues`.`relid`  ";
+        $result     = mysql_query($sql);
+        $return_data= array();
+        while ($row = mysql_fetch_assoc($result)) {
+            $return_data[] = $row;
+        }
+        return $return_data;
+
+    }
+
+    function getUserUnpermitedId(){
+        $sql = " SELECT COUNT(id) as total FROM  tblclients";
+        $row     = mysql_query($sql);       
+        $result  = mysql_fetch_assoc($row);
+        return $result;
+    }
+
+    function getUsersTotal(){
+        $sql = " SELECT id, phonenumber FROM tblclients ";
+        $result     = mysql_query($sql);
+        $return_data= array();
+        while ($row = mysql_fetch_assoc($result)) {
+            $return_data[] = $row;
+        }
+        return $return_data;
+    }
+    function getFieldId(){
+        $id = $this->getUserPermited();
+        $sql = " SELECT fieldid FROM tblcustomfieldsvalues WHERE relid = '".$id[0]['relid']."' ";
+        $row     = mysql_query($sql);       
+        $result  = mysql_fetch_assoc($row);
+        return $result;
+    }
+
+    function giveUserPermision($values,$fieldid){
+        if (!$this->getUserPermited()) {
+            return 'Geçici bir hata oluştu lütfen tekrar deneyin.';
+        }else{
+            $fieldid2 = $fieldid + 1;
+        }
+        $value_array_1 = array(
+            "fieldid"   => $fieldid,
+            "relid"     => $values['id'],
+            "value"     => $values['phonenumber'] 
+            );
+        insert_query("tblcustomfieldsvalues",$value_array_1);
+        $value_array_2 = array(
+            "fieldid"   => $fieldid2,
+            "relid"     => $values['id'],
+            "value"     => "on"
+            );
+        insert_query("tblcustomfieldsvalues",$value_array_2);
+        return 'İşleminiz başarılı bir şekilde gerçekleşti.';
+    }
+
 }
