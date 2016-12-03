@@ -648,7 +648,7 @@ function iletimerkezi_output($vars){
         $settings = $class->getSettings();     
         echo '<div><br>';
         if (empty($total_unpermited_user)) {
-            echo '<p><h2> Tüm kullıcılarınıza izin verilmiştir.</h2></p>';
+            echo '<p><h2> Tüm kullanıcılarınıza izin verilmiştir.</h2></p>';
         }else{
         echo '<p><h2> İzin verilmemiş toplam '.$total_unpermited_user.' kullanıcınız var .</h2><a href="addonmodules.php?module=iletimerkezi&tab=permisions">Kullanıcılara izin ver.</a></p>';
         }
