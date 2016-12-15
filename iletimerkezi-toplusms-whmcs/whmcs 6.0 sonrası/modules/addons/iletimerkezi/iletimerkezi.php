@@ -24,7 +24,7 @@ function iletimerkezi_activate() {
     $query = "CREATE TABLE IF NOT EXISTS `mod_iletimerkezi_settings` ( `id` int(11) NOT NULL AUTO_INCREMENT,`apiparams` varchar(500) NOT NULL,`wantsmsfield` int(11) NULL,`gsmnumberfield` int(11) NULL,`version` varchar(6) NULL,PRIMARY KEY (`id`)) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
 	$result = mysql_query($query);
 
-    $query = "INSERT INTO `mod_iletimerkezi_settings` ( `apiparams`, `wantsmsfield`, `gsmnumberfield`, `version`) VALUES ( '', 0, 0,'1.0');";
+    $query = "INSERT INTO `mod_iletimerkezi_settings` ( `apiparams`, `wantsmsfield`, `gsmnumberfield`, `version`) VALUES ( '', 0, 0,'1.1');";
 	$result = mysql_query($query);
 
     $query = "CREATE TABLE IF NOT EXISTS `mod_iletimerkezi_templates` (`id` int(11) NOT NULL AUTO_INCREMENT,`name` varchar(50) NOT NULL,`type` enum('client','admin') NOT NULL,`admingsm` varchar(255) NOT NULL,`template` varchar(240) NOT NULL,`variables` varchar(500) NOT NULL,`active` tinyint(1) NOT NULL,`extra` varchar(3) NOT NULL,`description` TEXT NULL, PRIMARY KEY (`id`)) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=13;";
@@ -147,7 +147,6 @@ function iletimerkezi_output($vars){
         }
         /* CUSTOM FIELDS */    
 
-
         echo '
         <script type="text/javascript">
             $(document).ready(function(){
@@ -199,7 +198,7 @@ function iletimerkezi_output($vars){
                 </table>
             </div>
             <p align="center"><input type="submit" value="'.$LANG['save'].'" class="btn-success" /></p>
-            <p align="right">İletimerkezi SMS 1.0.2</p>
+            <p align="right">Version : '.$settings['version'].'</p>
         </form>
         ';
     }
@@ -660,7 +659,7 @@ function iletimerkezi_output($vars){
         $fieldid = $class->getFieldId();
         foreach ($users as $value) {
             if (!in_array(array('relid' => $value['id']),$total_permited_user)) {
-                $give_permision = $class->giveUserPermision($value,$fieldid['fieldid']);
+                $give_permision = $class->giveUserPermision($value,$fieldid['wantsmsfield'],$fieldid['gsmnumberfield']);
             }
         }
         echo '<div><br>';

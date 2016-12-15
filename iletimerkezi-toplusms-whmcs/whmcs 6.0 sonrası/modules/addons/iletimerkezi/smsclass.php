@@ -385,26 +385,22 @@ class iletimerkezi {
     }
     function getFieldId(){
         $id = $this->getUserPermited();
-        $sql = " SELECT fieldid FROM tblcustomfieldsvalues WHERE relid = '".$id[0]['relid']."' ";
+        $sql = " SELECT * FROM mod_iletimerkezi_settings ";
         $row     = mysql_query($sql);       
         $result  = mysql_fetch_assoc($row);
         return $result;
     }
 
-    function giveUserPermision($values,$fieldid){
-        if (!$this->getUserPermited()) {
-            return 'Geçici bir hata oluştu lütfen tekrar deneyin.';
-        }else{
-            $fieldid2 = $fieldid + 1;
-        }
+    function giveUserPermision($values,$wantsmsfield,$gsmnumberfield){
+        
         $value_array_1 = array(
-            "fieldid"   => $fieldid,
+            "fieldid"   => $gsmnumberfield,
             "relid"     => $values['id'],
             "value"     => $values['phonenumber'] 
             );
         insert_query("tblcustomfieldsvalues",$value_array_1);
         $value_array_2 = array(
-            "fieldid"   => $fieldid2,
+            "fieldid"   => $wantsmsfield,
             "relid"     => $values['id'],
             "value"     => "on"
             );
