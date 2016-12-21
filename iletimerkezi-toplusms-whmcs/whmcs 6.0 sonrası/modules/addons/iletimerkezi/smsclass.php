@@ -356,8 +356,8 @@ class iletimerkezi {
         return $return_data;   
     }
 
-    function getUserPermited(){
-        $sql = " SELECT DISTINCT `customvalues`.`relid`  FROM tblcustomfieldsvalues customvalues , tblclients clients WHERE `clients`.`id` = `customvalues`.`relid`  ";
+    function getUserPermited($fieldid){
+        $sql = " SELECT `relid`  FROM tblcustomfieldsvalues WHERE fieldid = '".$fieldid."'  ";
         $result     = mysql_query($sql);
         $return_data= array();
         while ($row = mysql_fetch_assoc($result)) {
@@ -384,7 +384,6 @@ class iletimerkezi {
         return $return_data;
     }
     function getFieldId(){
-        $id = $this->getUserPermited();
         $sql = " SELECT * FROM mod_iletimerkezi_settings ";
         $row     = mysql_query($sql);       
         $result  = mysql_fetch_assoc($row);

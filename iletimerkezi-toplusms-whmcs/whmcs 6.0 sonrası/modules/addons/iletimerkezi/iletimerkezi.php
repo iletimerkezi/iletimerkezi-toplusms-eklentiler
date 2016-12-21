@@ -641,7 +641,8 @@ function iletimerkezi_output($vars){
         </form>';        
     
     } elseif($tab == "notifications") {   
-        $total_permited_user = $class->getUserPermited();
+        $fieldid = $class->getFieldId();
+        $total_permited_user = $class->getUserPermited($fieldid['wantsmsfield']);
         $total_user = $class->getUserUnpermitedId();
         $total_unpermited_user = $total_user['total'] - count($total_permited_user);
         $settings = $class->getSettings();     
@@ -654,9 +655,9 @@ function iletimerkezi_output($vars){
         echo file_get_contents('https://dev.iletimerkezi.com/programs/whmcs/info.php?version='.urlencode($settings['version']));
         echo '</div>';
     } elseif($tab == "permisions"){
-        $users = $class->getUsersTotal();
-        $total_permited_user = $class->getUserPermited();
         $fieldid = $class->getFieldId();
+        $users = $class->getUsersTotal();
+        $total_permited_user = $class->getUserPermited($fieldid['wantsmsfield']);
         foreach ($users as $value) {
             if (!in_array(array('relid' => $value['id']),$total_permited_user)) {
                 $give_permision = $class->giveUserPermision($value,$fieldid['wantsmsfield'],$fieldid['gsmnumberfield']);
