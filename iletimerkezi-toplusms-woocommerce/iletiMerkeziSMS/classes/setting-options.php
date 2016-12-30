@@ -70,7 +70,7 @@ class SatSMS_Setting_Options {
      */
     function get_settings_fields() {
 
-        
+        $order_statuses = $this->order_statuses();        
         $buyer_message = "[order_id] nolu siparişiniz, [order_status] durumundadır. \nBizi seçtiğiniz için teşekkürler"; 
         $admin_message = "Yeni bir sipariş var.\n[order_id] nolu siparişin durumu : [order_status]\n";    
         $settings_fields = array(
@@ -122,12 +122,7 @@ class SatSMS_Setting_Options {
                     'label' => __( 'Ürün durumu değişimi ', 'satosms' ),
                     'desc' => __( 'Ürün durumu değiştiğinde SMS gönderir.', 'satosms' ),
                     'type' => 'multicheck',
-                    'options' => array(
-                        'on-hold' => __( 'On Hold', 'satosms' ),
-                        'pending'  => __( 'Pending', 'satosms' ),
-                        'processing'  => __( 'Processing', 'satosms' ),
-                        'completed'  => __( 'Completed', 'satosms' ),
-                    )
+                    'options' => $order_statuses
                 )
             ) ),
 
@@ -169,6 +164,28 @@ class SatSMS_Setting_Options {
 
         return apply_filters( 'satosms_settings_
             section_content', $settings_fields );
+    }
+
+    public function order_statuses(){
+
+       $status_posts = get_posts( array(
+                'posts_per_page' => -1,
+                'post_type'      => 'yith-wccos-ostatus',
+                'post_status'    => 'publish'
+            ) );
+        foreach ( $status_posts as $sp ) {
+            $statuses[ get_post_meta( $sp->ID, 'slug', true ) ] = $sp->post_title;
+        }
+        $default_statuses = array('pending' => __('Ödeme Bekliyor', 'satosms' ),
+                                  'processing' => __('İşleniyor', 'satosms'),
+                                  'on-hold' => __('Beklemede', 'satosms'),
+                                  'completed' => __('Tamamlandı','satosms'),
+                                  'cancelled' => __('İptal Edildi', 'satosms'),
+                                  'refunded' => __('İade Edildi', 'satosms'),
+                                  'failed' => __('Başarısız','satosms'));
+        $order_statuses = array_merge($statuses,$default_statuses);
+        return $order_statuses;
+
     }
 
     /**

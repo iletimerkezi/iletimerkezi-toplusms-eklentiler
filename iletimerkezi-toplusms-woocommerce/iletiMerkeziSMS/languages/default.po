@@ -44,7 +44,7 @@ msgstr ""
 
 #: sat-wc-order-sms.php:272
 msgid "SMS Send Faild to buyer, Somthing wrong"
-msgstr ""
+msgstr "SMS gönderiminde hata oluştu"
 
 #: sat-wc-order-sms.php:327
 msgid "Send SMS to Buyer"

@@ -88,17 +88,16 @@ class SatSMS_SMS_Gateways {
                             </order>
                     </request>
 EOS;
-
+        
         $response = $sol4mob_sms->sendRequest('http://api.iletimerkezi.com/v1/send-sms',$xml,array('Content-Type: text/xml'));
         
         preg_match_all('|\<code\>.*\<\/code\>|U', $response, $matches,PREG_PATTERN_ORDER);
         
         if(isset($matches[0])&&isset($matches[0][0])) {
-             if($matches[0][0]==200) {
+             if( $matches[0][0] == '<code>200</code>' ) {
                 return true;
              } 
         }
-
         return false;
        
     }
