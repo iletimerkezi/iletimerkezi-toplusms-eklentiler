@@ -183,9 +183,11 @@ class SatSMS_Setting_Options {
                                   'cancelled' => __('İptal Edildi', 'satosms'),
                                   'refunded' => __('İade Edildi', 'satosms'),
                                   'failed' => __('Başarısız','satosms'));
-        $order_statuses = array_merge($statuses,$default_statuses);
-        return $order_statuses;
-
+        if (!empty($statuses)) {
+           $order_statuses = array_merge($statuses,$default_statuses);
+            return $order_statuses;
+        }
+        return $default_statuses;
     }
 
     /**

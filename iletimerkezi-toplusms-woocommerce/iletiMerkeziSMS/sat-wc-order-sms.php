@@ -363,7 +363,11 @@ class Sat_WC_Order_SMS {
                                   'cancelled' => 'İptal Edildi',
                                   'refunded' => 'İade Edildi',
                                   'failed' => 'Başarısız');
-        $order_statuses = array_merge($statuses,$default_statuses);
+        if (!empty($statuses)) {
+          $order_statuses = array_merge($statuses,$default_statuses);
+        }else{
+          $order_statuses = $default_statuses;
+        }
         $order_status = $order_statuses[$new_status];
         if (!$order_status) {
             return $new_status;
