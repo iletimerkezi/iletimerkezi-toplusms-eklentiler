@@ -155,7 +155,7 @@ class SatSMS_Setting_Options {
                 array(
                     'name' => 'sms_body',
                     'label' => __( 'Satın alana gidecek SMS ', 'satosms' ),
-                    'desc' => __( ' Satın alana gidecek SMS\'i düzenleyebilirsiniz. Kullanabileceğiniz değişkenler; <code>[order_id]</code> , <code>[order_status]</code>', 'satosms' ),
+                    'desc' => __( ' Satın alana gidecek SMS\'i düzenleyebilirsiniz. Kullanabileceğiniz değişkenler; <code>[order_id]</code> , <code>[order_status]</code> <br> Kargo durumları için yith ile ortak çalışan değişkenler ; <code>[ywot_carrier_name]</code>,<code>[ywot_pick_up_date]</code>,<code>[ywot_tracking_code]</code>', 'satosms' ),
                     'type' => 'textarea',
                     'default' => __( $buyer_message, 'satosms' )
                 ),
