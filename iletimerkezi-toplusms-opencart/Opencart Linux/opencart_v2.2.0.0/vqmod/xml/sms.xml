@@ -61,7 +61,7 @@
                         //Send sms admin
                         $message = str_replace(array('%firstname%','%lastname%','%telephone%','%email%','%password%'),array($this->request->post['firstname'],$this->request->post['lastname'],$this->request->post['telephone'],$this->request->post['email'], $this->request->post['password']),$message_info['iletimerkezisms_member_login_text']);
 
-                        $admin_numbers = explode(',',$message_info['iletimerkezisms_order_notify_gsm']);
+                        $admin_numbers = explode(',',$message_info['iletimerkezisms_member_login']);
                         foreach ($admin_numbers as $admin_number) {
                                 $sms->send($message_info['iletimerkezisms_username'],$message_info['iletimerkezisms_password'],$message,$admin_number,$message_info['iletimerkezisms_originator']);
                         }
@@ -160,7 +160,7 @@
 
             //Send sms admin
 
-            $admin_numbers = explode(',',$message_info['iletimerkezisms_order_notify_gsm']);
+            $admin_numbers = explode(',',$message_info['iletimerkezisms_return_notify_gsm']);
             foreach ($admin_numbers as $admin_number) {
                     $sms->send($message_info['iletimerkezisms_username'],$message_info['iletimerkezisms_password'],$message,$admin_number,$message_info['iletimerkezisms_originator']);
             }
@@ -174,7 +174,7 @@
                 <operation>
 
                         <search position="after"><![CDATA[
-                        $this->model_checkout_order->addOrderHistory($order_id, $this->request->post['order_status_id'], $this->request->post['comment'], $this->request->post['notify'], $this->request->post['override']);
+                        $this->model_checkout_order->addOrderHistory($order_id, $this->request->post['order_status_id'], $this->request->post['comment'], $this->request->post['notify']
                         ]]></search>
 
                         <add><![CDATA[

@@ -193,16 +193,19 @@ class ControllerMarketingSms extends Controller {
 						$email_total = $this->model_customer_customer->getTotalCustomers($customer_data);
 										
 						$results = $this->model_customer_customer->getCustomers($customer_data);
-				
-						foreach ($results as $result) {
-							$numbers[$result['customer_id']] = $result['telephone'];
-							$numbers = $result['telephone'];
-							$numbers = preg_replace('/\D/','',$numbers);
-        					$numbers = substr($numbers, -10);
-                            $message = $this->request->post['message'];
-							$message = str_replace(array('%firstname%','%lastname%',),array($result['firstname'],$result['lastname']),$this->request->post['message']);
-							$smsmessage .= $tag1.$message.$tag2.$numbers.$tag3;
-										
+						if (!empty($this->request->post['customer_group_id'])) {
+							$customer_group_id = $this->request->post['customer_group_id'];
+							foreach ($results as $result) {
+								$numbers[$result['customer_id']] = $result['telephone'];
+								$numbers = $result['telephone'];
+								$numbers = preg_replace('/\D/','',$numbers);
+	        					$numbers = substr($numbers, -10);
+	                            $message = $this->request->post['message'];
+	                            if($customer_group_id == $result['customer_group_id']){
+									$message = str_replace(array('%firstname%','%lastname%',),array($result['firstname'],$result['lastname']),$this->request->post['message']);
+									$smsmessage .= $tag1.$message.$tag2.$numbers.$tag3;
+								}			
+							}
 						}
 						$this->load->model('setting/setting');
 								$message_info = $this->model_setting_setting->getSetting('iletimerkezisms');
