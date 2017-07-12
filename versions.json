@@ -5,10 +5,10 @@
     			{
 	        		"title" : "Opencart",
 		        		"versions" : [
-		            		"openart_v2.3.x.x",
-		            		"openart_v2.2.x.x",
-		            		"openart_v2.1.x.x",
-		            		"openart_v2.0.x.x",
+		            		"opencart_v2.3.x.x",
+		            		"opencart_v2.2.x.x",
+		            		"opencart_v2.1.x.x",
+		            		"opencart_v2.0.x.x",
 		            		"opencart_v1.5.6.x",
 		            		"opencart_v1.5.6.0",
 		            		"opencart_v1.5.5.x",
