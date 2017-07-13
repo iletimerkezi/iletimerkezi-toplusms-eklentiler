@@ -25,37 +25,37 @@
 				"opencart_v1.4.0.x"
 			],
 			"git_folder": "iletimerkezi-toplusms-opencart"
+		},
+		"prestashop": {
+			"title": "Prestashop",
+			"versions": [
+				"ps1.4.x",
+				"ps1.x.x"
+			],
+			"git_folder": "iletimerkezi-toplusms-prestashop"
+		},
+		"magento": {
+			"title": "Magento",
+			"versions": [
+				"mg1.5.x.x",
+				"mg1.9.x.x"
+			],
+			"git_folder": "iletimerkezi-toplusms-magento"
+		},
+		"whmcs": {
+			"title": "Whmcs",
+			"versions": [
+				"whmcs1.x",
+				"whmcs6.x"
+			],
+			"git_folder": "iletimerkezi-toplusms-whmcs"
+		},
+		"woocommerce": {
+			"title": "Woocommerce",
+			"versions": [
+				"iletiMerkeziSMS"
+			],
+			"git_folder": "iletimerkezi-toplusms-woocommerce"
 		}
-	},
-	"prestashop": {
-		"title": "Prestashop",
-		"versions": [
-			"ps1.4.x",
-			"ps1.x.x"
-		],
-		"git_folder": "iletimerkezi-toplusms-prestashop"
-	},
-	"magento": {
-		"title": "Magento",
-		"versions": [
-			"mg1.5.x.x",
-			"mg1.9.x.x"
-		],
-		"git_folder": "iletimerkezi-toplusms-magento"
-	},
-	"whmcs": {
-		"title": "Whmcs",
-		"versions": [
-			"whmcs1.x",
-			"whmcs6.x"
-		],
-		"git_folder": "iletimerkezi-toplusms-whmcs"
-	},
-	"woocommerce": {
-		"title": "Woocommerce",
-		"versions": [
-			"iletiMerkeziSMS"
-		],
-		"git_folder": "iletimerkezi-toplusms-woocommerce"
 	}
 }
