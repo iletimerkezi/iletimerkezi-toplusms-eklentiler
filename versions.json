@@ -3,7 +3,7 @@
 		"opencart": {
 			"title": "Opencart",
 			"versions": [
-				"opencart_v3.0.x.x"
+				"opencart_v3.0.x.x",
 				"opencart_v2.3.x.x",
 				"opencart_v2.2.x.x",
 				"opencart_v2.1.x.x",
