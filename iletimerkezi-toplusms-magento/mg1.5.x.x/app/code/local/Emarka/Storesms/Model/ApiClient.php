@@ -52,7 +52,7 @@ class Emarka_Storesms_Model_ApiClient {
 EOS;
 
         $result = $this->_connect($xml,true);
-        
+
         if($result)
             $response = simplexml_load_string($result);
         else {
@@ -86,7 +86,7 @@ EOS;
     public function _saveSendedSms($report_id, $number, $message, $status) {
 
         $resource = Mage::getSingleton('core/resource');
-         
+
         /**
          * Retrieve the write connection
          */
@@ -101,7 +101,7 @@ EOS;
     }
 
     public function _connect($xml, $send = false) {
-        
+
         if($send)
             $url = 'http://api.iletimerkezi.com/v1/send-sms';
         else
@@ -144,9 +144,9 @@ EOS;
             $iletimerkezi_password = $config->getPassword();
         //die(var_export($results));
             foreach ($results as $key => $result) {
-                
+
                 $report_id = $result['response'];
-                
+
                 $xml = <<<EOS
         <request>
             <authentication>
@@ -187,9 +187,9 @@ EOS;
                 }*/
 
             }
-            
+
         }
-            
+
     }
 
     /**
@@ -200,7 +200,7 @@ EOS;
     private function _updateSmsStatus($id, $status) {
 
         $resource = Mage::getSingleton('core/resource');
-         
+
         /**
          * Retrieve the write connection
          */
@@ -226,6 +226,40 @@ EOS;
         $fp = fopen($file_name, 'a');
         fwrite($fp, "<pre>".var_export($data,1)."</pre>");
         fclose($fp);
+    }
+
+    public function setDomain() {
+
+        $iletimerkezi_username = $config->getLogin();
+        $iletimerkezi_password = $config->getPassword();
+
+        $domain = $_SERVER['HTTP_HOST'];
+        $xml =
+                "<request>
+                    <authentication>
+                        <username>{$iletimerkezi_username}</username>
+                        <password>{$iletimerkezi_password}</password>
+                    </authentication>
+                    <pluginUser>
+                        <site><![CDATA[".$domain."]]></site>
+                        <name>opencart</name>
+                    </pluginUser>
+                </request>";
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL,'http://api.iletimerkezi.com/v1/add-plugin-user');
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS,$xml);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST,2);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER,0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+        curl_setopt($ch, CURLOPT_HTTPHEADER,array('Content-Type: text/xml'));
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        // curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 120);
+
+        $result = curl_exec($ch);
+        return true;
     }
 
 }

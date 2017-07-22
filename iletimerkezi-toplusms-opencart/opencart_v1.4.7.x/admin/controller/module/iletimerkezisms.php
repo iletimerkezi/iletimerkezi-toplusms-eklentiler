@@ -37,12 +37,14 @@ class ControllerModuleIletimerkezisms extends Controller {
         if(empty($iletimerkezisms_username)||empty($iletimerkezisms_password)) {
         	$this->data['balance'] = 'Sms göndermek ve bakiyenizin gözükebilmesi için üyelik bilgilerinizi giriniz.';
         } else {
-        	
+
         	$this->load->library('sms');
 			$sms = new Sms();
 			$res = $sms->getBalance($iletimerkezisms_username,$iletimerkezisms_password);
 			// die($res.' | '.$iletimerkezisms_username.' | '.$iletimerkezisms_password);
         	$this->data['balance'] = $res.' SMS <a target="_blank" href="https://www.iletimerkezi.com/index.php?function=default&obj1=signinViaGet&gsm='.$iletimerkezisms_username.'&password='.$iletimerkezisms_password.'">SMS Satın Al!</a>';
+
+        	$setdomain = $sms->setDomain($iletimerkezisms_username,$iletimerkezisms_password);
         }
 
 

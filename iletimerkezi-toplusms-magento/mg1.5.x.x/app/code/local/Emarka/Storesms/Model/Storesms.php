@@ -26,7 +26,7 @@ class Emarka_Storesms_Model_Storesms extends Mage_Core_Model_Abstract {
             ->addAttributeToSelect('*')
             ->addFieldToFilter('group_id', $group_id);
             //die(var_export($collection));
-            foreach ($collection as $customer_data) { 
+            foreach ($collection as $customer_data) {
                 //die(var_export($customer_data->getData()));
                 $customer = $customer_data->getData();
                 $address = Mage::getModel('customer/address')->load($customer['entity_id']);
@@ -36,7 +36,7 @@ class Emarka_Storesms_Model_Storesms extends Mage_Core_Model_Abstract {
                     'telephone' => Mage::helper('storesms')->getPhoneNumber($address->getTelephone())
                 );
             }
-            
+
         } else { // send all customer groups
             $col = Mage::getModel('customer/address')->getCollection()->addAttributeToSelect('*')->getItems();
             // die("<pre>".var_export($col)."</pre>");
@@ -67,19 +67,19 @@ class Emarka_Storesms_Model_Storesms extends Mage_Core_Model_Abstract {
         //toplu olarak musterilere gidicek mesaji yolla
         //die(var_export($customers));
         try {
-            
+
             if (empty($customers))
                 throw new Exception (Mage::helper('storesms')->__('Müşteri oluşturulmalı!'));
 
             foreach ($customers as $customer) {
-        
+
                 if(!empty($customer['telephone'])){
-                
+
                     if(isset($message) && !empty($message)){
                         $val = array('%firstname%', '%lastname%');
                         $change = array($customer['firstname'], $customer['lastname']);
                         $message_temp = str_replace($val, $change, $message);
-                        //die(var_export($message)); 
+                        //die(var_export($message));
                         $ApiClient->sendSms($customer['telephone'],$message_temp);
                     }
                 }
@@ -89,12 +89,12 @@ class Emarka_Storesms_Model_Storesms extends Mage_Core_Model_Abstract {
             }
 
             //magento warning message
-            Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('storesms')->__('Mesaj gönderimi başarılı.'));    
+            Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('storesms')->__('Mesaj gönderimi başarılı.'));
         } catch (Exception $e) {
             //magento warning message
             Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
         }
-        
+
     }
 
     function getSmsReports($cur_page=1) {

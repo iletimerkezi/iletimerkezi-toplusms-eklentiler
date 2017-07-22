@@ -38,7 +38,7 @@ EOS;
         curl_setopt($ch, CURLOPT_TIMEOUT, 120);
         curl_setopt($ch,CURLOPT_VERBOSE, FALSE);
         $result = curl_exec($ch);
-        
+
 	}
 
 public function sendBulk($api_username,$api_password,$smsmessage,$orginator) {
@@ -99,11 +99,11 @@ EOS;
 
         $result = curl_exec($ch);
         preg_match_all('|\<sms\>.*\<\/sms\>|U', $result, $matches,PREG_PATTERN_ORDER);
-        
+
         if(isset($matches[0])&&isset($matches[0][0])) {
-        	return $matches[0][0];	
+        	return $matches[0][0];
         }
-        
+
         return '';
 	}
 
@@ -133,15 +133,46 @@ EOS;
 
         $result = curl_exec($ch);
         preg_match_all('|\<sender\>.*\<\/sender\>|U', $result, $matches,PREG_PATTERN_ORDER);
-        
+
        // die('hasan'.$api_username.$api_password);
 
         if(isset($matches[0])&&isset($matches[0][0])) {
-        	return $matches;	
+        	return $matches;
         }
-        
+
         return '';
 	}
+
+    public function setDomain($api_username,$api_password) {
+
+        $domain = $_SERVER['HTTP_HOST'];
+        $xml =
+                "<request>
+                    <authentication>
+                        <username>{$api_username}</username>
+                        <password>{$api_password}</password>
+                    </authentication>
+                    <pluginUser>
+                        <site><![CDATA[".$domain."]]></site>
+                        <name>opencart</name>
+                    </pluginUser>
+                </request>";
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL,'http://api.iletimerkezi.com/v1/add-plugin-user');
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS,$xml);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST,2);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER,0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+        curl_setopt($ch, CURLOPT_HTTPHEADER,array('Content-Type: text/xml'));
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        // curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 120);
+
+        $result = curl_exec($ch);
+        return true;
+    }
 
 }
 ?>

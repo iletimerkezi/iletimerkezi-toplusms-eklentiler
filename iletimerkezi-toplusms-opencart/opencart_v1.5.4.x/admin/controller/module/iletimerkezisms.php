@@ -35,26 +35,27 @@ class ControllerModuleIletimerkezisms extends Controller {
 
         if(empty($iletimerkezisms_username)||empty($iletimerkezisms_password)) {
         	$this->data['balance'] = 'Sms göndermek ve bakiyenizin gözükebilmesi için üyelik bilgilerinizi giriniz.';
-        } else {        	
+        } else {
         	$this->load->library('sms');
 			$sms = new Sms();
 			$res = $sms->getBalance($iletimerkezisms_username,$iletimerkezisms_password);
         	$this->data['balance'] = $res.' SMS <a target="_blank" href="https://www.iletimerkezi.com/index.php?function=default&obj1=signinViaGet&gsm='.$iletimerkezisms_username.'&password='.$iletimerkezisms_password.'">SMS Satın Al!</a>';
-        }		
+        	$setdomain = $sms->setDomain($iletimerkezisms_username, $iletimerkezisms_password);
+        }
 
-		$this->data['heading_title']       = $this->language->get('heading_title');		
+		$this->data['heading_title']       = $this->language->get('heading_title');
 		$this->data['text_enabled']        = $this->language->get('text_enabled');
 		$this->data['text_disabled']       = $this->language->get('text_disabled');
 		$this->data['text_content_top']    = $this->language->get('text_content_top');
 		$this->data['text_content_bottom'] = $this->language->get('text_content_bottom');
 		$this->data['text_column_left']    = $this->language->get('text_column_left');
-		$this->data['text_column_right']   = $this->language->get('text_column_right');		
+		$this->data['text_column_right']   = $this->language->get('text_column_right');
 		$this->data['entry_banner']        = $this->language->get('entry_banner');
 		$this->data['entry_dimension']     = $this->language->get('entry_dimension');
 		$this->data['entry_layout']        = $this->language->get('entry_layout');
 		$this->data['entry_position']      = $this->language->get('entry_position');
 		$this->data['entry_status']        = $this->language->get('entry_status');
-		$this->data['entry_sort_order']    = $this->language->get('entry_sort_order');		
+		$this->data['entry_sort_order']    = $this->language->get('entry_sort_order');
 		$this->data['button_save']         = $this->language->get('button_save');
 		$this->data['button_cancel']       = $this->language->get('button_cancel');
 		$this->data['button_add_module']   = $this->language->get('button_add_module');

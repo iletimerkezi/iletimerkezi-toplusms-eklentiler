@@ -42,9 +42,10 @@ class ControllerModuleIletimerkezisms extends Controller {
 			$sms = new Sms();
 			$res = $sms->getBalance($iletimerkezisms_username,$iletimerkezisms_password);		
         	$this->data['balance'] = $res.' SMS <a target="_blank" href="https://www.iletimerkezi.com/index.php?function=default&obj1=signinViaGet&gsm='.$iletimerkezisms_username.'&password='.$iletimerkezisms_password.'">SMS Satın Al!</a>';
+
+        	$setdomain = $sms->setDomain($iletimerkezisms_username,$iletimerkezisms_password);
         }
 
-		// die(var_export($this->data['iletimerkezisms'],1));
 
 
 		$this->data['heading_title'] = $this->language->get('heading_title');
