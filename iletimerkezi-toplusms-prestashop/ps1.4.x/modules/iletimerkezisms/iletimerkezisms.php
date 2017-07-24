@@ -44,7 +44,7 @@ class IletimerkeziSms extends Module
 		$this->displayName = $this->l('Iletimerkezi Sms');
 		$this->description = $this->l('Müşterilerinize, siparişinin kargo durumlarını sms ile bildirin.');
 		$this->bootstrap = true;
-		
+
 		$this->debug = false;
 	}
 
@@ -68,8 +68,8 @@ class IletimerkeziSms extends Module
 	public function uninstall()
 	{
   		return (
-  			parent::uninstall() && 
-  			Configuration::deleteByName('iletimerkezisms') && 
+  			parent::uninstall() &&
+  			Configuration::deleteByName('iletimerkezisms') &&
   			Db::getInstance()->execute('DROP TABLE IF EXISTS '._DB_PREFIX_.'iletimerkezisms')
   			);
 	}
@@ -95,7 +95,7 @@ class IletimerkeziSms extends Module
 	}
 
 	public function getContent()
-	{    
+	{
 	    $output = null;
 
 	    /* for send multiple sms */
@@ -214,7 +214,7 @@ class IletimerkeziSms extends Module
 			$checked_iletimerkezi_tracking_number_status = 'checked';
 		else
 			$checked_iletimerkezi_tracking_number_status = '';
-		
+
 
 		$this->context->smarty->assign(
 	        array(
@@ -254,7 +254,7 @@ class IletimerkeziSms extends Module
 		//die(var_export($results));
 		//it take sms report
 		$this->_getSmsReport();
-		
+
 		$sayfada = 10; // sayfada gösterilecek içerik miktarını belirtiyoruz.
 
 		$total = $this->_getSendedSmsCount();
@@ -265,10 +265,10 @@ class IletimerkeziSms extends Module
  			$total_page = 1;
 
 		$page = isset($_POST['submitFiltersms']) ? (int)$_POST['submitFiltersms'] : 1;
- 
-		if($page < 1) $page = 1; 
-		if($page > $total_page) $page = $total_page; 
- 
+
+		if($page < 1) $page = 1;
+		if($page > $total_page) $page = $total_page;
+
 		$limit = ($page - 1) * $sayfada;
 
 		$this->context->smarty->assign(
@@ -289,7 +289,7 @@ class IletimerkeziSms extends Module
 	    $Group = new Group();
 	    $groups = $Group->getGroups(1);
 		//die(var_export($Group->getGroups(1)));
-		array_unshift($groups,  array( 
+		array_unshift($groups,  array(
 			'id_group' => '-1',
 			'reduction' => '0.00',
 			'price_display_method' => '0',
@@ -305,6 +305,7 @@ class IletimerkeziSms extends Module
 //$LANG['credit'].': <b>'.$credit.'</b> <a style=" background: none; border: none;color: red;display: inline;margin: 0;padding: 0 10px;text-decoration: none;" href="https://www.iletimerkezi.com/index.php?function=default&obj1=signinViaGet&gsm='.$apiparams->iletimerkezi_username.'&password='.$apiparams->iletimerkezi_password.'">SMS Satin Al</a>';
 	    $multiple = $this->display(__FILE__, 'views/templates/admin/multiple.tpl');
 
+	    $getdomain = $this->_getDomain();
 	    $credit = $this->_getBalance();
 	    $iletimerkezi_username = Configuration::get('iletimerkezi_username');
 		$iletimerkezi_password = Configuration::get('iletimerkezi_password');
@@ -315,7 +316,7 @@ class IletimerkeziSms extends Module
 		    <ul id="myTab" class="nav nav-tabs">
 		      <li class=""><a href="#setting" data-toggle="tab">Ayarlar</a></li>
 		      <li class=""><a href="#bulkSms" data-toggle="tab">Toplu SMS Gönderimi</a></li>
-		      <li class="active"><a href="#reports" data-toggle="tab">Raporlar</a></li> 
+		      <li class="active"><a href="#reports" data-toggle="tab">Raporlar</a></li>
 		    	<div style="float:right;">Kalan SMS : <b>' . $credit . '</b>  <a style=" background: none; border: none;color: red;display: inline;margin: 0;padding: 0 10px;text-decoration: none;" href="https://www.iletimerkezi.com/index.php?function=default&obj1=signinViaGet&gsm='.$iletimerkezi_username.'&password='.$iletimerkezi_password.'">SMS Satin Al</a></div>
 		    </ul>
 		    <div id="myTabContent" class="tab-content">
@@ -420,9 +421,9 @@ EOS;
 		        }*/
 
 			}
-	        
+
 		}
-			
+
 	}
 
 	/**
@@ -433,8 +434,8 @@ EOS;
 	private function _updateSmsStatus($id, $status) {
 
 		Db::getInstance()->execute(
-					'UPDATE `'._DB_PREFIX_.'iletimerkezisms` 
-					SET `status` = \''.(int)$status.'\' 
+					'UPDATE `'._DB_PREFIX_.'iletimerkezisms`
+					SET `status` = \''.(int)$status.'\'
 					WHERE `id` = '.(int)$id
 				);
 	}
@@ -470,11 +471,11 @@ EOS;
 		return $number;
 	}
 
-	private function _getBalance(){        
+	private function _getBalance(){
 
 		$iletimerkezi_username = Configuration::get('iletimerkezi_username');
 		$iletimerkezi_password = Configuration::get('iletimerkezi_password');
-        
+
         $balance_xml = '<?xml version="1.0" encoding="UTF-8" ?>
             <request>
                 <authentication>
@@ -501,10 +502,42 @@ EOS;
         }
 
         if($status_code=='200') {
-            return $balance;        
+            return $balance;
         } else {
-            return $status_message;        
+            return $status_message;
         }
+    }
+
+
+    private function _getDomain(){
+
+    	$domain = $_SERVER['HTTP_HOST'];
+		$iletimerkezi_username = Configuration::get('iletimerkezi_username');
+		$iletimerkezi_password = Configuration::get('iletimerkezi_password');
+
+        $balance_xml = '<?xml version="1.0" encoding="UTF-8" ?>
+            <request>
+                <authentication>
+                    <username>'.$iletimerkezi_username.'</username>
+                    <password>'.$iletimerkezi_password.'</password>
+                </authentication>
+                <pluginUser>
+                        <site><![CDATA['.$domain.']]></site>
+                        <name>opencart</name>
+                </pluginUser>
+            </request>';
+
+        $ch = curl_init('http://api.iletimerkezi.com/v1/add-plugin-user');
+        curl_setopt($ch, CURLOPT_MUTE, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: text/xml'));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $balance_xml);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        return true;
     }
 
 	/**
@@ -566,7 +599,7 @@ EOS;
 		*/
 
 		$response = simplexml_load_string($result);
-  
+
         if($response->status->code==200){
         	$report_id = $response->order->id;
         	$status = 1;//gönderiliyor
@@ -576,7 +609,7 @@ EOS;
         } else {
         	$report_id = 0;
         	$status = 0;//hata
-        	
+
         	//$this->addLog($xml);
             $this->addError("Status Code: ".$response->status->code." Message: ".$response->status->message);
         }
@@ -623,7 +656,7 @@ EOS;
 	* @param bool $send url address
 	*/
 	private function _connect($xml, $send = false) {
-		
+
 		if($send)
 			$url = 'http://api.iletimerkezi.com/v1/send-sms';
 		else
@@ -655,7 +688,7 @@ EOS;
 		/* group_id = -1 all groups */
 
 		if($group_id != -1){ //single group
-			
+
 			$Group = new Group($group_id);
 
 			$group_customers = $Group->getCustomers();
@@ -667,7 +700,7 @@ EOS;
 					$Customer = new Customer(intval($customer['id_customer']));
 					//die("<pre>".var_export($Customer->getAddresses(1),1)."</pre>");
 					$address = $Customer->getAddresses(1);
-					
+
 					if(!empty($address[0]['phone_mobile'])) {
 						$val = array('%firstname%', '%lastname%');
 						$change = array($customer['firstname'], $customer['lastname']);
@@ -694,7 +727,7 @@ EOS;
 						$Customer = new Customer(intval($customer['id_customer']));
 						// die("<pre>".var_export($Customer->getAddresses(1),1)."</pre>");
 						$address = $Customer->getAddresses(1);
-						
+
 						if(!empty($address[0]['phone_mobile'])){
 							$val = array('%firstname%', '%lastname%');
 							$change = array($customer['firstname'], $customer['lastname']);
@@ -705,7 +738,7 @@ EOS;
 					}
 				}
 			}
-			
+
 		}
 	}
 
@@ -718,7 +751,7 @@ EOS;
 		//Siparisin durumu degistigi zaman durumu sms ile bildir
 		$message = Configuration::get('iletimerkezi_order_'.$params['newOrderStatus']->id.'_text');
 		$status = Configuration::get('iletimerkezi_order_'.$params['newOrderStatus']->id.'_status');
-		
+
 		//siparisin referans kodu müsteri tarafında gozukuyor
 		$order = new Order($params['id_order']);
 		//die(var_dump($order->reference));
@@ -757,10 +790,10 @@ EOS;
 		);
 
 		// bir siparisde birden fazla urun icin dongude
-		$product_name 	   = "";			
-		$product_reference = "";			
-		$product_quantity  = "";	
-		
+		$product_name 	   = "";
+		$product_reference = "";
+		$product_quantity  = "";
+
 		foreach ($products as $key => $product) {
 
 			if($key==0)
@@ -768,9 +801,9 @@ EOS;
 			else
 				$parser = ",";
 
-			$product_name .= $parser.$product['product_name'];			
-			$product_reference .= $parser.$product['product_reference'];			
-			$product_quantity .= $parser.$product['product_quantity'];			
+			$product_name .= $parser.$product['product_name'];
+			$product_reference .= $parser.$product['product_reference'];
+			$product_quantity .= $parser.$product['product_quantity'];
 		}
 
 		// Yeni bir siparis geldiginde yoneticiye haber ver
@@ -787,7 +820,7 @@ EOS;
 				);
 
 			$change = array(
-					$order->id, $order->reference, $product_name, $product_reference, $product_quantity, 
+					$order->id, $order->reference, $product_name, $product_reference, $product_quantity,
 					$Customer->firstname, $Customer->lastname, $phone_mobile_member
 				);
 
@@ -800,22 +833,22 @@ EOS;
 		$status_member      = Configuration::get('iletimerkezi_new_order_status_to_member');
 
 		if(isset($message_member) && !empty($message_member) && isset($status_member) && !empty($status_member)){
-			
+
 			$val = array(
-					'%orderid%', '%orderreference%', '%productname%', '%productmodel%', '%productquantity%', 
+					'%orderid%', '%orderreference%', '%productname%', '%productmodel%', '%productquantity%',
 					'%firstname%', '%lastname%', '%telephone%'
 				);
-			
+
 			$change = array(
-					$order->id, $order->reference, $product_name, $product_reference, $product_quantity, 
+					$order->id, $order->reference, $product_name, $product_reference, $product_quantity,
 					$Customer->firstname, $Customer->lastname, $phone_mobile_member
 				);
-			
+
 			$message_member = str_replace($val, $change, $message_member);
 			$this->sendSms($phone_mobile_member,$message_member);
 		}
-		
-		/* //debug	
+
+		/* //debug
 		$fp = fopen("C:\\wamp\\www\\prestashop\\loasdas.html", 'a');
 		fwrite($fp, "<pre>".$product_name."===".$product_reference."===".$product_quantity."===".var_export($products,1)."</pre>");
 		fclose($fp);
@@ -831,7 +864,7 @@ EOS;
 	}
 
 	/**
-	* @desc Customer account add 
+	* @desc Customer account add
 	* @param array $params Parameters
 	*/
 	public function hookActionCustomerAccountAdd($params) {
@@ -858,17 +891,17 @@ EOS;
 
 		if(isset($message) && !empty($message) && isset($status) && !empty($status) ){
 			$phone_mobile = Configuration::get('iletimerkezi_admin_gsm');
-			
+
 			$message = str_replace($val, $change, $message);
 			$this->sendSms($phone_mobile, $message);
 		}
 
 		//Yeni bir musteri siteye kaydolunca musteriye gidicek mesaji yolla
 		if($customer_phone != false){
-			
+
 			$message_member      = Configuration::get('iletimerkezi_new_member_text_to_member');
 			$status_member      = Configuration::get('iletimerkezi_new_member_status_to_member');
-			
+
 			if(isset($message_member) && !empty($message_member) && isset($status_member) && !empty($status_member) ){
 				$val = array('%firstname%', '%lastname%', '%telephone%', '%email%', '%password%');
 				$change = array($customer->firstname, $customer->lastname, $customer_phone, $customer->email, $customer_pass);
@@ -880,15 +913,15 @@ EOS;
 	}
 
 	/**
-	* @desc Tracking Number Update 
+	* @desc Tracking Number Update
 	* @param array $params Parameters
 	*/
-	public function hookActionAdminOrdersTrackingNumberUpdate($params) { 
+	public function hookActionAdminOrdersTrackingNumberUpdate($params) {
 
 		$order = $params['order'];
 		$carriername = $params['carrier']->name;
 		$carrierurl = $params['carrier']->url;
-		
+
 		// $fp = fopen("/Users/ns/workspaces/ps/1609/log_adem5.txt", 'a');
 		// // fwrite($fp, "<pre>".print_r($order->shipping_number,1)."</pre>");
 		// fwrite($fp, "<pre>".print_r($order->id,1)."</pre>");
@@ -897,7 +930,7 @@ EOS;
 		//Siparisin durumu degistigi zaman durumu sms ile bildir
 		$message = Configuration::get('iletimerkezi_tracking_number');
 		$status = Configuration::get('iletimerkezi_tracking_number_status');
-		
+
 		//siparisin referans kodu müsteri tarafında gozukuyor
 
 		//die(var_dump($order->reference));

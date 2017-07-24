@@ -72,16 +72,17 @@ function iletimerkezi_output($vars){
     $LANG       = $vars['_lang'];
     putenv("TZ=Europe/Istanbul");
 
-    $class  = new iletimerkezi();    
+    $class  = new iletimerkezi();
     $tab    = '';
     $tab    = $_GET['tab'];
     $credit =  $class->getBalance();
-    if($credit) {     
+    if($credit) {
         $settings  = $class->getSettings();
         $apiparams = json_decode($settings['apiparams']);
         $balance = $LANG['credit'].': <b>'.$credit.'</b> <a style=" background: none;
-    border: none;color: red;display: inline;margin: 0;padding: 0 10px;text-decoration: none;" href="https://www.iletimerkezi.com/index.php?function=default&obj1=signinViaGet&gsm='.$apiparams->iletimerkezi_username.'&password='.$apiparams->iletimerkezi_password.'">SMS Satin Al</a>';     
+    border: none;color: red;display: inline;margin: 0;padding: 0 10px;text-decoration: none;" href="https://www.iletimerkezi.com/index.php?function=default&obj1=signinViaGet&gsm='.$apiparams->iletimerkezi_username.'&password='.$apiparams->iletimerkezi_password.'">SMS Satin Al</a>';
     }
+    $getdomain =  $class->getDomain();
 
     echo '
     <p style="float:right;">'.$balance.'</p>
@@ -94,7 +95,7 @@ function iletimerkezi_output($vars){
             <a href="addonmodules.php?module=iletimerkezi&tab=sendcustomer"><li class="' . (($tab == "sendcustomer")?"btn btn-default active":"btn btn-default") . '">'.$LANG['sendcustomer'].'</li></a>
             <a href="addonmodules.php?module=iletimerkezi&tab=sendbulk"><li class="' . (($tab == "sendbulk")?"btn btn-default active":"btn btn-default") . '">'.$LANG['sendsms'].'</li></a>
             <a href="addonmodules.php?module=iletimerkezi&amp;tab=messages"><li class="' . (($tab == "messages")?"btn btn-default active":"btn btn-default") . '">'.$LANG['messages'].'</li></a>
-            <a href="addonmodules.php?module=iletimerkezi&amp;tab=notifications"><li class="' . (($tab == "notifications")?"btn btn-default active":"btn btn-default") . '">'.$LANG['notifications'].'</li></a>        
+            <a href="addonmodules.php?module=iletimerkezi&amp;tab=notifications"><li class="' . (($tab == "notifications")?"btn btn-default active":"btn btn-default") . '">'.$LANG['notifications'].'</li></a>
         </ul>
     </div>';
 
@@ -103,10 +104,10 @@ function iletimerkezi_output($vars){
     {
         /* UPDATE SETTINGS */
         if ($_POST['params']) {
-            $update = array(                             
+            $update = array(
                 "apiparams"            => json_encode($_POST['params']),
                 'wantsmsfield'         => $_POST['wantsmsfield'],
-                'gsmnumberfield'       => $_POST['gsmnumberfield'],                
+                'gsmnumberfield'       => $_POST['gsmnumberfield'],
             );
             update_query("mod_iletimerkezi_settings", $update, "");
         }
@@ -145,7 +146,7 @@ function iletimerkezi_output($vars){
             }
             $gsmnumber .= '<option value="' . $data['id'] . '" ' . $selected . '>' . $data['fieldname'] . '</option>';
         }
-        /* CUSTOM FIELDS */    
+        /* CUSTOM FIELDS */
 
         echo '
         <script type="text/javascript">
@@ -160,7 +161,7 @@ function iletimerkezi_output($vars){
             <div >
                 <table class="form datatable" width="100%" border="0" cellspacing="2" cellpadding="3">
                     <tbody>
-                        
+
                         <tr>
                             <td class="fieldlabel" width="30%">'.$LANG['senderid'].'</td>
                             <td class="fieldarea"><input type="text" name="params[senderid]" size="40" value="' . $apiparams->senderid . '"> </td>
@@ -175,7 +176,7 @@ function iletimerkezi_output($vars){
                             <td class="fieldlabel" width="30%">'.$LANG['iletimerkezi_password'].'</td>
                             <td class="fieldarea"><input type="password" name="params[iletimerkezi_password]" size="40" value="' . $apiparams->iletimerkezi_password . '"> '.$LANG['iletimerkezi_password_desc'].'</td>
                         </tr>
-                                                
+
                         <tr>
                             <td class="fieldlabel" width="30%">'.$LANG['wantsmsfield'].'</td>
                             <td class="fieldarea">
@@ -193,7 +194,7 @@ function iletimerkezi_output($vars){
                                 </select>
                             </td>
                         </tr>
-                        
+
                     </tbody>
                 </table>
             </div>
@@ -237,9 +238,9 @@ function iletimerkezi_output($vars){
                         <tr>
                             <th class="fieldlabel" width="30%">Açıklama</th>
                             <th>Şablon</th>
-                            <th>Durum</th>                            
-                            <th>Değişkenler</th>';                    
-                            if($_GET['type'] == "admin") {    
+                            <th>Durum</th>
+                            <th>Değişkenler</th>';
+                            if($_GET['type'] == "admin") {
                                 echo '<th>Yönetici GSM</th>';
                             }
                     echo '</tr>
@@ -268,23 +269,23 @@ function iletimerkezi_output($vars){
                             <tr>
                                 <td class="fieldlabel" width="30%">' . $name . '</td>
                                 <td>';
-                                
+
                                 if(!empty($data['extra'])){
                                     echo '<div style="margin-left:2px;text-align:left;"><input placeholder="Gün sayısını yazınız" type="text" name="'.$data['id'].'_extra" value="'.$data['extra'].'"></div>';
                                 }
 
                                 echo '
                                     <textarea style="padding:5px;" rows="5" cols="50" name="' . $data['id'] . '_template">' . $data['template'] . '</textarea>
-                                </td>                        
+                                </td>
                                 <td><input type="checkbox" value="on" name="' . $data['id'] . '_active" ' . $active . '></td>
                                 <td>' . $data['variables'] . '</td>';
-                    
+
                                 if($_GET['type'] == "admin"){
-                                    echo '                                                            
+                                    echo '
                                         <td>
                                             <input style="width:80%;" type="text" name="'.$data['id'].'_admingsm" value="'.$data['admingsm'].'">
                                             '.$LANG['admingsmornek'].'
-                                        </td>                            
+                                        </td>
                                     ';
                                 }
 
@@ -300,7 +301,7 @@ function iletimerkezi_output($vars){
     }
     elseif ($tab == "messages")
     {
-        
+
 
         $class  = new iletimerkezi();
 
@@ -308,24 +309,24 @@ function iletimerkezi_output($vars){
         $totalreports    = $class->getTotalReport();
         $reports        = $totalreports['total'];
         $totalpage      = ceil($reports / $reportperpage);
-        
+
         $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
-                
+
         if($page < 1) $page = 1;
-        
+
         if($page > $totalpage && $totalpage != 0 ) $page = $totalpage;
 
         $limit = ($page - 1) * $reportperpage;
 
         $getreport = $class->getReports($limit,$reportperpage);
-        
+
        // die(var_dump($getreport));
 
         if(!empty($_GET['deletesms'])){
             $smsid = (int) $_GET['deletesms'];
             $sql = "DELETE FROM mod_iletimerkezi_messages WHERE id = '$smsid'";
             mysql_query($sql);
-        }        
+        }
 
         echo  '
         <!--<script src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
@@ -376,8 +377,8 @@ function iletimerkezi_output($vars){
                 } else {
                     $status = $value['status'];
                 }
-                
-                //die(var_dump($value));        
+
+                //die(var_dump($value));
                 echo  '<tr>
                 <td>'.$i.'</td>
                 <td><a href="clientssummary.php?userid='.$value['user'].'">'.$value['firstname'].' '.$value['lastname'].'</a></td>
@@ -411,20 +412,20 @@ function iletimerkezi_output($vars){
 
         $min_middle_page = ceil($page_show/2);
         $max_middle_page = ($totalpage+1) - $min_middle_page;
-         
+
         $middle_page = $page;
         if($middle_page < $min_middle_page) $middle_page = $min_middle_page;
         if($middle_page > $max_middle_page) $middle_page = $max_middle_page;
-         
+
         $left_pages = round($middle_page - (($page_show-1) / 2));
-        $right_pages = round((($page_show-1) / 2) + $middle_page); 
-         
+        $right_pages = round((($page_show-1) / 2) + $middle_page);
+
         if($left_pages < 1) $left_pages = 1;
         if($right_pages > $totalpage) $right_pages = $totalpage;
-         
+
         if($page != 1) echo ' <a href="addonmodules.php?module=iletimerkezi&tab=messages&page=">&lt;&lt;İlk sayfa</a> ';
         if($page != 1) echo ' <a href="addonmodules.php?module=iletimerkezi&tab=messages&page='.($page-1).'">&lt;Önceki</a> ';
-         
+
         for($s = $left_pages; $s <= $right_pages; $s++) {
             if($page == $s) {
                 echo '[' . $s . '] ';
@@ -432,10 +433,10 @@ function iletimerkezi_output($vars){
                 echo '<a href="addonmodules.php?module=iletimerkezi&tab=messages&page='.$s.'">'.$s.'</a> ';
             }
         }
-         
+
         if($page != $totalpage && $totalpage != 0) echo ' <a href="addonmodules.php?module=iletimerkezi&tab=messages&page='.($page+1).'">Sonraki&gt;</a> ';
         if($page != $totalpage && $totalpage != 0) echo ' <a href="addonmodules.php?module=iletimerkezi&tab=messages&page='.$totalpage.'">Son sayfa&gt;&gt;</a>';
-    
+
 
     }
     elseif($tab=="sendcustomer")
@@ -506,12 +507,12 @@ function iletimerkezi_output($vars){
                             <td class="fieldarea">
                                 <textarea rows="10" cols="50" name="message"></textarea>
                             </td>
-                        </tr>                 
+                        </tr>
                     </tbody>
                 </table>
             </div>
             <p align="center"><input type="submit" value="'.$LANG['send'].'" class="btn-success" /></p>
-        </form>';        
+        </form>';
     }
     elseif($tab=="sendbulk")
     {  //die("send bulk");
@@ -524,36 +525,36 @@ function iletimerkezi_output($vars){
 
                 $userSql = "SELECT `id`, `firstname`, `lastname`, `phonenumber`
                 FROM `tblclients`";
-                
+
                 $result = mysql_query($userSql);
-                
+
                 while ($data = mysql_fetch_array($result)) {
                     $val = array('{firstname}', '{lastname}');
                     $change = array($data['firstname'], $data['lastname']);
                     $message = str_replace($val, $change, $_POST['message']);
-                    
+
                     $class2  = new iletimerkezi();
                     $class2->setGsmnumber($data['phonenumber']);
                     $class2->setMessage($message);
                     $class2->setUserid($data['id']);
 
                     $res = $class2->send();
-                    
+
                     if($res == false){
                         $sms_response = $class2->getErrors();
                     }else{
                         $sms_response = $LANG['smssent'].' '.$gsmnumber;
                     }
-                    
+
                     if($_POST["debug"] == "ON"){
                         $debug = 1;
-                    }  
-                    unset($class2);       
+                    }
+                    unset($class2);
                 }
             } else { //die("sdsad");
                 $userSql = "SELECT `id`, `firstname`, `lastname`, `phonenumber`
                 FROM `tblclients` WHERE groupid='".$_POST['client']."'";
-                
+
                 //die(var_export($data));
                 $clients = '';
                 $result = mysql_query($userSql);
@@ -578,10 +579,10 @@ function iletimerkezi_output($vars){
                     if($_POST["debug"] == "ON"){
                         $debug = 1;
                     }
-                    unset($class2);               
+                    unset($class2);
                 }
             }
-            
+
         }
         /*
         $userSql = "SELECT `a`.`id`,`a`.`firstname`, `a`.`lastname`, `b`.`value` as `gsmnumber`
@@ -633,19 +634,19 @@ function iletimerkezi_output($vars){
                             <td class="fieldarea">
                                 <textarea rows="10" cols="50" name="message"></textarea>
                             </td>
-                        </tr>                 
+                        </tr>
                     </tbody>
                 </table>
             </div>
             <p align="center"><input type="submit" value="'.$LANG['send'].'" class="btn-success" /></p>
-        </form>';        
-    
-    } elseif($tab == "notifications") {   
+        </form>';
+
+    } elseif($tab == "notifications") {
         $fieldid = $class->getFieldId();
         $total_permited_user = $class->getUserPermited($fieldid['wantsmsfield']);
         $total_user = $class->getUserUnpermitedId();
         $total_unpermited_user = $total_user['total'] - count($total_permited_user);
-        $settings = $class->getSettings();     
+        $settings = $class->getSettings();
         echo '<div><br>';
         if (empty($total_unpermited_user)) {
             echo '<p><h2> Tüm kullanıcılarınıza izin verilmiştir.</h2></p>';
@@ -666,7 +667,7 @@ function iletimerkezi_output($vars){
         echo '<div><br>';
         echo '<p><h2>'.$give_permision. '</h2><a href="addonmodules.php?module=iletimerkezi&tab=notifications">Devam Et.</a></p>';
         echo file_get_contents('https://dev.iletimerkezi.com/programs/whmcs/info.php?version='.urlencode($settings['version']));
-        echo '</div>'; 
+        echo '</div>';
     }
 
     echo '</div>';

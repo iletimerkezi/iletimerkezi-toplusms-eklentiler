@@ -15,12 +15,12 @@ class SatSMS_Setting_Options {
         $this->settings_api = new WeDevs_Settings_API;
 
         add_action( 'admin_init', array($this, 'admin_init') );
-        add_action( 'admin_menu', array($this, 'admin_menu') ); 
+        add_action( 'admin_menu', array($this, 'admin_menu') );
     }
 
     /**
      * Admin init hook
-     * @return void 
+     * @return void
      */
     function admin_init() {
 
@@ -34,7 +34,7 @@ class SatSMS_Setting_Options {
 
     /**
      * Admin Menu CB
-     * @return void 
+     * @return void
      */
     function admin_menu() {
         add_menu_page( __( 'İletimerkezi SMS', 'satosms' ), __( 'İletimerkezi SMS', 'satosms' ), 'manage_options', 'sat-order-sms-notification-settings', array( $this, 'plugin_page' ), plugins_url( 'iletiMerkeziSMS/images/im-icon.png' ));
@@ -42,7 +42,7 @@ class SatSMS_Setting_Options {
 
     /**
      * Get All settings Field
-     * @return array 
+     * @return array
      */
     function get_settings_sections() {
         $sections = array(
@@ -70,9 +70,9 @@ class SatSMS_Setting_Options {
      */
     function get_settings_fields() {
 
-        $order_statuses = $this->order_statuses();        
-        $buyer_message = "[order_id] nolu siparişiniz, [order_status] durumundadır. \nBizi seçtiğiniz için teşekkürler"; 
-        $admin_message = "Yeni bir sipariş var.\n[order_id] nolu siparişin durumu : [order_status]\n";    
+        $order_statuses = $this->order_statuses();
+        $buyer_message = "[order_id] nolu siparişiniz, [order_status] durumundadır. \nBizi seçtiğiniz için teşekkürler";
+        $admin_message = "Yeni bir sipariş var.\n[order_id] nolu siparişin durumu : [order_status]\n";
         $settings_fields = array(
 
             'satosms_general' => apply_filters( 'satosms_general_settings', array(
@@ -222,10 +222,10 @@ class SatSMS_Setting_Options {
 
     /**
      * Get sms Gateway settings
-     * @return array 
+     * @return array
      */
     function get_sms_gateway() {
-        $gateway = array( 
+        $gateway = array(
             'iletimerkezi' => __( 'İletimerkezi', 'satosms' ),
         );
 
@@ -236,7 +236,7 @@ class SatSMS_Setting_Options {
 
 /**
  * SMS Gateway Settings Extra panel options
- * @return void 
+ * @return void
  */
 
  function getBalance($api_username,$api_password) {
@@ -265,41 +265,74 @@ EOS;
 
         $result = curl_exec($ch);
         preg_match_all('|\<sms\>.*\<\/sms\>|U', $result, $matches,PREG_PATTERN_ORDER);
-        
+
         if(isset($matches[0])&&isset($matches[0][0])) {
-            return $matches[0][0];  
+            return $matches[0][0];
         }
-        
+
         return '';
+    }
+
+    function getDomain($api_username,$api_password) {
+
+        $domain = $_SERVER['HTTP_HOST'];
+        $xml = "
+        <request>
+            <authentication>
+                <username>{$api_username}</username>
+                <password>{$api_password}</password>
+            </authentication>
+            <pluginUser>
+                        <site><![CDATA[".$domain."]]></site>
+                        <name>opencart</name>
+                </pluginUser>
+        </request>
+        ";
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL,'http://api.iletimerkezi.com/v1/add-plugin-user');
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS,$xml);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST,2);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER,0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+        curl_setopt($ch, CURLOPT_HTTPHEADER,array('Content-Type: text/xml'));
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        // curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 120);
+
+        $result = curl_exec($ch);
+        return true;
     }
 
 
 
 function satosms_settings_field_gateway() {
 
-    $talkwithtext_username   = satosms_get_option( 'talkwithtext_username', 'satosms_gateway', '' ); 
-    $talkwithtext_password   = satosms_get_option( 'talkwithtext_password', 'satosms_gateway', '' ); 
-    $talkwithtext_originator = satosms_get_option( 'talkwithtext_originator', 'satosms_gateway', '' ); 
-    
-    $iletimerkezi_username   = satosms_get_option( 'iletimerkezi_username', 'satosms_gateway', '' ); 
-    $iletimerkezi_password   = satosms_get_option( 'iletimerkezi_password', 'satosms_gateway', '' ); 
-    $iletimerkezi_originator = satosms_get_option( 'iletimerkezi_originator', 'satosms_gateway', '' ); 
+    $talkwithtext_username   = satosms_get_option( 'talkwithtext_username', 'satosms_gateway', '' );
+    $talkwithtext_password   = satosms_get_option( 'talkwithtext_password', 'satosms_gateway', '' );
+    $talkwithtext_originator = satosms_get_option( 'talkwithtext_originator', 'satosms_gateway', '' );
 
-    $clickatell_name         = satosms_get_option( 'clickatell_name', 'satosms_gateway', '' ); 
-    $clickatell_password     = satosms_get_option( 'clickatell_password', 'satosms_gateway', '' ); 
-    $clickatell_api          = satosms_get_option( 'clickatell_api', 'satosms_gateway', '' ); 
+    $iletimerkezi_username   = satosms_get_option( 'iletimerkezi_username', 'satosms_gateway', '' );
+    $iletimerkezi_password   = satosms_get_option( 'iletimerkezi_password', 'satosms_gateway', '' );
+    $iletimerkezi_originator = satosms_get_option( 'iletimerkezi_originator', 'satosms_gateway', '' );
+
+    $clickatell_name         = satosms_get_option( 'clickatell_name', 'satosms_gateway', '' );
+    $clickatell_password     = satosms_get_option( 'clickatell_password', 'satosms_gateway', '' );
+    $clickatell_api          = satosms_get_option( 'clickatell_api', 'satosms_gateway', '' );
 
     $twt_helper        = sprintf( 'Please fill talk with text username and password. If not then visit <a href="%s" target="_blank">%s</a>', 'http://my.talkwithtext.com/', 'Talk With Text' );
     $clickatell_helper = sprintf( 'Please fill Clickatell informations. If not then go to <a href="%s" target="_blank">%s</a> and get your informations', 'https://www.clickatell.com/login/', 'Clickatell');
-    
+
     $balance = getBalance($iletimerkezi_username,$iletimerkezi_password);
+    $getdomain = getDomain($iletimerkezi_username,$iletimerkezi_password);
     if (!$balance) {
         $iletimerkezi_helper2 = sprintf( 'Mesaj gönderebilmek için giriş bilgileriniz doldurun. Eğer bilmiyorsanız <a href="%s" target="_blank">%s</a> bilgi alabilirsiniz.', 'https://www.iletimerkezi.com', 'İleti Merkezi\'nden');
     }else{
     $iletimerkezi_helper = sprintf( 'Mevcut bakiyeniz :'.$balance.' <a target="_blank" href="https://www.iletimerkezi.com/index.php?function=default&obj1=signinViaGet&gsm='.$iletimerkezi_username.'&password='.$iletimerkezi_password.'">SMS Satın Al!</a>');
     }
     ?>
-    
+
     <?php do_action( 'satosms_gateway_settings_options_before' ); ?>
 
     <div class="talkwithtext_wrapper hide_class">
@@ -344,7 +377,7 @@ function satosms_settings_field_gateway() {
                 <th scrope="row"><?php _e( 'Clickatell name', 'satosms' ) ?></th>
                 <td>
                     <input type="text" name="satosms_gateway[clickatell_name]" id="satosms_gateway[clickatell_name]" value="<?php echo $clickatell_name; ?>">
-                    <span><?php _e( 'Clickatell Username', 'satosms' ); ?></span> 
+                    <span><?php _e( 'Clickatell Username', 'satosms' ); ?></span>
                 </td>
             </tr>
 
@@ -352,7 +385,7 @@ function satosms_settings_field_gateway() {
                 <th scrope="row"><?php _e( 'Clickatell Password', 'satosms' ) ?></th>
                 <td>
                     <input type="text" name="satosms_gateway[clickatell_password]" id="satosms_gateway[clickatell_password]" value="<?php echo $clickatell_password; ?>">
-                    <span><?php _e( 'Clickatell password', 'satosms' ); ?></span> 
+                    <span><?php _e( 'Clickatell password', 'satosms' ); ?></span>
                 </td>
             </tr>
 
@@ -360,7 +393,7 @@ function satosms_settings_field_gateway() {
                 <th scrope="row"><?php _e( 'Clickatell api', 'satosms' ) ?></th>
                 <td>
                     <input type="text" name="satosms_gateway[clickatell_api]" id="satosms_gateway[clickatell_api]" value="<?php echo $clickatell_api; ?>">
-                    <span><?php _e( 'Clickatell API id', 'satosms' ); ?></span> 
+                    <span><?php _e( 'Clickatell API id', 'satosms' ); ?></span>
                 </td>
             </tr>
         </table>
@@ -379,7 +412,7 @@ function satosms_settings_field_gateway() {
                 <th scrope="row"><?php _e( 'Kullanıcı Adı', 'satosms' ) ?></th>
                 <td>
                     <input type="text" name="satosms_gateway[iletimerkezi_username]" id="satosms_gateway[iletimerkezi_username]" value="<?php echo $iletimerkezi_username; ?>">
-                    <span><?php _e( '', 'satosms' ); ?></span> 
+                    <span><?php _e( '', 'satosms' ); ?></span>
                 </td>
             </tr>
 
@@ -387,7 +420,7 @@ function satosms_settings_field_gateway() {
                 <th scrope="row"><?php _e( 'Şifre', 'satosms' ) ?></th>
                 <td>
                     <input type="password" name="satosms_gateway[iletimerkezi_password]" id="satosms_gateway[iletimerkezi_password]" value="<?php echo $iletimerkezi_password; ?>">
-                    <span><?php _e( '', 'satosms' ); ?></span> 
+                    <span><?php _e( '', 'satosms' ); ?></span>
                 </td>
             </tr>
 
@@ -395,7 +428,7 @@ function satosms_settings_field_gateway() {
                 <th scrope="row"><?php _e( 'Başlık', 'satosms' ) ?></th>
                 <td>
                     <input type="text" name="satosms_gateway[iletimerkezi_originator]" id="satosms_gateway[iletimerkezi_originator]" value="<?php echo $iletimerkezi_originator; ?>">
-                    <span><?php _e( '', 'satosms' ); ?></span> 
+                    <span><?php _e( '', 'satosms' ); ?></span>
                 </td>
             </tr>
         </table>

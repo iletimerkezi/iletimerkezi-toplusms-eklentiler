@@ -61,8 +61,8 @@ class IletimerkeziSms extends Module
 	public function uninstall()
 	{
   		return (
-  			parent::uninstall() && 
-  			Configuration::deleteByName('iletimerkezisms') && 
+  			parent::uninstall() &&
+  			Configuration::deleteByName('iletimerkezisms') &&
   			Db::getInstance()->execute('DROP TABLE IF EXISTS '._DB_PREFIX_.'iletimerkezisms')
   			);
 	}
@@ -86,7 +86,7 @@ class IletimerkeziSms extends Module
 	}
 
 	public function getContent()
-	{    
+	{
 		global $smarty;
 	    $output = null;
 
@@ -98,7 +98,7 @@ class IletimerkeziSms extends Module
 	    } else {
 
 	    if (isset($_POST['submitModule']))
-		{ 
+		{
 			Configuration::updateValue('iletimerkezi_username', $_POST['iletimerkezi_username']);
 			Configuration::updateValue('iletimerkezi_password', $_POST['iletimerkezi_password']);
 			Configuration::updateValue('iletimerkezi_sender', $_POST['iletimerkezi_sender']);
@@ -160,12 +160,12 @@ class IletimerkeziSms extends Module
 	            <p class="help-block">
 	              (Mesajin içinde %orderid% %orderreference% %firstname% %lastname% %telephone% degiskenini kullanabilirsiniz.)
 	            </p>
-	          </td>                                
+	          </td>
 	          </tr>
 			';
 
 		}
-		
+
 
 		$smarty->assign(
 	        array(
@@ -196,12 +196,12 @@ class IletimerkeziSms extends Module
 
 		//$results = Db::getInstance()->ExecuteS('SELECT * FROM '._DB_PREFIX_.'group_lang');
 		//die(var_export($results));
-		
+
 		 /* list of customer groups */
 	    $Group = new Group();
 	    $groups = $Group->getGroups(1);
 		//die(var_export($Group->getGroups(1)));
-		array_unshift($groups,  array( 
+		array_unshift($groups,  array(
 			'id_group' => '-1',
 			'reduction' => '0.00',
 			'price_display_method' => '0',
@@ -219,9 +219,9 @@ class IletimerkeziSms extends Module
 		//it take sms report
 		/*
 		$this->_getSmsReport();
-		
+
 		$sayfada = 10; // sayfada gösterilecek içerik miktarını belirtiyoruz.
- 
+
 		$total = $this->_getSendedSmsCount();
  		//die(var_dump($total));
  		if($total)
@@ -230,15 +230,15 @@ class IletimerkeziSms extends Module
  			$total_page = 1;
 
 		$page = isset($_POST['submitFiltersms']) ? (int)$_POST['submitFiltersms'] : 1;
- 
-		if($page < 1) $page = 1; 
-		if($page > $total_page) $page = $total_page; 
- 
+
+		if($page < 1) $page = 1;
+		if($page > $total_page) $page = $total_page;
+
 		$limit = ($page - 1) * $sayfada;
 
 		$smarty->assign(
 	        array(
-	            
+
 	            'reports' => $this->_getSendedSms($limit, $sayfada),
 	            'list_total' => 25,
 	            'simple_header' => false,
@@ -250,7 +250,7 @@ class IletimerkeziSms extends Module
 
 	    $reports = $this->display(__FILE__,'report.tpl');
 		*/
-	    
+
 
 	    $tabs = '<div id="tabs-container">
 				    <ul class="tabs-menu">
@@ -272,11 +272,12 @@ class IletimerkeziSms extends Module
 				</div>';
 
 	    //return $output.$setting_form.$reports.$multiple; //$this->displayForm();
+		$getdomain = $this->getDomain();
 	    return $output.$tabs; //$this->displayForm();
 	}
 
 	/**
-	* @desc it give into database sms count
+	* @escd it give into database sms count
 	* @return int total
 	*/
 	private function _getSendedSmsCount() {
@@ -359,9 +360,9 @@ EOS;
 		        }*/
 
 			}
-	        
+
 		}
-			
+
 	}
 
 	/**
@@ -372,8 +373,8 @@ EOS;
 	private function _updateSmsStatus($id, $status) {
 
 		Db::getInstance()->execute(
-					'UPDATE `'._DB_PREFIX_.'iletimerkezisms` 
-					SET `status` = \''.(int)$status.'\' 
+					'UPDATE `'._DB_PREFIX_.'iletimerkezisms`
+					SET `status` = \''.(int)$status.'\'
 					WHERE `id` = '.(int)$id
 				);
 	}
@@ -443,7 +444,7 @@ EOS;
 		$result = $this->_connect($xml,true);
 
         $response = simplexml_load_string($result);
-  
+
         if($response->status->code==200){
         	$report_id = $response->order->id;
         	$status = 1;//gönderiliyor
@@ -456,13 +457,44 @@ EOS;
         return $response;
 	}
 
+	private function getDomain(){
+
+    	$domain = $_SERVER['HTTP_HOST'];
+		$iletimerkezi_username = Configuration::get('iletimerkezi_username');
+		$iletimerkezi_password = Configuration::get('iletimerkezi_password');
+
+        $balance_xml = '<?xml version="1.0" encoding="UTF-8" ?>
+            <request>
+                <authentication>
+                    <username>'.$iletimerkezi_username.'</username>
+                    <password>'.$iletimerkezi_password.'</password>
+                </authentication>
+                <pluginUser>
+                        <site><![CDATA['.$domain.']]></site>
+                        <name>opencart</name>
+                </pluginUser>
+            </request>';
+
+        $ch = curl_init('http://api.iletimerkezi.com/v1/add-plugin-user');
+        curl_setopt($ch, CURLOPT_MUTE, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: text/xml'));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $balance_xml);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        return true;
+    }
+
 	/**
 	* @desc connect api
 	* @param string $xml post data
 	* @param bool $send url address
 	*/
 	private function _connect($xml, $send = false) {
-		
+
 		if($send)
 			$url = 'http://api.iletimerkezi.com/v1/send-sms';
 		else
@@ -501,7 +533,7 @@ EOS;
 					$Customer = new Customer(intval($customer['id_customer']));
 					//die("<pre>".var_export($Customer->getAddresses(1),1)."</pre>");
 					$address = $Customer->getAddresses(1);
-					
+
 					if(!empty($address[0]['phone_mobile'])){
 						$val = array('%firstname%', '%lastname%');
 						$change = array($customer['firstname'], $customer['lastname']);
@@ -525,19 +557,19 @@ EOS;
 						//die("<pre>".var_export($Customer->getAddresses(1),1)."</pre>");
 						$address = $Customer->getAddresses(1);
 						//die(var_dump($address[0]['phone_mobile']));
-						
+
 						if(!empty($address[0]['phone_mobile'])){
 							//die(var_dump($address[0]['phone_mobile']));
 							$val = array('%firstname%', '%lastname%');
 							$change = array($customer['firstname'], $customer['lastname']);
 							$message = str_replace($val, $change, $message);
 							$response = $this->sendSms( $address[0]['phone_mobile'], $message);
-							
+
 						}
 					}
 				}
 			}
-			
+
 		}
 		if($response->status->code==200){
 	    	echo '<p class ="conf confirm">Mesajınız başarılı bir şekilde iletildi.<p>';
@@ -556,7 +588,7 @@ EOS;
 		$message = Configuration::get('iletimerkezi_order_'.$params['newOrderStatus']->id.'_text');
 
 		if(isset($message) && !empty($message)){
-			
+
 			$order = new Order ($params['id_order']);
 			$customer = new Customer ($order->id_customer);
 			$addressInvoice = new Address(intval($order->id_address_invoice));
@@ -587,10 +619,10 @@ EOS;
 		);
 
 		// bir siparisde birden fazla urun icin dongude
-		$product_name 	   = "";			
-		$product_reference = "";			
-		$product_quantity  = "";	
-		
+		$product_name 	   = "";
+		$product_reference = "";
+		$product_quantity  = "";
+
 		foreach ($products as $key => $product) {
 
 			if($key==0)
@@ -598,9 +630,9 @@ EOS;
 			else
 				$parser = ",";
 
-			$product_name .= $parser.$product['product_name'];			
-			$product_reference .= $parser.$product['product_reference'];			
-			$product_quantity .= $parser.$product['product_quantity'];			
+			$product_name .= $parser.$product['product_name'];
+			$product_reference .= $parser.$product['product_reference'];
+			$product_quantity .= $parser.$product['product_quantity'];
 		}
 
 		//Yeni bir siparis geldiginde yoneticiye haber ver
@@ -623,14 +655,14 @@ EOS;
 
 			$Address = new Address((int)($order->id_address_invoice));
 			$phone_mobile_member = $Address->phone_mobile;
-			
+
 			$val = array('%orderid%', '%productname%', '%productmodel%', '%productquantity%');
 			$change = array($order->id, $product_name, $product_reference, $product_quantity);
 			$message_member = str_replace($val, $change, $message_member);
 			$this->sendSms($phone_mobile_member,$message_member);
 		}
-		
-		/* //debug	
+
+		/* //debug
 		$fp = fopen("C:\\wamp\\www\\prestashop\\loasdas.html", 'a');
 		fwrite($fp, "<pre>".$product_name."===".$product_reference."===".$product_quantity."===".var_export($products,1)."</pre>");
 		fclose($fp);
@@ -642,7 +674,7 @@ EOS;
 	}
 
 	/**
-	* @desc Customer account add 
+	* @desc Customer account add
 	* @param array $params Parameters
 	*/
 	public function hookCreateAccount($params) {
@@ -668,7 +700,7 @@ EOS;
 
 		if(isset($message) && !empty($message) ){
 			$phone_mobile = Configuration::get('iletimerkezi_admin_gsm');
-			
+
 			$message = str_replace($val, $change, $message);
 			$this->sendSms($phone_mobile, $message);
 		}

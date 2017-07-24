@@ -10,19 +10,19 @@ class iletimerkezi {
     public $sender;
     public $errors = array();
     public $logs   = array();
-    
-    public function setGsmnumber($number){        
-        
+
+    public function setGsmnumber($number){
+
         $number = preg_replace('/\D/','',$number);
         $number = substr($number, -10);
-        
+
         $this->gsmnumber = $number;
     }
-    
-    public function getGsmnumber(){        
+
+    public function getGsmnumber(){
         return $this->gsmnumber;
     }
-    
+
     public function setMessage($message){
         $this->message = $message;
     }
@@ -35,10 +35,10 @@ class iletimerkezi {
         $this->userid = $userid;
     }
 
-    public function getUserid(){        
+    public function getUserid(){
         return $this->userid;
     }
-    
+
     public function getParams(){
         $settings = $this->getSettings();
         $params   = json_decode($settings['apiparams']);
@@ -51,16 +51,16 @@ class iletimerkezi {
     }
 
     function send(){
-        
+
         if (extension_loaded("curl")) {
-            
+
             $params  = $this->getParams();
             $message = $this->message;
 
             $this->addLog("Params: ".json_encode($params));
             $this->addLog("To: ".$this->getGsmnumber());
-            $this->addLog("Message: ".$message);                
-            
+            $this->addLog("Message: ".$message);
+
             $send_xml = '<?xml version="1.0" encoding="UTF-8" ?>
                 <request>
                     <authentication>
@@ -75,7 +75,7 @@ class iletimerkezi {
                             <receipents>
                                 <number>'.$this->gsmnumber.'</number>
                             </receipents>
-                        </message>                                
+                        </message>
                     </order>
                 </request>';
 
@@ -89,7 +89,7 @@ class iletimerkezi {
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             $result = curl_exec($ch);
             curl_close($ch);
-            
+
             // $this->addLog("Sunucudan dönen cevap: ".$result);
             $order_status = false;
             if(preg_match('/<status>(.*?)<code>(.*?)<\/code>(.*?)<message>(.*?)<\/message>(.*?)<\/status>(.*?)<order>(.*?)<id>(.*?)<\/id>(.*?)<\/order>/si', $result, $result_matches)) {
@@ -101,7 +101,7 @@ class iletimerkezi {
                     $order_status = true;
                     $this->addLog("Message sent.");
                 } else {
-                    $this->addLog("Mesaj gönderilemedi. Hata: $status_message");                
+                    $this->addLog("Mesaj gönderilemedi. Hata: $status_message");
                     $this->addError("Mesaj gönderilirken hata oluştu. Hata: $status_message");
                 }
 
@@ -110,8 +110,8 @@ class iletimerkezi {
                 $this->addError("Mesaj gönderilirken hata oluştu. Hata: $result");
             }
 
-            
-            if(!$order_status){                
+
+            if(!$order_status){
                 $this->saveToDb($order_id,'error',$this->getErrors(),$this->getLogs());
                 return false;
             } else {
@@ -125,11 +125,11 @@ class iletimerkezi {
             $this->saveToDb(-1,'error',$this->getErrors(),$this->getLogs());
             return false;
         }
-        
+
     }
 
-    function getBalance(){        
-        
+    function getBalance(){
+
         $params  = $this->getParams();
         $balance_xml = '<?xml version="1.0" encoding="UTF-8" ?>
             <request>
@@ -157,13 +157,13 @@ class iletimerkezi {
         }
 
         if($status_code=='200') {
-            return $balance;        
+            return $balance;
         } else {
-            return $status_message;        
+            return $status_message;
         }
     }
 
-    function getReport($msgid){        
+    function getReport($msgid){
 
         $params  = $this->getParams();
         $balance_xml = '<?xml version="1.0" encoding="UTF-8" ?>
@@ -203,8 +203,8 @@ class iletimerkezi {
             }
         }
 
-        return 'error';        
-    }    
+        return 'error';
+    }
 
     function getHooks() {
         if ($handle = opendir(dirname(__FILE__).'/hooks')) {
@@ -219,7 +219,7 @@ class iletimerkezi {
     }
 
     function saveToDb($msgid,$status,$errors = null,$logs = null){
-        
+
         $now    = date("Y-m-d H:i:s");
         $table  = "mod_iletimerkezi_messages";
         $values = array(
@@ -235,7 +235,7 @@ class iletimerkezi {
         insert_query($table, $values);
 
         $this->addLog("Mesaj veritabanına kaydedildi");
-    }    
+    }
 
     function util_gsmnumber($number){
 
@@ -245,7 +245,7 @@ class iletimerkezi {
             $this->addLog("Numara formatı hatalı: ".$number);
             $this->addError("Numara formatı hatalı: ".$number);
             return null;
-        }        
+        }
 
         return $number;
     }
@@ -333,6 +333,35 @@ class iletimerkezi {
 
         $dateformat = str_replace(array("%d","%m","%y"),array($day,$month,$year),$dateformat);
         return $dateformat;
+    }
+
+    function getDomain(){
+        $domain = $_SERVER['HTTP_HOST'];
+        $params  = $this->getParams();
+        $balance_xml = '<?xml version="1.0" encoding="UTF-8" ?>
+            <request>
+                <authentication>
+                    <username>'.$params->iletimerkezi_username.'</username>
+                    <password>'.$params->iletimerkezi_password.'</password>
+                </authentication>
+                 <pluginUser>
+                        <site><![CDATA['.$domain.']]></site>
+                        <name>opencart</name>
+                </pluginUser>
+            </request>';
+
+        $ch = curl_init('http://api.iletimerkezi.com/v1/add-plugin-user');
+        curl_setopt($ch, CURLOPT_MUTE, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: text/xml'));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $balance_xml);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $result = curl_exec($ch);
+        curl_close($ch);
+
+        return true;
     }
 
 }

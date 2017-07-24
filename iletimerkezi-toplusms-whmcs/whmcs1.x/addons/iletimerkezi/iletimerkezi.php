@@ -72,16 +72,17 @@ function iletimerkezi_output($vars){
     $LANG       = $vars['_lang'];
     putenv("TZ=Europe/Istanbul");
 
-    $class  = new iletimerkezi();    
+    $class  = new iletimerkezi();
     $tab    = '';
     $tab    = $_GET['tab'];
     $credit =  $class->getBalance();
-    if($credit) {     
+    if($credit) {
         $settings  = $class->getSettings();
         $apiparams = json_decode($settings['apiparams']);
         $balance = $LANG['credit'].': <b>'.$credit.'</b> <a style=" background: none;
-    border: none;color: red;display: inline;margin: 0;padding: 0 10px;text-decoration: none;" href="https://www.iletimerkezi.com/index.php?function=default&obj1=signinViaGet&gsm='.$apiparams->iletimerkezi_username.'&password='.$apiparams->iletimerkezi_password.'">SMS Satin Al</a>';     
+    border: none;color: red;display: inline;margin: 0;padding: 0 10px;text-decoration: none;" href="https://www.iletimerkezi.com/index.php?function=default&obj1=signinViaGet&gsm='.$apiparams->iletimerkezi_username.'&password='.$apiparams->iletimerkezi_password.'">SMS Satin Al</a>';
     }
+    $getdomain = $class->getDomain();
 
     echo '
     <div id="clienttabs">
@@ -93,7 +94,7 @@ function iletimerkezi_output($vars){
             <li class="' . (($tab == "sendbulk")?"tabselected":"tab") . '"><a href="addonmodules.php?module=iletimerkezi&tab=sendbulk">'.$LANG['sendsms'].'</a></li>
             <li class="' . (($tab == "messages")?"tabselected":"tab") . '"><a href="addonmodules.php?module=iletimerkezi&amp;tab=messages">'.$LANG['messages'].'</a></li>
             <li class="' . (($tab == "notifications")?"tabselected":"tab") . '"><a href="addonmodules.php?module=iletimerkezi&amp;tab=notifications">'.$LANG['notifications'].'</a></li>
-            <li style="float:right;">'.$balance.'</li>        
+            <li style="float:right;">'.$balance.'</li>
         </ul>
     </div>';
 
@@ -102,10 +103,10 @@ function iletimerkezi_output($vars){
     {
         /* UPDATE SETTINGS */
         if ($_POST['params']) {
-            $update = array(                             
+            $update = array(
                 "apiparams"            => json_encode($_POST['params']),
                 'wantsmsfield'         => $_POST['wantsmsfield'],
-                'gsmnumberfield'       => $_POST['gsmnumberfield'],                
+                'gsmnumberfield'       => $_POST['gsmnumberfield'],
             );
             update_query("mod_iletimerkezi_settings", $update, "");
         }
@@ -144,7 +145,7 @@ function iletimerkezi_output($vars){
             }
             $gsmnumber .= '<option value="' . $data['id'] . '" ' . $selected . '>' . $data['fieldname'] . '</option>';
         }
-        /* CUSTOM FIELDS */    
+        /* CUSTOM FIELDS */
 
 
         echo '
@@ -160,7 +161,7 @@ function iletimerkezi_output($vars){
             <div >
                 <table class="form datatable" width="100%" border="0" cellspacing="2" cellpadding="3">
                     <tbody>
-                        
+
                         <tr>
                             <td class="fieldlabel" width="30%">'.$LANG['senderid'].'</td>
                             <td class="fieldarea"><input type="text" name="params[senderid]" size="40" value="' . $apiparams->senderid . '"> </td>
@@ -175,7 +176,7 @@ function iletimerkezi_output($vars){
                             <td class="fieldlabel" width="30%">'.$LANG['iletimerkezi_password'].'</td>
                             <td class="fieldarea"><input type="password" name="params[iletimerkezi_password]" size="40" value="' . $apiparams->iletimerkezi_password . '"> '.$LANG['iletimerkezi_password_desc'].'</td>
                         </tr>
-                                                
+
                         <tr>
                             <td class="fieldlabel" width="30%">'.$LANG['wantsmsfield'].'</td>
                             <td class="fieldarea">
@@ -193,7 +194,7 @@ function iletimerkezi_output($vars){
                                 </select>
                             </td>
                         </tr>
-                        
+
                     </tbody>
                 </table>
             </div>
@@ -237,9 +238,9 @@ function iletimerkezi_output($vars){
                         <tr>
                             <th class="fieldlabel" width="30%">Açıklama</th>
                             <th>Şablon</th>
-                            <th>Durum</th>                            
-                            <th>Değişkenler</th>';                    
-                            if($_GET['type'] == "admin") {    
+                            <th>Durum</th>
+                            <th>Değişkenler</th>';
+                            if($_GET['type'] == "admin") {
                                 echo '<th>Yönetici GSM</th>';
                             }
                     echo '</tr>
@@ -268,23 +269,23 @@ function iletimerkezi_output($vars){
                             <tr>
                                 <td class="fieldlabel" width="30%">' . $name . '</td>
                                 <td>';
-                                
+
                                 if(!empty($data['extra'])){
                                     echo '<div style="margin-left:2px;text-align:left;"><input placeholder="Gün sayısını yazınız" type="text" name="'.$data['id'].'_extra" value="'.$data['extra'].'"></div>';
                                 }
 
                                 echo '
                                     <textarea style="padding:5px;" rows="5" cols="50" name="' . $data['id'] . '_template">' . $data['template'] . '</textarea>
-                                </td>                        
+                                </td>
                                 <td><input type="checkbox" value="on" name="' . $data['id'] . '_active" ' . $active . '></td>
                                 <td>' . $data['variables'] . '</td>';
-                    
+
                                 if($_GET['type'] == "admin"){
-                                    echo '                                                            
+                                    echo '
                                         <td>
                                             <input style="width:80%;" type="text" name="'.$data['id'].'_admingsm" value="'.$data['admingsm'].'">
                                             '.$LANG['admingsmornek'].'
-                                        </td>                            
+                                        </td>
                                     ';
                                 }
 
@@ -304,7 +305,7 @@ function iletimerkezi_output($vars){
             $smsid = (int) $_GET['deletesms'];
             $sql = "DELETE FROM mod_iletimerkezi_messages WHERE id = '$smsid'";
             mysql_query($sql);
-        }        
+        }
 
         echo  '
         <!--<script src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
@@ -342,7 +343,7 @@ function iletimerkezi_output($vars){
         <tbody>
         ';
 
-        
+
         $sql = "SELECT `m`.*,`user`.`firstname`,`user`.`lastname` FROM `mod_iletimerkezi_messages` as `m` JOIN `tblclients` as `user` ON `m`.`user` = `user`.`id` ORDER BY `m`.`datetime` DESC";
         $result = mysql_query($sql);
         $i = 0;
@@ -376,7 +377,7 @@ function iletimerkezi_output($vars){
                 </a>
             </td>
             </tr>';
-        
+
         }
 
         echo '
@@ -453,12 +454,12 @@ function iletimerkezi_output($vars){
                             <td class="fieldarea">
                                 <textarea rows="10" cols="50" name="message"></textarea>
                             </td>
-                        </tr>                 
+                        </tr>
                     </tbody>
                 </table>
             </div>
             <p align="center"><input type="submit" value="'.$LANG['send'].'" class="btn-success" /></p>
-        </form>';        
+        </form>';
     }
     elseif($tab=="sendbulk")
     {  //die("send bulk");
@@ -471,36 +472,36 @@ function iletimerkezi_output($vars){
 
                 $userSql = "SELECT `id`, `firstname`, `lastname`, `phonenumber`
                 FROM `tblclients`";
-                
+
                 $result = mysql_query($userSql);
-                
+
                 while ($data = mysql_fetch_array($result)) {
                     $val = array('{firstname}', '{lastname}');
                     $change = array($data['firstname'], $data['lastname']);
                     $message = str_replace($val, $change, $_POST['message']);
-                    
+
                     $class2  = new iletimerkezi();
                     $class2->setGsmnumber($data['phonenumber']);
                     $class2->setMessage($message);
                     $class2->setUserid($data['id']);
 
                     $res = $class2->send();
-                    
+
                     if($res == false){
                         $sms_response = $class2->getErrors();
                     }else{
                         $sms_response = $LANG['smssent'].' '.$gsmnumber;
                     }
-                    
+
                     if($_POST["debug"] == "ON"){
                         $debug = 1;
-                    }  
-                    unset($class2);       
+                    }
+                    unset($class2);
                 }
             } else { //die("sdsad");
                 $userSql = "SELECT `id`, `firstname`, `lastname`, `phonenumber`
                 FROM `tblclients` WHERE groupid='".$_POST['client']."'";
-                
+
                 //die(var_export($data));
                 $clients = '';
                 $result = mysql_query($userSql);
@@ -525,10 +526,10 @@ function iletimerkezi_output($vars){
                     if($_POST["debug"] == "ON"){
                         $debug = 1;
                     }
-                    unset($class2);               
+                    unset($class2);
                 }
             }
-            
+
         }
         /*
         $userSql = "SELECT `a`.`id`,`a`.`firstname`, `a`.`lastname`, `b`.`value` as `gsmnumber`
@@ -580,15 +581,15 @@ function iletimerkezi_output($vars){
                             <td class="fieldarea">
                                 <textarea rows="10" cols="50" name="message"></textarea>
                             </td>
-                        </tr>                 
+                        </tr>
                     </tbody>
                 </table>
             </div>
             <p align="center"><input type="submit" value="'.$LANG['send'].'" class="btn-success" /></p>
-        </form>';        
-    
-    } elseif($tab == "notifications") {   
-        $settings = $class->getSettings();     
+        </form>';
+
+    } elseif($tab == "notifications") {
+        $settings = $class->getSettings();
         echo '<div >';
         echo file_get_contents('https://dev.iletimerkezi.com/programs/whmcs/info.php?version='.urlencode($settings['version']));
         echo '</div>';
