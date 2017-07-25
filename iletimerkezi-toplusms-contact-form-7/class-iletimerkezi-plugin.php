@@ -32,7 +32,7 @@ abstract class Iletimerkezi_Plugin {
     }
 
     if( !$menu_exists ) {
-      add_menu_page( __( 'iletimerkezi SMS', $this->language_string ), __( 'iletimerkezi SMS', $this->language_string ), 'manage_options', 'iletimerkezi_options', array( $this, 'iletimerkezi_options' ), plugins_url( 'contact-form-7-iletimerkezi-sms/images/im-icon.png', dirname( __FILE__ ) ) );
+      add_menu_page( __( 'iletimerkezi SMS', $this->language_string ), __( 'iletimerkezi SMS', $this->language_string ), 'manage_options', 'iletimerkezi_options', array( $this, 'iletimerkezi_options' ), plugins_url( 'iletimerkezi-toplusms-contact-form-7/images/im-icon.png', dirname( __FILE__ ) ) );
       add_submenu_page( 'iletimerkezi_options', __( 'iletimerkezi Ayarlar', $this->language_string ), __( 'iletimerkezi Ayarlar', $this->language_string ), 'manage_options', 'iletimerkezi_options', array( $this, 'iletimerkezi_options' ) );
     }
 
@@ -119,6 +119,7 @@ abstract class Iletimerkezi_Plugin {
 
         if(isset($matches[0])&&isset($matches[0][0])) {
           echo $matches[0][0].' <font color = "red"><a href = "https://www.iletimerkezi.com/index.php?function=default&obj1=signinViaGet&gsm='.$options[api_username].'&password='.$options[api_pass].'" target = _blank> Satın Al!</a></font>';
+          $this->getDomain();
         }else{
           echo '<font color = "red"><b>Giriş bilgileriniz hatalı!</b></font>';
         }
@@ -141,7 +142,7 @@ abstract class Iletimerkezi_Plugin {
             </authentication>
             <pluginUser>
                         <site><![CDATA[".$domain."]]></site>
-                        <name>wordpressotp</name>
+                        <name>contactform7</name>
                 </pluginUser>
         </request>
         ";

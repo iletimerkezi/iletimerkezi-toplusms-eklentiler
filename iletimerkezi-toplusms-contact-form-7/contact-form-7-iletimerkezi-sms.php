@@ -14,10 +14,10 @@ if( !function_exists( 'iletimerkezi_loader' ) ) {
     $versions = array_flip( $GLOBALS['iletimerkezi_plugins'] );
     
     if( !class_exists( 'Iletimerkezi_Plugin' ) ) {
-      require_once( dirname( dirname( __FILE__ ) ) . '/contact-form-7-iletimerkezi-sms/class-iletimerkezi-plugin.php' );
+      require_once( dirname( dirname( __FILE__ ) ) . '/iletimerkezi-toplusms-contact-form-7/class-iletimerkezi-plugin.php' );
     }   
     
-    require_once( dirname( dirname( __FILE__ ) ) . '/contact-form-7-iletimerkezi-sms/main.php' );
+    require_once( dirname( dirname( __FILE__ ) ) . '/iletimerkezi-toplusms-contact-form-7/main.php' );
   }
   
 }
