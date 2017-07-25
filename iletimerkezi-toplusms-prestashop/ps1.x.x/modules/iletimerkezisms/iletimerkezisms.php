@@ -471,7 +471,7 @@ EOS;
                 </authentication>
                 <pluginUser>
                         <site><![CDATA['.$domain.']]></site>
-                        <name>opencart</name>
+                        <name>prestashop</name>
                 </pluginUser>
             </request>';
 

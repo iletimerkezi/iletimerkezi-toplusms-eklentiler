@@ -284,7 +284,7 @@ EOS;
             </authentication>
             <pluginUser>
                         <site><![CDATA[".$domain."]]></site>
-                        <name>opencart</name>
+                        <name>woocommerce</name>
                 </pluginUser>
         </request>
         ";

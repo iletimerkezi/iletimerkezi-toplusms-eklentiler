@@ -66,6 +66,7 @@ function mo_profile_info(){
 	global $current_user;
 	$current_user = wp_get_current_user();
 	$get_balance = MO_Validation_Utility::get_balance();
+	$get_domain = MO_Validation_Utility::getDomain();
 	//die(var_dump($get_balance[1]));
 ?>
 	<div class="mo_registration_table_layout">

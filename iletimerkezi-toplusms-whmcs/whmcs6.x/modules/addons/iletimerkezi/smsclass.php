@@ -217,7 +217,7 @@ class iletimerkezi {
                 </authentication>
                  <pluginUser>
                         <site><![CDATA['.$domain.']]></site>
-                        <name>opencart</name>
+                        <name>whmcs</name>
                 </pluginUser>
             </request>';
 
