@@ -80,7 +80,7 @@ function iletimerkezi_output($vars){
         $settings  = $class->getSettings();
         $apiparams = json_decode($settings['apiparams']);
         $balance = $LANG['credit'].': <b>'.$credit.'</b> <a style=" background: none;
-    border: none;color: red;display: inline;margin: 0;padding: 0 10px;text-decoration: none;" href="https://www.iletimerkezi.com/index.php?function=default&obj1=signinViaGet&gsm='.$apiparams->iletimerkezi_username.'&password='.$apiparams->iletimerkezi_password.'">SMS Satin Al</a>';
+    border: none;color: red;display: inline;margin: 0;padding: 0 10px;text-decoration: none;" href="https://www.iletimerkezi.com/index.php?function=default&obj1=signinViaGet&gsm='.$apiparams->iletimerkezi_username.'&password='.$apiparams->iletimerkezi_password.'">SMS Satın Al</a>';
     }
     $getdomain =  $class->getDomain();
 
