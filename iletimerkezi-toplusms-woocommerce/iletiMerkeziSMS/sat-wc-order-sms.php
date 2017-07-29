@@ -5,7 +5,7 @@ Plugin URI: http://www.woocommercesms.com
 Description: Woocommers ile beraber çalışır, ürün satışında ve ürün durumları değiştiğinde İleti Merkezi üzerinden SMS gönderir.
 Yith eklentisi ile çalışabilen değişkenler eklendi.
 Version: 1.1.1
-Author: İleti Merkezi    
+Author: İleti Merkezi
 Author URI: http://www.iletimerkezi.com/
 License: GPL2
 */
@@ -104,7 +104,7 @@ class Sat_WC_Order_SMS {
      */
     public function __construct() {
 
-       
+
         // Instantiate necessary class
         $this->instantiate();
 
@@ -118,7 +118,7 @@ class Sat_WC_Order_SMS {
         /*if( satosms_get_option( 'enable_notification', 'satosms_general', 'off' ) == 'off' ) {
             return;
         }*/
-        
+
         //add_action( 'woocommerce_checkout_after_customer_details', array( $this, 'add_buyer_notification_field' ) );
         //add_action( 'woocommerce_checkout_process', array( $this, 'add_buyer_notification_field_process' ) );
         add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'buyer_notification_update_order_meta' ) );
@@ -126,7 +126,7 @@ class Sat_WC_Order_SMS {
         add_action( 'woocommerce_order_status_changed', array( $this, 'trigger_after_order_place' ), 10, 3 );
        // add_filter( 'wc_order_statuses', array($this, 'filter_order_status'));
 
-       
+
     }
 
     /**
@@ -163,15 +163,15 @@ class Sat_WC_Order_SMS {
         load_plugin_textdomain( 'satosms', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
     }
 
-     
+
     public function admin_enqueue_scripts() {
 
         wp_enqueue_style( 'admin-satosms-styles', plugins_url( 'css/admin.css', __FILE__ ), false, date( 'Ymd' ) );
         wp_enqueue_script( 'admin-satosms-scripts', plugins_url( 'js/admin.js', __FILE__ ), array( 'jquery' ), false, true );
 
-        wp_localize_script( 'admin-satosms-scripts', 'satosms', array( 
+        wp_localize_script( 'admin-satosms-scripts', 'satosms', array(
             'ajaxurl' => admin_url( 'admin-ajax.php' )
-        ) );   
+        ) );
     }
 
     /**
@@ -198,11 +198,11 @@ class Sat_WC_Order_SMS {
      * Add Buyer Notification field validation
      */
     function add_buyer_notification_field_process() {
-        
+
         if( satosms_get_option( 'force_buyer_notification', 'satosms_general', 'no' ) == 'no' ) {
             return;
         }
-        
+
         // Check if the field is set, if not then show an error message.
         if ( ! $_POST['buyer_sms_notify'] ) {
                 wc_add_notice( __( '<strong>Send Notification Via SMS</strong> must be required' ), 'error' );
@@ -210,20 +210,20 @@ class Sat_WC_Order_SMS {
     }
 
     /**
-     * Display Buyer notification in Order admin page 
-     * @param  object $order 
-     * @return void        
+     * Display Buyer notification in Order admin page
+     * @param  object $order
+     * @return void
      */
     function buyer_sms_notify_display_admin_order_meta( $order ) {
         $want_notification =  get_post_meta( $order->id, '_buyer_sms_notify', true );
-        $display_info = (  isset( $want_notification ) && !empty( $want_notification ) ) ? 'Yes' : 'No'; 
+        $display_info = (  isset( $want_notification ) && !empty( $want_notification ) ) ? 'Yes' : 'No';
         echo '<p><strong>'.__('Buyer want to get SMS notification').':</strong> ' . $display_info . '</p>';
     }
 
     /**
-     * Update Order buyer notify meta in checkout page 
-     * @param  integer $order_id 
-     * @return void           
+     * Update Order buyer notify meta in checkout page
+     * @param  integer $order_id
+     * @return void
      */
     function buyer_notification_update_order_meta( $order_id ) {
         if ( ! empty( $_POST['buyer_sms_notify'] ) ) {
@@ -233,10 +233,10 @@ class Sat_WC_Order_SMS {
 
     /**
      * Trigger when and order is placed
-     * @param  integer $order_id   
-     * @param  string $old_status 
-     * @param  string $new_status 
-     * @return void             
+     * @param  integer $order_id
+     * @param  string $old_status
+     * @param  string $new_status
+     * @return void
      */
     public  function trigger_after_order_place( $order_id, $old_status, $new_status ) {
         $order = new WC_Order( $order_id );
@@ -250,34 +250,34 @@ class Sat_WC_Order_SMS {
         $default_buyer_sms_body = __( 'Thanks for purchasing. Your [order_id] is now [order_status]. Thank you', 'satosms' );
         $order_status_settings  = satosms_get_option( 'order_status', 'satosms_general', array() );
         $admin_phone_number     = satosms_get_option( 'sms_admin_phone', 'satosms_message', '' );
-        $admin_sms_body         = satosms_get_option( 'admin_sms_body', 'satosms_message', $default_admin_sms_body ); 
-        $buyer_sms_body         = satosms_get_option( 'sms_body', 'satosms_message', $default_buyer_sms_body ); 
+        $admin_sms_body         = satosms_get_option( 'admin_sms_body', 'satosms_message', $default_admin_sms_body );
+        $buyer_sms_body         = satosms_get_option( 'sms_body', 'satosms_message', $default_buyer_sms_body );
         $active_gateway         = satosms_get_option( 'sms_gateway', 'satosms_gateway', 'iletimerkezi' );
-        $want_to_notify_buyer   = get_post_meta( $order_id, '_buyer_sms_notify', true ); 
-        
+        $want_to_notify_buyer   = get_post_meta( $order_id, '_buyer_sms_notify', true );
+
         if( count( $order_status_settings ) < 0 || empty( $active_gateway ) ) {
             return;
-        }  
-        
-        if( in_array( $new_status, $order_status_settings )) { 
+        }
+
+        if( in_array( $new_status, $order_status_settings )) {
           if( satosms_get_option( 'enable_notification', 'satosms_general', 'off' ) == 'off' && $new_status == 'processing' ) {
             return;
           }
             //if( $want_to_notify_buyer ) {
                 if(  satosms_get_option( 'admin_notification', 'satosms_general', 'on' ) == 'on' ) {
-                    
+                    $buyer_number = get_post_meta( $order_id, '_billing_phone', true );
                     $admin_numbers = explode(',',$admin_phone_number);
                     foreach ($admin_numbers as $admin_number) {
-                        $admin_sms_data['number']   = $admin_number;     
-                        
-                        $admin_sms_data['sms_body'] = $this->pharse_sms_body( $admin_sms_body, $new_status, $order_id, $ywot );
-                        
+                        $admin_sms_data['number']   = $admin_number;
+
+                        $admin_sms_data['sms_body'] = $this->pharse_sms_body( $admin_sms_body, $new_status, $order_id, $ywot, $buyer_number );
+
                         $admin_response             = SatSMS_SMS_Gateways::init()->$active_gateway( $admin_sms_data );
                         if( $admin_response ) {
                             $order->add_order_note( __( 'Admin numarasına SMS gönderilmiştir.', 'satosms' ) );
                         } else {
                             $order->add_order_note( __( 'Admin numarasına SMS gönderimi başarısız oldu.', 'satosms' ) );
-                        }           
+                        }
                     }
                 }
 
@@ -292,12 +292,12 @@ class Sat_WC_Order_SMS {
                     $order->add_order_note( __( 'Müşteriye SMS gönderilmiştir.', 'satosms' ) );
                 } else {
                     $order->add_order_note( __( 'Müşteriye SMS gönderimi başarısız oldu.', 'satosms' ) );
-                }  
+                }
         }
             /*} else {
 
                 if(  satosms_get_option( 'admin_notification', 'satosms_general', 'on' ) == 'on' ) {
-                    $admin_sms_data['number']   = $admin_phone_number;     
+                    $admin_sms_data['number']   = $admin_phone_number;
                     $admin_sms_data['sms_body'] = $this->pharse_sms_body( $admin_sms_body, $new_status, $order_id );
                     $admin_response             = SatSMS_SMS_Gateways::init()->$active_gateway( $admin_sms_data );
 
@@ -307,7 +307,7 @@ class Sat_WC_Order_SMS {
                         $order->add_order_note( __( 'SMS Send Faild, Somthing wrong', 'satosms' ) );
                     }
                 }
-            }         
+            }
         }*/
     }
 
@@ -316,19 +316,19 @@ class Sat_WC_Order_SMS {
 
     /**
      * Pharse Message body with necessary variables
-     * @param  string $content      
-     * @param  string $order_status 
-     * @param  integer $order_id     
-     * @return string               
+     * @param  string $content
+     * @param  string $order_status
+     * @param  integer $order_id
+     * @return string
      */
-    public function pharse_sms_body( $content, $order_status, $order_id, $ywot ) {
+    public function pharse_sms_body( $content, $order_status, $order_id, $ywot, $number ) {
 
         $order = $order_id;
         $ywot_carrier_name = $ywot['ywot_carrier_name'][0];
         $ywot_pick_up_date = $ywot['ywot_pick_up_date'][0];
         $ywot_tracking_code = $ywot['ywot_tracking_code'][0];
         $order_total = $order_amount. ' '. get_post_meta( $order_id, '_order_currency', true );
-        
+
         $filter_status = $this->filter_order_status($order_status);
         $find = array(
             '[order_id]',
@@ -336,17 +336,19 @@ class Sat_WC_Order_SMS {
             '[ywot_carrier_name]',
             '[ywot_pick_up_date]',
             '[ywot_tracking_code]',
+            '[buyer_number]',
         );
         $replace = array(
             $order,
             $filter_status,
             $ywot_carrier_name,
             $ywot_pick_up_date,
-            $ywot_tracking_code
+            $ywot_tracking_code,
+            $number
         );
 
         $body = str_replace( $find, $replace, $content );
-        
+
         return $body;
     }
 
@@ -384,7 +386,7 @@ class Sat_WC_Order_SMS {
 } // Sat_WC_Order_SMS
 
 /**
- * Loaded after all plugin initialize 
+ * Loaded after all plugin initialize
  */
 add_action( 'plugins_loaded', 'load_sat_wc_order_sms' );
 

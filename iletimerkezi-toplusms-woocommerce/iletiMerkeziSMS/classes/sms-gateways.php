@@ -18,9 +18,9 @@ class SatSMS_SMS_Gateways {
     }
 
     function talkwithtext( $sms_data ) {
-        $username = satosms_get_option( 'talkwithtext_username', 'satosms_gateway', '' ); 
-        $password = satosms_get_option( 'talkwithtext_password', 'satosms_gateway', '' ); 
-        $originator = satosms_get_option( 'talkwithtext_originator', 'satosms_gateway', '' ); 
+        $username = satosms_get_option( 'talkwithtext_username', 'satosms_gateway', '' );
+        $password = satosms_get_option( 'talkwithtext_password', 'satosms_gateway', '' );
+        $originator = satosms_get_option( 'talkwithtext_originator', 'satosms_gateway', '' );
         $admin_phone = str_replace( '+', '', $sms_data['number'] );
 
         if( empty( $username ) || empty( $password ) ) {
@@ -28,14 +28,14 @@ class SatSMS_SMS_Gateways {
         }
 
         require_once dirname( __FILE__ ) . '/../lib/sms.php';
-        $sol4mob_sms=   new sms();     
+        $sol4mob_sms=   new sms();
         $sol4mob_sms->username= $username;
         $sol4mob_sms->password= $password;
         $sol4mob_sms->originator= $originator;
-        $sol4mob_sms->msgtext= $sms_data['sms_body']; 
+        $sol4mob_sms->msgtext= $sms_data['sms_body'];
         $sol4mob_sms->phone= $admin_phone;
-        $response = $sol4mob_sms->send();  
-        
+        $response = $sol4mob_sms->send();
+
         if( $response == 'OK' ) {
             return true;
         } else {
@@ -45,9 +45,9 @@ class SatSMS_SMS_Gateways {
 
     function iletimerkezi( $sms_data ) {
 
-        $username = satosms_get_option( 'iletimerkezi_username', 'satosms_gateway', '' ); 
-        $password = satosms_get_option( 'iletimerkezi_password', 'satosms_gateway', '' ); 
-        $originator = satosms_get_option( 'iletimerkezi_originator', 'satosms_gateway', '' ); 
+        $username = satosms_get_option( 'iletimerkezi_username', 'satosms_gateway', '' );
+        $password = satosms_get_option( 'iletimerkezi_password', 'satosms_gateway', '' );
+        $originator = satosms_get_option( 'iletimerkezi_originator', 'satosms_gateway', '' );
         $admin_phone = $sms_data['number'];
         $admin_phone = preg_replace('/\D/','',$admin_phone);
         $admin_phone = substr($admin_phone, -10);
@@ -61,11 +61,11 @@ class SatSMS_SMS_Gateways {
 
         require_once dirname( __FILE__ ) . '/../lib/sms.php';
 
-        $sol4mob_sms=   new sms();     
+        $sol4mob_sms=   new sms();
         // $sol4mob_sms->username= $username;
         // $sol4mob_sms->password= $password;
         // $sol4mob_sms->originator= ;
-        // $sol4mob_sms->msgtext= $sms_data['sms_body']; 
+        // $sol4mob_sms->msgtext= $sms_data['sms_body'];
         // $sol4mob_sms->phone= $admin_phone;
 
         $msg = $sms_data['sms_body'];
@@ -88,18 +88,18 @@ class SatSMS_SMS_Gateways {
                             </order>
                     </request>
 EOS;
-        
+
         $response = $sol4mob_sms->sendRequest('http://api.iletimerkezi.com/v1/send-sms',$xml,array('Content-Type: text/xml'));
-        
+
         preg_match_all('|\<code\>.*\<\/code\>|U', $response, $matches,PREG_PATTERN_ORDER);
-        
+
         if(isset($matches[0])&&isset($matches[0][0])) {
              if( $matches[0][0] == '<code>200</code>' ) {
                 return true;
-             } 
+             }
         }
         return false;
-       
+
     }
 
     /**
