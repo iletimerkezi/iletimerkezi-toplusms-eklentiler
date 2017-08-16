@@ -10,5 +10,5 @@ $class = new iletimerkezi();
 $hooks = $class->getHooks();
 
 foreach($hooks as $hook){
-   $res = add_hook($hook['hook'], 1, $hook['function'], "");   
+   $res = add_hook($hook['hook'], 1, $hook['function'], "");
 }

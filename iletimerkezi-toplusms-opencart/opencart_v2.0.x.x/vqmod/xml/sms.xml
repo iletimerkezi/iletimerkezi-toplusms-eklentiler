@@ -174,7 +174,7 @@
                 <operation>
 
                         <search position="after"><![CDATA[
-                        $this->model_checkout_order->addOrderHistory($order_id, $this->request->post['order_status_id'], $this->request->post['comment'], $this->request->post['notify'], $this->request->post['override']);
+                        $this->model_checkout_order->addOrderHistory($order_id, $this->request->post['order_status_id'], $this->request->post['comment'], $this->request->post['notify']
                         ]]></search>
 
                         <add><![CDATA[
