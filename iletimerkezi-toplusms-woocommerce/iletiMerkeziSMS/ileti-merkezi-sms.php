@@ -3,7 +3,7 @@
 Plugin Name: İleti Merkezi Sms
 Plugin URI: http://www.woocommercesms.com
 Description: Woocommers ile beraber çalışır, ürün satışında ve ürün durumları değiştiğinde İleti Merkezi üzerinden SMS gönderir.
-Version: 1.0.0
+Version: 1.0.1
 Author: İleti Merkezi
 Author URI: http://www.iletimerkezi.com/
 License: GPL2

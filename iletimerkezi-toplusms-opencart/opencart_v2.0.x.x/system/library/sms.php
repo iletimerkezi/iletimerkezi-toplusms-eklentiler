@@ -172,7 +172,7 @@ EOS;
 
         $result = curl_exec($ch);
         return true;
-    }ß
+    }
 
 }
 ?>
