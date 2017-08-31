@@ -240,8 +240,7 @@ class MO_Validation_Utility{
 
 			$username = get_option('iletimerkezi_username');
 			$password = get_option('iletimerkezi_password');
-			$sender   = get_option('iletimerkzi_sender');
-
+			$sender   = get_option('iletimerkezi_sender');
 			//$url www= get_option('mo_customer_validation_host_name') . '/moas/api/auth/challenge';
 
 			//$ch = curl_init($url);
@@ -304,7 +303,6 @@ class MO_Validation_Utility{
 				        </order>
 					</request>
 EOS;
-
 					$ch = curl_init();
 			        curl_setopt($ch, CURLOPT_URL,'http://api.iletimerkezi.com/v1/send-sms');
 			        curl_setopt($ch, CURLOPT_POST, 1);
@@ -318,7 +316,6 @@ EOS;
 			        curl_setopt($ch, CURLOPT_TIMEOUT, 120);
 			        curl_setopt($ch,CURLOPT_VERBOSE, FALSE);
 			        $result = curl_exec($ch);
-			        //die(var_dump($result));
 				preg_match_all('|\<code\>.*\<\/code\>|U', $result, $matches,PREG_PATTERN_ORDER);
 				if(isset($matches[0])&&isset($matches[0][0])) {
 

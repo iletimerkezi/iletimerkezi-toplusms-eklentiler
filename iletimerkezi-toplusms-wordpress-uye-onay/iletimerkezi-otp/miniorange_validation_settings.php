@@ -2,7 +2,7 @@
 /**
 * Plugin Name: İleti Merkezi SMS ile üyelik onayı
 * Plugin URI: http://www.iletimerkezi.com
-* Description: SMS ile Woocommerce, Contact 7 vb. formlar için üyelik onay ekletisi. 
+* Description: SMS ile Woocommerce, Contact 7 vb. formlar için üyelik onay ekletisi.
 * Version: 1.0.0
 * Author: ileti merkezi
 * Author URI: http://www.iletimerkezi.com
@@ -30,11 +30,10 @@ class Miniorange_Customer_Validation {
 		//add_filter( 'dbdelta_create_queries', array($this,'jal_install') );
 		register_deactivation_hook(__FILE__, array( $this, 'mo_registration_deactivate'));
 		register_activation_hook( __FILE__, array($this, 'mo_registration_activate') );
-		
+
 
 
 		//registration form actions and filters
-		if(trim ( get_option ( 'mo_customer_validation_admin_email' ) ) != '' && trim ( get_option ( 'mo_customer_validation_admin_api_key' ) ) != ''){
 			add_action('register_form', 'miniorange_site_register_form');
 			add_filter('registration_errors', 'miniorange_site_registration_errors', 10, 3 );
 			add_action('admin_post_nopriv_miniorange-validate-otp-form', '_handle_validation_form_action');
@@ -59,7 +58,7 @@ class Miniorange_Customer_Validation {
 			add_action('um_before_new_user_register', 'miniorange_um_user_registration', 99,1);
 			//action to hook into event registration account creation
 			add_action('evr_process_confirmation','miniorange_evr_user_registration',1,1);
-			//filter to hook into buddypress registration account creation 
+			//filter to hook into buddypress registration account creation
 			add_filter('bp_signup_usermeta','miniorange_bp_user_registration',99,1);
 			add_action('bp_core_screen_signup','miniorange_check_registration_status',99,0);
 			//filter to hook into pie registration form
@@ -69,18 +68,15 @@ class Miniorange_Customer_Validation {
 			add_filter( 'wpcf7_validate_email*', 'miniorange_cf7_text_validation', 10 , 2 );
 			add_filter( 'wpcf7_validate_email', 'miniorange_cf7_text_validation', 10 , 2 );
 			add_filter( 'wpcf7_validate_tel*', 'miniorange_cf7_text_validation', 10 , 2 );
-		}
 	}
-	
-	
-	
+
 	function jal_install() {
 		//die('adasda');
 		global $wpdb;
 		global $jal_db_version;
 
 		$table_name = $wpdb->prefix . 'iletimerkeziotp';
-		
+
 		$charset_collate = $wpdb->get_charset_collate();
 
 		$sql = "CREATE TABLE IF NOT EXISTS `iletimerkeziotp` (
@@ -116,7 +112,7 @@ class Miniorange_Customer_Validation {
 
 	function mo_registration_plugin_settings_style() {
 		wp_enqueue_style( 'mo_customer_validation_admin_settings_style', plugins_url('includes/css/mo_customer_validation_style.css?version=1.1.1', __FILE__));
-		wp_enqueue_style( 'mo_customer_validation_admin_settings_phone_style', plugins_url('includes/css/phone.css', __FILE__));				
+		wp_enqueue_style( 'mo_customer_validation_admin_settings_phone_style', plugins_url('includes/css/phone.css', __FILE__));
 	}
 
 	function mo_registration_plugin_settings_script() {
@@ -131,7 +127,7 @@ class Miniorange_Customer_Validation {
 		global $jal_db_version;
 
 		$table_name = $wpdb->prefix . 'iletimerkeziotp';
-		
+
 		$charset_collate = $wpdb->get_charset_collate();
 
 		$sql = "CREATE TABLE IF NOT EXISTS `".$wpdb->prefix."iletimerkeziotp` (
@@ -144,7 +140,7 @@ class Miniorange_Customer_Validation {
 		  PRIMARY KEY (`id`)
 		) $charset_collate
 		";
-		
+
 
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 		dbDelta( $sql );
@@ -175,7 +171,7 @@ class Miniorange_Customer_Validation {
 	}
 
 	function miniorange_registration_save_settings(){
-		if ( current_user_can( 'manage_options' )){ 
+		if ( current_user_can( 'manage_options' )){
 			if( isset( $_POST['option'] ) and $_POST['option'] == "mo_registration_register_customer" ) {	//register the admin to miniOrange
 				//validation and sanitization
 				$company = '';
@@ -264,7 +260,7 @@ class Miniorange_Customer_Validation {
 
 				$customer = new MO_Validation_Utility();
 				$content = json_decode($customer->validate_otp_token(get_option('mo_customer_validation_transactionId'), $otp_token ),true);
-				
+
 				if(strcasecmp($content['status'], 'SUCCESS') == 0) {
 						$this->create_customer();
 				}else{
@@ -282,20 +278,20 @@ class Miniorange_Customer_Validation {
 				$send_otp_response = json_decode($customer->send_otp_token($auth_type,'',$phone),true);
 				if(strcasecmp($send_otp_response['status'], 'SUCCESS') == 0){
 					//Save txId
-				
+
 					update_option('mo_customer_validation_transactionId',$send_otp_response['txId']);
 					update_option( 'mo_customer_validation_registration_status','MO_OTP_DELIVERED_SUCCESS');
 					if(get_option('mo_customer_validation_sms_otp_count')){
 						update_option('mo_customer_validation_sms_otp_count',get_option('mo_customer_validation_sms_otp_count') + 1);
 						update_option('mo_customer_validation_message', 'Another One Time Passcode has been sent <b>( ' . get_option('mo_customer_validation_sms_otp_count') . ' )</b> for verification to ' . $phone);
 					}else{
-							
+
 							update_option('mo_customer_validation_message', 'One Time Passcode has been sent for verification to ' . $phone);
 							update_option('mo_customer_validation_sms_otp_count',1);
 					}
 
 					$this->mo_registration_show_success_message();
-				
+
 				}else{
 					update_option('mo_customer_validation_message','There was an error in sending sms. Please click on Resend OTP link next to phone number textbox.');
 					update_option('mo_customer_validation_registration_status','MO_OTP_DELIVERED_FAILURE');
@@ -384,7 +380,7 @@ class Miniorange_Customer_Validation {
 					update_option('mo_customer_validation_uultra_default_enable',isset( $_POST['mo_customer_validation_uultra_default_enable']) ? $_POST['mo_customer_validation_uultra_default_enable'] : 0);
 					update_option('mo_customer_validation_uultra_enable_type',isset( $_POST['mo_customer_validation_uultra_enable_type']) ? $_POST['mo_customer_validation_uultra_enable_type'] : '');
 					update_option('mo_customer_validation_uultra_phone_key',isset( $_POST['uultra_phone_field_key']) ? $_POST['uultra_phone_field_key'] : '');
-					
+
 					update_option('mo_customer_validation_bbp_enable_type',isset( $_POST['mo_customer_validation_bbp_enable_type']) ? $_POST['mo_customer_validation_bbp_enable_type'] : '');
 					update_option('mo_customer_validation_bbp_phone_key',isset( $_POST['bbp_phone_field_key']) ? $_POST['bbp_phone_field_key'] : '');
 					update_option('mo_customer_validation_wc_checkout_enable',isset( $_POST['mo_customer_validation_wc_checkout_enable']) ? $_POST['mo_customer_validation_wc_checkout_enable'] : 0);
@@ -401,7 +397,7 @@ class Miniorange_Customer_Validation {
 					update_option('mo_customer_validation_cf7_contact_enable',isset( $_POST['mo_customer_validation_cf7_contact_enable']) ? $_POST['mo_customer_validation_cf7_contact_enable'] : 0);
 					update_option('mo_customer_validation_cf7_contact_type',isset( $_POST['mo_customer_validation_cf7_contact_type']) ? $_POST['mo_customer_validation_cf7_contact_type'] : '');
 					update_option('mo_customer_validation_cf7_email_key',isset( $_POST['cf7_email_field_key']) ? $_POST['cf7_email_field_key'] : '');
-					
+
 					if(!$_POST['error_message']){
 						update_option( 'mo_customer_validation_message', 'Settings saved successfully. You can go to your registration form page to test the plugin. <a href=\"'.wp_logout_url().'\">Click here<\/a> to logout.' );
 							$this->mo_registration_show_success_message();
@@ -422,14 +418,14 @@ class Miniorange_Customer_Validation {
 						update_option('mo_customer_validation_email_otp_count',get_option('mo_customer_validation_email_otp_count') + 1);
 						update_option('mo_customer_validation_message', 'Another One Time Passcode has been sent <b>( ' . get_option('mo_customer_validation_email_otp_count') . ' )</b> for verification to ' . get_option('mo_customer_validation_admin_email'));
 					}else{
-						
+
 						update_option( 'mo_customer_validation_message', ' A passcode is sent to ' . get_option('mo_customer_validation_admin_email') . '. Please enter the otp here to verify your email.');
 						update_option('mo_customer_validation_email_otp_count',1);
 					}
 					update_option('mo_customer_validation_transactionId',$content['txId']);
 					update_option('mo_customer_validation_registration_status','MO_OTP_DELIVERED_SUCCESS');
 
-					$this->mo_registration_show_success_message();				
+					$this->mo_registration_show_success_message();
 				}else{
 					update_option('mo_customer_validation_message','There was an error in sending email. Please click on Resend OTP to try again.');
 					update_option('mo_customer_validation_registration_status','MO_OTP_DELIVERED_FAILURE');
@@ -484,8 +480,8 @@ class Miniorange_Customer_Validation {
 
 	function mo_registration_success_message() {
 		$message = get_option('mo_customer_validation_message'); ?>
-		<script> 
-		jQuery(document).ready(function() {	
+		<script>
+		jQuery(document).ready(function() {
 			var message = '<?php echo $message; ?>';
 			jQuery('#mo_registration_msgs').append("<div class='error notice is-dismissible mo_registration_error_container'> <p class='mo_registration_msgs'>" + message + "</p></div>");
 		});
@@ -494,7 +490,7 @@ class Miniorange_Customer_Validation {
 
 	function mo_registration_error_message() {
 			$message = get_option('mo_customer_validation_message'); ?>
-		<script> 
+		<script>
 		jQuery(document).ready(function() {
 			var message = '<?php echo $message; ?>';
 			jQuery('#mo_registration_msgs').append("<div class='updated notice is-dismissible mo_registration_success_container'> <p class='mo_registration_msgs'>" + message + "</p></div>");
@@ -514,7 +510,7 @@ class Miniorange_Customer_Validation {
 			update_option('mo_customer_validation_message', 'Your account has been retrieved successfully.' );
 			delete_option('mo_customer_validation_verify_customer');
 			delete_option('mo_customer_validation_new_registration');
-			
+
 			$this->_handle_mo_check_ln(false);
 			$this->mo_registration_show_success_message();
 		} else {
@@ -573,9 +569,9 @@ class Miniorange_Customer_Validation {
 				delete_option('mo_otp_plugin_version');
 				delete_option('mo_customer_validation_transaction_message');
 			}
-			
+
 		} else if(strcasecmp($content['status'], 'FAILED') == 0){
-            if($showMessage)        
+            if($showMessage)
             update_option('mo_customer_validation_message', 'You are on our FREE plan. Check Licensing Tab to learn how to upgrade.');
         }
 		$this->mo_registration_show_success_message();
@@ -618,7 +614,7 @@ class Miniorange_Customer_Validation {
 
 		if (MO_Validation_Utility::mo_check_empty_or_null( $POSTED['iletimerkezi_username'] ) || MO_Validation_Utility::mo_check_empty_or_null( $POSTED['iletimerkezi_password'] ) || MO_Validation_Utility::mo_check_empty_or_null( $POSTED['iletimerkezi_sender'] ) ) {
 			//update_option('mo_customer_validation_message', 'Lütfen tüm alanları eksiksiz olarak doldurun.');
-			return false;	
+			return false;
 		}
 			$phone = preg_replace('/\D/','',$POSTED['iletimerkezi_username']);
 			$phone = substr($phone, -10);

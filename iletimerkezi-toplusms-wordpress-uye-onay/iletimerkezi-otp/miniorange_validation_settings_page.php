@@ -22,7 +22,7 @@ function mo_register_plugin() {
 		<a class="nav-tab <?php echo $active_tab == 'settings' ? 'nav-tab-active' : ''; ?>" href="<?php echo add_query_arg( array('tab' => 'settings'), $_SERVER['REQUEST_URI'] ); ?>">SMS Ayarları</a>
 		<!--<a class="nav-tab <?php echo $active_tab == 'config' ? 'nav-tab-active' : ''; ?>" href="<?php echo add_query_arg( array('tab' => 'config'), $_SERVER['REQUEST_URI'] ); ?>">Raporlar</a>
 		<a class="nav-tab <?php echo $active_tab == 'pricing' ? 'nav-tab-active' : ''; ?>" href="<?php echo add_query_arg( array('tab' => 'pricing'), $_SERVER['REQUEST_URI'] ); ?>">Licensing Plans</a>
-		<a class="nav-tab <?php echo $active_tab == 'help' ? 'nav-tab-active' : ''; ?>" href="<?php echo add_query_arg( array('tab' => 'help'), $_SERVER['REQUEST_URI'] ); ?>">Help & Troubleshooting</a>-->	
+		<a class="nav-tab <?php echo $active_tab == 'help' ? 'nav-tab-active' : ''; ?>" href="<?php echo add_query_arg( array('tab' => 'help'), $_SERVER['REQUEST_URI'] ); ?>">Help & Troubleshooting</a>-->
 	</h2>
 </div>
 
@@ -47,7 +47,7 @@ function mo_register_plugin() {
 							}else if($active_tab == 'config'){
 								mo_validation_extra_settings();
 							}
-							
+
 						?>
 					</td>
 					<?php If($active_tab != 'pricing' || MO_Validation_Utility::mo_is_customer_validated()){ ?>
@@ -77,7 +77,7 @@ function mo_profile_info(){
 			<strong style = "color:red"><?php echo $get_balance[0]; ?></strong>
 		<?php }else{ ?>
 		<strong>Mesaj gönderebilmek için giriş bilgileriniz doldurun. Eğer bilmiyorsanız <a href="https://www.iletimerkezi.com" target="_blank">İleti Merkezi'nden</a> bilgi alabilirsiniz.</strong>
-		<?php 
+		<?php
 		}
 		?>
         </p>
@@ -86,25 +86,25 @@ function mo_profile_info(){
 		<table>
 			<tr>
 				<td style="width:45%; padding: 10px;"><b>İletimerkezi Kullanıcı Adınız :</b></td>
-				<td><input type="text" style="width:270px; padding: 10px;"  id="iletimerkezi_username" placeholder="İletimerkezi Kullanıcı Adınız"  name="iletimerkezi_username" value="<?php echo get_option('iletimerkezi_username');?>"></td> 
+				<td><input type="text" style="width:270px; padding: 10px;"  id="iletimerkezi_username" placeholder="İletimerkezi Kullanıcı Adınız"  name="iletimerkezi_username" value="<?php echo get_option('iletimerkezi_username');?>"></td>
 
 			</tr>
 			<tr>
 				<td style="width:45%; padding: 10px;"><b>İletimerkezi Şifreniz :</b></td>
-				<td><input type="password" style="width:270px; padding: 10px;"  id="iletimerkezi_password" placeholder="İletimerkezi Şifreniz" name="iletimerkezi_password" value="<?php echo get_option('iletimerkezi_password');?>"></td> 
+				<td><input type="password" style="width:270px; padding: 10px;"  id="iletimerkezi_password" placeholder="İletimerkezi Şifreniz" name="iletimerkezi_password" value="<?php echo get_option('iletimerkezi_password');?>"></td>
 
 			</tr>
 			<tr>
 				<td style="width:45%; padding: 10px;"><b>Başlık Bilginiz :</b></td>
-				<td><input type="text" style="width:270px; padding: 10px;"  id="iletimerkezi_sender" placeholder="Başlık Bilginiz"  name="iletimerkezi_sender" value="<?php echo get_option('iletimerkezi_sender');?>"></td> 
+				<td><input type="text" style="width:270px; padding: 10px;"  id="iletimerkezi_sender" placeholder="Başlık Bilginiz"  name="iletimerkezi_sender" value="<?php echo get_option('iletimerkezi_sender');?>"></td>
 
 			</tr>
 		</table><br/>
 		<input type="submit" name="submit" value="Kaydet" style="width:110px;" class="button button-primary button-large" />
 
 	</form>
-	
-<?php 
+
+<?php
 }
 
 function miniorange_plugin_support(){
@@ -118,7 +118,7 @@ function miniorange_plugin_support(){
 		<p>Şikayet ve önerileriniz için destek@emarka.com.tr adresine mail gönderebilirsiniz.</p>
 		<p style = "text-align: right; margin-right: 10px; ">Versiyon 1.0</p>
 	</div>
-	
+
 <?php
 }
 
@@ -133,7 +133,7 @@ function mo_registration_show_verify_password_page() {
 					Please <a href="<?php echo add_query_arg( array('tab' => 'register'), $_SERVER['REQUEST_URI'] ); ?>">Register or Login with miniOrange</a> to enable OTP Verification.
 					</div>
 				<?php } ?>
-			
+
 				<h3>Login with miniOrange</h3>
 				<p><b>It seems you already have an account with miniOrange. Please enter your miniOrange email and password. <a href="#forgot_password">Click here if you forgot your password?</a></b></p>
 				<table class="mo_registration_settings_table">
@@ -206,8 +206,8 @@ function mo_registration_show_otp_verification(){
 							<input type="hidden" name="option" value="mo_registration_resend_otp"/>
 						</td>
 						</tr>
-											
-										
+
+
 							</form>
 					</table>
 		<br>
@@ -231,7 +231,7 @@ function mo_registration_show_otp_verification(){
 				</tr>
 				</table>
 				<br><input type="submit" value="Send OTP" class="button button-primary button-large" />
-		
+
 		</form>
 		<br>
 		<h3>What is an OTP ?</h3>
@@ -239,8 +239,8 @@ function mo_registration_show_otp_verification(){
 		</div>
 		<script>
 		jQuery("#phone").intlTelInput();
-					
-						
+
+
 		</script>
 
 
@@ -277,7 +277,7 @@ function mo_registration_show_new_registration_page() {
 					<tr>
 						<td><b><font color="#FF0000">*</font>Website/Company Name:</b></td>
 						<td><input class="mo_registration_table_textbox" type="text" name="company"
-							required placeholder="Enter website or company name" 
+							required placeholder="Enter website or company name"
 							value="<?php echo $_SERVER['SERVER_NAME']; ?>"/></td>
 					</tr>
 					<tr>
@@ -318,7 +318,7 @@ function mo_registration_show_new_registration_page() {
 					</tr>
 				</table>
 				<p></p>
-				By clicking Next, you agree to our <a href="http://miniorange.com/usecases/miniOrange_Privacy_Policy.pdf" target="_blank">Privacy Policy</a> and <a href="http://miniorange.com/usecases/miniOrange_User_Agreement.pdf" target="_blank">User Agreement</a>.<p></p>				
+				By clicking Next, you agree to our <a href="http://miniorange.com/usecases/miniOrange_Privacy_Policy.pdf" target="_blank">Privacy Policy</a> and <a href="http://miniorange.com/usecases/miniOrange_User_Agreement.pdf" target="_blank">User Agreement</a>.<p></p>
 			</div>
 		</form>
 		<script>
@@ -331,12 +331,12 @@ function mo_registration_show_new_registration_page() {
 }
 
 function mo_validation_show_settings_page(){
-?>	
+?>
 	<div class="mo_registration_table_layout">
-		<?php $get_balance = MO_Validation_Utility::get_balance(); 
+		<?php $get_balance = MO_Validation_Utility::get_balance();
 		if(!empty($get_balance) && $get_balance[1] == false) { ?>
 			<div style="display:block;margin-top:10px;color:red;background-color:rgba(251, 232, 0, 0.15);padding:5px;border:solid 1px rgba(255, 0, 9, 0.36);">
-			Lütfen iletimerkezi bilgileriniz ile <a href="<?php echo add_query_arg( array('tab' => 'register'), $_SERVER['REQUEST_URI'] ); ?>">giriş yapınız.</a> 
+			Lütfen iletimerkezi bilgileriniz ile <a href="<?php echo add_query_arg( array('tab' => 'register'), $_SERVER['REQUEST_URI'] ); ?>">giriş yapınız.</a>
 			</div>
 		<?php } ?>
 		<form name="f" method="post" action="" id="mo_otp_verification_settings">
@@ -432,7 +432,7 @@ function mo_validation_show_settings_page(){
 							<?php checked( get_option('mo_customer_validation_simplr_default_enable') == 1 );?> /><strong>Simplr User Registration Form Plus</strong>
 							<img class="form_preview" title="Simplr User Registration Form'u görmek için tıklayınız." style="margin-bottom:-4px" data-formlink="https://wordpress.org/plugins/simplr-registration-form/" src="<?php echo plugins_url( 'includes/images/i.png', __FILE__ )?>" />
 							<div class="mo_registration_help_desc" <?php if(!get_option('mo_customer_validation_simplr_default_enable') == 1) echo 'hidden'; ?> id="simplr_default_options">
-								
+
 								<p><input type="radio" <?php if(get_option('get_balance') != 1) echo 'disabled'?> data-form="simplr_phone" id="simplr_phone" class="form_options app_enable" name="mo_customer_validation_simplr_enable_type" value="mo_phone_enable"
 									<?php checked( get_option('mo_customer_validation_simplr_enable_type') == "mo_phone_enable" );?> /><strong>Telefon ile doğrulamayı onayla.</strong>
 									<a class="form_query" data-desc="2"> <b>[ Telefon numarası alanını manuel olarak eklemelisiniz. ]</b></a>
@@ -460,7 +460,7 @@ function mo_validation_show_settings_page(){
 									<?php mo_form_additional_info(3,8,true); ?>
 									<div hidden id="form_query_desc_8" class="mo_registration_help_desc">
 									<ol>
-										<li><a href="<?php echo admin_url().'options-general.php?page=simplr_reg_set&regview=fields&orderby=name&order=desc'?>" target="_blank">Click here</a> to see your list of fields. 
+										<li><a href="<?php echo admin_url().'options-general.php?page=simplr_reg_set&regview=fields&orderby=name&order=desc'?>" target="_blank">Click here</a> to see your list of fields.
 										<li>Add a new Phone Field by clicking the <b>Add Field</b> button.</li>
 										<li>Give the <b>Field Name</b> and <b>Field Key</b> for the new field. Remember the Field Key as you will need it later.</li>
 										<li>Click on <b>Add Field</b> button at the bottom of the page to save your new field.</li>
@@ -635,7 +635,7 @@ function mo_validation_show_settings_page(){
 						<td>
 							<br/><input type="checkbox" <?php if(get_option('get_balance') != 1) echo 'disabled'?> id="uultra_default" class="app_enable" data-toggle="uultra_default_options" name="mo_customer_validation_uultra_default_enable" value="1"
 									<?php checked( get_option('mo_customer_validation_uultra_default_enable') == 1 );?> /><strong>User Ultra Registration Form</strong>
-								<img class="form_preview" title="Users Ultra Registration formu görmek için tıklayınız." style="margin-bottom:-4px" data-formlink="https://wordpress.org/plugins/users-ultra/" src="<?php echo plugins_url( 'includes/images/i.png', __FILE__ )?>"/> 
+								<img class="form_preview" title="Users Ultra Registration formu görmek için tıklayınız." style="margin-bottom:-4px" data-formlink="https://wordpress.org/plugins/users-ultra/" src="<?php echo plugins_url( 'includes/images/i.png', __FILE__ )?>"/>
 								<div class="mo_registration_help_desc" <?php if(!get_option('mo_customer_validation_uultra_default_enable') == 1) echo 'hidden'; ?> id="uultra_default_options">
 								<b></b>
 								<p><input type="radio" <?php if(get_option('get_balance') != 1) echo 'disabled'?> data-form="uultra_phone" id="uultra_phone" class="form_options app_enable" name="mo_customer_validation_uultra_enable_type" value="mo_uultra_phone_enable"
@@ -678,14 +678,14 @@ function mo_validation_show_settings_page(){
  						<td>
 							<br/><input type="checkbox" <?php if(get_option('get_balance') != 1) echo 'disabled'?> id="upme_default" class="app_enable" data-toggle="upme_default_options" name="mo_customer_validation_upme_default_enable" value="1"
 							<?php checked( get_option('mo_customer_validation_upme_default_enable') == 1 );?> /><strong>UserProfile Made Easy Registration Form</strong>
-									
-							<img class="form_preview" title="User Profile Made Easy Registration Form'u görmek için tıklayın." style="margin-bottom:-4px" data-formlink="http://codecanyon.net/item/user-profiles-made-easy-wordpress-plugin/4109874" src="<?php echo plugins_url( 'includes/images/i.png', __FILE__ )?>" /> 
-															
+
+							<img class="form_preview" title="User Profile Made Easy Registration Form'u görmek için tıklayın." style="margin-bottom:-4px" data-formlink="http://codecanyon.net/item/user-profiles-made-easy-wordpress-plugin/4109874" src="<?php echo plugins_url( 'includes/images/i.png', __FILE__ )?>" />
+
 							<div class="mo_registration_help_desc" <?php if(!get_option('mo_customer_validation_upme_default_enable') == 1) echo 'hidden'; ?> id="upme_default_options">
 								<b></b>
 								<p><input type="radio" <?php if(get_option('get_balance') != 1) echo 'disabled'?> data-form="upme_phone" id="upme_phone" class="form_options app_enable" name="mo_customer_validation_upme_enable_type" value="mo_upme_phone_enable"
 									<?php checked( get_option('mo_customer_validation_upme_enable_type') == "mo_upme_phone_enable" );?> /><strong>Telefon ile doğrulamayı onayla.</strong>
-								
+
 									<a class="form_query" data-desc="19"> <b>[ Telefon numarası alanını manuel olarak eklemelisiniz. ]</b></a>
 									<div hidden id="form_query_desc_19" class="mo_registration_help_desc">
 										<ol>
@@ -717,7 +717,7 @@ function mo_validation_show_settings_page(){
 									<div <?php if(get_option('mo_customer_validation_upme_enable_type') != "mo_upme_both_enable") echo 'hidden'; ?> class="upme_form" id="upme_both_field" >
 										Enter the Meta Key of the phone field:<input class="mo_registration_table_textbox" id="upme_phone_field_key1" name="upme_phone_field_key" type="text" value="<?php echo get_option('mo_customer_validation_upme_phone_key'); ?>">
 									</div>
-									
+
 								</p>-->
 							</div>
 						</td>
@@ -726,14 +726,14 @@ function mo_validation_show_settings_page(){
  						<td>
 							<br/><input type="checkbox" <?php if(get_option('get_balance') != 1) echo 'disabled'?> id="pie_default" class="app_enable" data-toggle="pie_default_options" name="mo_customer_validation_pie_default_enable" value="1"
 									<?php checked( get_option('mo_customer_validation_pie_default_enable') == 1 );?> /><strong>PIE Registration Form</strong>
-									
-								<img class="form_preview" title="PIE Registration Form'u görmek için tıklayın." style="margin-bottom:-4px" data-formlink="http://pieregister.com/" src="<?php echo plugins_url( 'includes/images/i.png', __FILE__ )?>" /> 
-																
+
+								<img class="form_preview" title="PIE Registration Form'u görmek için tıklayın." style="margin-bottom:-4px" data-formlink="http://pieregister.com/" src="<?php echo plugins_url( 'includes/images/i.png', __FILE__ )?>" />
+
 							<div class="mo_registration_help_desc" <?php if(!get_option('mo_customer_validation_pie_default_enable') == 1) echo 'hidden'; ?> id="pie_default_options">
 								<b></b>
 								<p><input type="radio" <?php if(get_option('get_balance') != 1) echo 'disabled'?> id="pie_phone" class="app_enable" name="mo_customer_validation_pie_enable_type" value="mo_pie_phone_enable"
 									<?php checked( get_option('mo_customer_validation_pie_enable_type') == "mo_pie_phone_enable" );?> /><strong>Telefon ile doğrulamayı onayla.</strong>
-								
+
 								<div <?php if(get_option('mo_customer_validation_pie_enable_type') != "mo_pie_phone_enable") echo 'hidden'; ?> id="pie_phone_field" >
 										Numara alanına ait Label'ı yazın :<input class="mo_registration_table_textbox" id="pie_phone_field_key" name="pie_phone_field_key" type="text" value="<?php echo get_option('mo_customer_validation_pie_phone_key'); ?>">
 									</div>
@@ -747,7 +747,7 @@ function mo_validation_show_settings_page(){
 									<div <?php if(get_option('mo_customer_validation_pie_enable_type') != "mo_pie_both_enable") echo 'hidden'; ?> id="pie_both_field" >
 										Enter the Meta Key of the phone field:<input class="mo_registration_table_textbox" id="pie_phone_field_key1" name="pie_phone_field_key" type="text" value="<?php echo get_option('mo_customer_validation_pie_phone_key'); ?>">
 									</div>
-									
+
 								</p>-->
 							</div>
 						</td>
@@ -756,15 +756,15 @@ function mo_validation_show_settings_page(){
  						<td>
 							<br/><input type="checkbox" <?php if(get_option('get_balance') != 1) echo 'disabled'?> id="cf7_contact" class="app_enable" data-toggle="cf7_contact_options" name="mo_customer_validation_cf7_contact_enable" value="1"
 									<?php checked( get_option('mo_customer_validation_cf7_contact_enable') == 1 );?> /><strong>Contact Form 7 - Contact Form</strong>
-									
-								<img class="form_preview" title="Click here to see Contact Form 7" style="margin-bottom:-4px" data-formlink="https://wordpress.org/plugins/contact-form-7/" src="<?php echo plugins_url( 'includes/images/i.png', __FILE__ )?>" /> 
-																
+
+								<img class="form_preview" title="Click here to see Contact Form 7" style="margin-bottom:-4px" data-formlink="https://wordpress.org/plugins/contact-form-7/" src="<?php echo plugins_url( 'includes/images/i.png', __FILE__ )?>" />
+
 							<div class="mo_registration_help_desc" <?php if(!get_option('mo_customer_validation_cf7_contact_enable') == 1) echo 'hidden'; ?> id="cf7_contact_options">
 								<p><input type="radio" <?php if(get_option('get_balance') != 1) echo 'disabled'?> id="cf7_contact_email" class="app_enable" data-toggle="cf7_contact_email_instructions" name="mo_customer_validation_cf7_contact_type" value="mo_cf7_contact_email_enable"
 									<?php checked( get_option('mo_customer_validation_cf7_contact_type') == "mo_cf7_contact_email_enable" );?> /><strong>Enable Email verification</strong>
 								</p>
 								<div <?php if(get_option('mo_customer_validation_cf7_contact_type') != "mo_cf7_contact_email_enable") echo 'hidden'; ?> class="mo_registration_help_desc" id="cf7_contact_email_instructions" >
-										Follow the following steps to enable Email Verification for Contact form 7: 
+										Follow the following steps to enable Email Verification for Contact form 7:
 										<ol>
 											<li><a href="<?php echo admin_url().'edit.php?post_type=page'?>" target="_blank">Click Here</a> to see your list of pages.</li>
 											<li>Click on the <b>Edit</b> option of the page which has your contact form.</li>
@@ -777,7 +777,7 @@ function mo_validation_show_settings_page(){
 											</li>
 											<li>Enter the name of the email field below:<br>
 												<input class="mo_registration_table_textbox" id="cf7_email_field_key" name="cf7_email_field_key" type="text" value="<?php echo get_option('mo_customer_validation_cf7_email_key'); ?>">
-												<br/><i> For Reference : [email* &lt;name of your email field&gt;]</i> 
+												<br/><i> For Reference : [email* &lt;name of your email field&gt;]</i>
 											</li>
 											<li>Click on the Save Button below to save your settings</li>
 										</ol>
@@ -786,7 +786,7 @@ function mo_validation_show_settings_page(){
 									<?php checked( get_option('mo_customer_validation_cf7_contact_type') == "mo_cf7_contact_phone_enable" );?> /><strong>Telefon ile doğrulamayı onayla.</strong>
 								</p>
 								<div <?php if(get_option('mo_customer_validation_cf7_contact_type') != "mo_cf7_contact_phone_enable") echo 'hidden'; ?> class="mo_registration_help_desc" id="cf7_contact_phone_instructions" >
-										Follow the following steps to Telefon ile doğrulamayı onayla. for Contact form 7: 
+										Follow the following steps to Telefon ile doğrulamayı onayla. for Contact form 7:
 										<ol>
 											<li><a href="<?php echo admin_url().'edit.php?post_type=page'?>" target="_blank">Click Here</a> to see your list of pages.</li>
 											<li>Click on the <b>Edit</b> option of the page which has your contact form.</li>
@@ -826,16 +826,16 @@ function mo_validation_show_settings_page(){
 							<input type="hidden" id="error_message" name="error_message" value="">
 							<input type="button" id="ov_settings_button"  title="Lütfen listeden bir form seçin" value="Kaydet" style="float:left; width:100px;margin-bottom:2%;" <?php if(get_option('get_balance') != 1) echo 'disabled'?>
 								class="button button-primary button-large" />
-							
+
 						</td>
 					</tr>
 				</table>
 
 		</form>
-			
-			
+
+
 	<!--	<form name="f" method="post" action="" id="mo_otp_verification_test">
-			<input type="hidden" name="option" value="mo_otp_verification_test" />	
+			<input type="hidden" name="option" value="mo_otp_verification_test" />
 			<input type="submit" id="test_button"  value="Test" style="float:right; width:100px;margin-top:-6%;" <?php //if(!MO_Validation_Utility::mo_customer_validation_is_customer_registered()) echo 'disabled'?>
 								class="button button-primary button-large" />
 		</form>-->
@@ -852,7 +852,7 @@ function mo_customer_validation_pricing_info(){
 			Please <a href="<?php echo add_query_arg( array('tab' => 'register'), $_SERVER['REQUEST_URI'] ); ?>">Register or Login with miniOrange</a> to enable OTP Verification.
 			</div>
 		<?php } ?>
-		
+
 		<table class="mo_registration_pricing_table">
 		<h2>LICENSING PLANS
 			<span style="float:right">
@@ -936,7 +936,7 @@ function mo_customer_validation_pricing_info(){
 						 <option>&nbsp;&nbsp;&nbsp;$750 per 50k transaction*</option>
 					  </select>
 					  [ This is for your own SMS/SMTP gateway ]<br/>[ You can refill at anytime ]<br/>[ To use miniOrange SMS/SMTP gateway, click Upgrade Now button** ]
-					  
+
 					  <br>+ <br>Custom Integration Charges***<br>
 				</p>
 				</p>
@@ -954,25 +954,25 @@ function mo_customer_validation_pricing_info(){
 			</div></td>
 		</td>
 		</tr>
-		
+
 		</table>
 		<br>
 		<div id="disclaimer" style="margin-bottom:15px;">
 			<span style="font-size:15px;">
 				*<b>This is for your own SMS/SMTP gateway.</b> If you want to use more than 50k transactions, mail us at <a href="mailto:info@miniorange.com"><b>info@miniorange.com</b></a> or submit a support request using the support form under User <a href="<?php echo admin_url().'admin.php?page=mo_customer_validation_settings&tab=profile'?>">Profile tab</a>.<br/><br/>
 				**If you want to <b>use miniorange SMS/SMTP gateway</b>, and your country is not in list, mail us at <a href="mailto:info@miniorange.com"><b>info@miniorange.com</b></a> or submit a support request using the support form under User <a href="<?php echo admin_url().'admin.php?page=mo_customer_validation_settings&tab=profile'?>">Profile tab</a>. We will get back to you promptly.<br><br>
-				***<b>Custom integration charges</b> will be applied for supporting a registration form which is not already supported by our plugin. Each request will be handled on a per case basis.				
+				***<b>Custom integration charges</b> will be applied for supporting a registration form which is not already supported by our plugin. Each request will be handled on a per case basis.
 			</span>
 		</div>
-		
+
 		<h3>10 Days Return Policy -</h3>
 		<p>At miniOrange, we want to ensure you are 100% happy with your purchase.  If the premium plugin you purchased is not working as advertised and you’ve attempted to resolve any feature issues with our support team, which couldn't get resolved. We will refund the whole amount within 10 days of the purchase. Please email us at <a href="mailto:info@miniorange.com">info@miniorange.com</a> for any queries regarding the return policy.<br>
 If you have any doubts regarding the licensing plans, you can mail us at <a href="mailto:info@miniorange.com">info@miniorange.com</a> or submit a query using the support form.</p>
 		<br>
-		
+
 		</div>
-		
-		 <form style="display:none;" id="mocf_loginform" action="<?php echo get_option( 'mo_customer_validation_host_name').'/moas/login'; ?>" 
+
+		 <form style="display:none;" id="mocf_loginform" action="<?php echo get_option( 'mo_customer_validation_host_name').'/moas/login'; ?>"
 		target="_blank" method="post">
 			<input type="email" name="username" value="<?php echo get_option('mo_customer_validation_admin_email'); ?>" />
 			<input type="text" name="redirectUrl" value="<?php echo get_option( 'mo_customer_validation_host_name').'/moas/initializepayment'; ?>" />
@@ -980,22 +980,22 @@ If you have any doubts regarding the licensing plans, you can mail us at <a href
 		</form>
 		<form id="mo_ln_form" style="display:none;" action="" method="post">
 			<input type="hidden" name="option" value="check_mo_ln" />
-		</form>  
+		</form>
 		<script>
 			function mo2f_upgradeform(planType){
 				jQuery('#requestOrigin').val(planType);
 				jQuery('#mocf_loginform').submit();
 			}
-			
+
 		</script>
 	</div>
-<?php 
+<?php
 }
-	
+
 function mo_validation_troubleshoot_info(){
 ?>
 		<div class="mo_registration_table_layout">
-	
+
 		<?php if(!MO_Validation_Utility::mo_customer_validation_is_customer_registered()) { ?>
 			<div style="display:block;margin-top:10px;color:red;background-color:rgba(251, 232, 0, 0.15);padding:5px;border:solid 1px rgba(255, 0, 9, 0.36);">
 			Please <a href="<?php echo add_query_arg( array('tab' => 'register'), $_SERVER['REQUEST_URI'] ); ?>">Register or Login with miniOrange</a> to enable OTP Verification.
@@ -1014,18 +1014,18 @@ function mo_validation_troubleshoot_info(){
 				</div>
 				<hr>
 			</td></tr>
-			
-			<tr><td>	
+
+			<tr><td>
 				<div class="registration_question"><h3><a>My Registration form is missing from the list</a></h3></div>
 				<div  hidden  class="mo_registration_help_desc">
-					We are actively adding support for more forms. Please contact us using the support form on your right or email us at <b>info@miniorange.com</b>. <br/>While contacting us please include enough information about your registration form and how you intend to use this plugin. We will respond promptly.  
+					We are actively adding support for more forms. Please contact us using the support form on your right or email us at <b>info@miniorange.com</b>. <br/>While contacting us please include enough information about your registration form and how you intend to use this plugin. We will respond promptly.
 				</div>
 				<hr>
 			</td></tr>
 			<tr><td>
 				<div class="registration_question"><h3><a>Is OTP SMS delivered to DND(Do Not Disturb) mobile numbers?</a></h3></div>
 				<div hidden class="mo_registration_help_desc">
-					 Yes, OTP SMS is even delivered to DND mobile numbers. 
+					 Yes, OTP SMS is even delivered to DND mobile numbers.
 				</div>
 				<hr>
 			</td></tr>
@@ -1039,38 +1039,38 @@ function mo_validation_troubleshoot_info(){
 			<tr><td>
 				<div class="registration_question"><h3><a>Can I integrate custom SMS/SMTP gateway with the plugin?</a></h3></div>
 				<div hidden class="mo_registration_help_desc">
-					Yes, you can integrate your custom SMS/SMTP gateway with us. This feature is available after upgrading the plugin. Steps (which can be seen after upgrading) to configure the custom SMS/SMTP gateway are under <a href="<?php echo admin_url().'?page=mo_customer_validation_settings&tab=config'?>">Configuration</a> tab. 
+					Yes, you can integrate your custom SMS/SMTP gateway with us. This feature is available after upgrading the plugin. Steps (which can be seen after upgrading) to configure the custom SMS/SMTP gateway are under <a href="<?php echo admin_url().'?page=mo_customer_validation_settings&tab=config'?>">Configuration</a> tab.
 				</div>
 				<hr>
 			</td></tr>
-			
+
 			<tr><td>
 				<div class="registration_question"><h3><a>Can I customize Sender ID of SMS?</a></h3></div>
 				<div hidden class="mo_registration_help_desc">
-					You can customtize Sender ID, if you use your own SMS gateway. Using miniOrange SMS gateway, you can't customize Sender ID of SMS. 
+					You can customtize Sender ID, if you use your own SMS gateway. Using miniOrange SMS gateway, you can't customize Sender ID of SMS.
 				</div>
 				<hr>
 			</td></tr>
 			<tr><td>
 				<div class="registration_question"><h3><a>Can I customize Sender Email of OTP emails?</a></h3></div>
 				<div hidden class="mo_registration_help_desc">
-					Yes, you can customize Sender Email of OTP emails. Steps (which can be seen after upgrading) to configure the custom Sender Email are under <a href="<?php echo admin_url().'?page=mo_customer_validation_settings&tab=config'?>">Configuration</a> tab. 
+					Yes, you can customize Sender Email of OTP emails. Steps (which can be seen after upgrading) to configure the custom Sender Email are under <a href="<?php echo admin_url().'?page=mo_customer_validation_settings&tab=config'?>">Configuration</a> tab.
 				</div>
 				<hr>
 			</td></tr>
-			
+
 			<tr><td>
 				<div class="registration_question"><h3><a>Can I customize SMS/Email template?</a></h3></div>
 				<div hidden class="mo_registration_help_desc">
-					Yes, you can customtize SMS/Email template. This feature is available after upgrading the plugin. Steps (which can be seen after upgrading) to configure the custom SMS/SMTP gateway are under  <a href="<?php echo admin_url().'?page=mo_customer_validation_settings&tab=config'?>">Configuration</a> tab. 
+					Yes, you can customtize SMS/Email template. This feature is available after upgrading the plugin. Steps (which can be seen after upgrading) to configure the custom SMS/SMTP gateway are under  <a href="<?php echo admin_url().'?page=mo_customer_validation_settings&tab=config'?>">Configuration</a> tab.
 				</div>
 				<hr>
 			</td></tr>
-		 	<tr><td>	
+		 	<tr><td>
 				<div class="registration_question"><h3><a>How do i integrate the plugin with my own custom Registration Form?</a></h3></div>
 				<div  hidden  class="mo_registration_help_desc">
-					Please contact us using the support form on your right or email us at <b>info@miniorange.com</b>. <br/>While contacting us please include enough information about your registration form and how you intend to use this plugin. We will respond promptly.  
-				</div>	
+					Please contact us using the support form on your right or email us at <b>info@miniorange.com</b>. <br/>While contacting us please include enough information about your registration form and how you intend to use this plugin. We will respond promptly.
+				</div>
 				<hr>
 		 	</td></tr>
 		 	<tr><td>
@@ -1094,8 +1094,8 @@ function mo_validation_troubleshoot_info(){
 				</div>
 				<hr>
 			</td></tr>
-		
-		 	<tr><td>			
+
+		 	<tr><td>
 				<div class="registration_question"><h3><a>I did not recieve OTP. What should I do?</a></h3></div>
 				<div hidden class="mo_registration_help_desc">
 					The OTP is sent as an email to your email address with which you have registered. If you cannot see the email from miniOrange in your mails, please make sure to check your SPAM folder. <br/><br/>If you don't see an email even in SPAM folder, please verify your account using your mobile number. You will get an OTP on your mobile number which you need to enter on the page. If none of the above works, please contact us using the Support form on the right.
@@ -1206,7 +1206,7 @@ function mo_validation_extra_settings(){
 						<img src="<?php echo MO_Validation_Utility::mo_is_customer_validated() ? plugins_url( 'includes/images/smsGateway.jpg', __FILE__ ) : plugins_url( 'includes/images/smsGatewayOb.jpg', __FILE__ )?>" />
 						<div <?php echo MO_Validation_Utility::mo_is_customer_validated() ? '' : 'hidden' ?> style="text-align:center">
 							<input type="button" title="Need to be registered for this option to be available"  value="Change SMS Gateway" onclick="extraSettings('<?php echo  get_option('mo_customer_validation_host_name') ?>','/moas/smsconfig');" class="button button-primary button-large" style="margin-right: 3%;">
-						</div>	
+						</div>
 					</div>
 				</td>
 			</tr>
