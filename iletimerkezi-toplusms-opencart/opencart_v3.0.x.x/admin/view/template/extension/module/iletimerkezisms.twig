@@ -1,0 +1,284 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="submit" form="form" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href=" {{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+         {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}
+    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+      </div>
+    <div class="content">
+
+      <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form">
+
+        <table class="form">
+          <tr>
+            <td><span style="color:red;">Mevcut Bakiyeniz</span></td>
+            <td>
+              <span style="color:red;">
+                {{ balance }}
+              </span>
+
+            </td>
+          </tr>
+
+          <tr>
+            <td>iletimerkezi.com telefon numaranız:
+              <br>
+              <span class="help">Üyeliğiniz yoksa <a href="www.iletimerkezi.com/uye-kayidi">www.iletimerkezi.com/uye-kayidi</a> sayfasindan üye olabilirsiniz.</span>
+            </td>
+            <td>
+             {% if not iletimerkezisms.iletimerkezisms_username is empty %}
+                {% set iletimerkezisms_username = iletimerkezisms.iletimerkezisms_username %}
+              {% else %}
+               {% set iletimerkezisms_username = '' %}
+              {% endif %}
+              <input value="{{ iletimerkezisms_username }}" type="input" name="iletimerkezisms_username" />
+            </td>
+          </tr>
+
+          <tr>
+            <td>iletimerkezi.com şifreniz:</td>
+            <td>
+              {% if not iletimerkezisms.iletimerkezisms_password is empty %}
+              	{% set iletimerkezisms_password = iletimerkezisms.iletimerkezisms_password %}
+              {% else %}
+                {% set iletimerkezisms_password = '' %}
+              {% endif %}
+              <input value="{{ iletimerkezisms_password }}" type="password" name="iletimerkezisms_password" />
+            </td>
+          </tr>
+
+          <tr>
+            <td>Başlık Bilginiz:
+              <br>
+              <span class="help">
+                Hesabınıza tanımlı olan başlığı yazınız.
+              </span>
+            </td>
+            <td>
+             {% if not iletimerkezisms.iletimerkezisms_originator is empty %}
+               	{% set iletimerkezisms_originator = iletimerkezisms.iletimerkezisms_originator %}
+                {% if iletimerkezisms_originator == 'ILETI MRKZI' %}
+                  {% set disabled = 'disabled' %}
+                {% else %}
+                  {% set disabled = '' %}
+                {% endif %}
+              {% else %}
+                {% set iletimerkezisms_originator = '' %}
+              {% endif %}
+              <input value="{{ iletimerkezisms_originator }}" type="text" name="iletimerkezisms_originator" {{ disabled }} />
+            </td>
+          </tr>
+
+          <tr>
+            <td>Yeni üyeye, kullanıcı adı ve şifresi sms olarak gönderilsin:
+              <br>
+              <span class="help">
+                <br>Kullanabileceğiniz değişkenler<br>
+                %firstname%<br>
+                %lastname%<br>
+                %telephone%<br>
+                %email%<br>
+                %password%
+              </span>
+
+            </td>
+            <td>
+              {% if not iletimerkezisms.iletimerkezisms_sms_password_text is empty %}
+                {% set iletimerkezisms_sms_password_text = iletimerkezisms.iletimerkezisms_sms_password_text %}
+              {% else %}
+                {% set iletimerkezisms_sms_password_text = '' %}
+              {% endif %}
+              <textarea rows="10" cols="60" name="iletimerkezisms_sms_password_text">{{ iletimerkezisms_sms_password_text }}</textarea>
+
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+                Sitenize yeni bir üye geldiğinde bilgileri sms olarak yazacağınız numaraya gönderilsin:
+                <span class="help">
+                <br>Kullanabileceğiniz değişkenler<br>
+                %firstname%<br>
+                %lastname%<br>
+                %telephone%
+                </span>
+            </td>
+            <td>
+	              {% if not iletimerkezisms.iletimerkezisms_member_login is empty %}
+	                {% set iletimerkezisms_member_login = iletimerkezisms.iletimerkezisms_member_login %}
+	              {% else %}
+	                {% set iletimerkezisms_member_login = '' %}
+	              {% endif %}
+                <input value="{{ iletimerkezisms_member_login }}" type="text" name="iletimerkezisms_member_login" placeholder="GSM numaranız"/>
+	            <br>
+	              {% if not iletimerkezisms.iletimerkezisms_member_login_text is empty %}
+	                {% set iletimerkezisms_member_login_text = iletimerkezisms.iletimerkezisms_member_login_text %}
+	              {% else %}
+	                {% set iletimerkezisms_member_login_text = '' %}
+	              {% endif %}
+                <textarea rows="10" cols="60" name="iletimerkezisms_member_login_text">{{ iletimerkezisms_member_login_text }}</textarea>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              Yeni bir sipariş oluşturulduğunda müşteriye sms gitsin:
+              <span class="help">
+                <br>Kullanabileceğiniz değişkenler<br>
+                %orderid%<br>
+                %productname%<br>
+                %productmodel%<br>
+                %productquantity%<br>
+                </span>
+            </td>
+            <td>
+              {% if not iletimerkezisms.iletimerkezisms_order_customer_notify_text is empty %}
+                {% set iletimerkezisms_order_customer_notify_text = iletimerkezisms.iletimerkezisms_order_customer_notify_text %}
+              {% else %}
+                {% set iletimerkezisms_order_customer_notify_text = '' %}
+              {% endif %}
+                <textarea rows="10" cols="60" name="iletimerkezisms_order_customer_notify_text">{{ iletimerkezisms_order_customer_notify_text }}</textarea>
+            </td>
+          </tr>
+
+
+          <tr>
+            <td>
+              Yeni bir sipariş geldiğinde sms olarak yazacağınız numaraya gönderilsin:
+              <span class="help">
+                <br>Kullanabileceğiniz değişkenler<br>
+                %orderid%<br>
+                %productname%<br>
+                %productmodel%<br>
+                %productquantity%<br>
+                </span>
+            </td>
+            <td>
+	              {% if not iletimerkezisms.iletimerkezisms_order_notify_gsm is empty %}
+	                {% set iletimerkezisms_order_notify_gsm = iletimerkezisms.iletimerkezisms_order_notify_gsm %}
+	              {% else %}
+	                {% set iletimerkezisms_order_notify_gsm = '' %}
+	              {% endif %}
+                <input value="{{iletimerkezisms_order_notify_gsm}}" type="text" name="iletimerkezisms_order_notify_gsm" placeholder="Gsm Numarası"/>
+                <br>
+	              {% if not iletimerkezisms.iletimerkezisms_order_notify_text is empty %}
+	                {% set iletimerkezisms_order_notify_text = iletimerkezisms.iletimerkezisms_order_notify_text %}
+	              {% else %}
+	                {% set iletimerkezisms_order_notify_text = '' %}
+	              {% endif %}
+                <textarea rows="10" cols="60" name="iletimerkezisms_order_notify_text">{{ iletimerkezisms_order_notify_text }}</textarea>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              Sipariş iptalinde yöneticiye sms gitsin:
+              <span class="help">
+                <br>Kullanabileceğiniz değişkenler<br>
+                %firstname%<br>
+                %lastname%<br>
+                %telephone%<br>
+                %email%<br>
+                %product%<br>
+                %reason%<br>
+                %comment%<br>
+                </span>
+            </td>
+            <td>
+	              {% if not iletimerkezisms.iletimerkezisms_order_return_gsm is empty %}
+	                {% set iletimerkezisms_order_return_gsm = iletimerkezisms.iletimerkezisms_order_return_gsm %}
+	              {% else %}
+	                {% set iletimerkezisms_order_return_gsm = '' %}
+	              {% endif %}
+                <input value="{{iletimerkezisms_order_return_gsm}}" type="text" name="iletimerkezisms_order_return_gsm" placeholder="Gsm Numarası"/>
+                <br>
+	              {% if not iletimerkezisms.iletimerkezisms_sms_return_text is empty %}
+	                {% set iletimerkezisms_sms_return_text = iletimerkezisms.iletimerkezisms_sms_return_text %}
+	              {% else %}
+	                {% set iletimerkezisms_sms_return_text = '' %}
+	              {% endif %}
+                <textarea rows="10" cols="60" name="iletimerkezisms_sms_return_text">{{ iletimerkezisms_sms_return_text }}</textarea>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+                Ürünün kargo durumu değiştiği zaman müşterinize sms gönderilsin:
+                <span class="help">
+                <br>Kullanabileceğiniz değişkenler<br>
+                %orderid%<br>
+                %firstname%<br>
+                %lastname%<br>
+                %comment%
+                </span>
+            </td>
+            <td>
+              <select id="shipping_status" name="shipping_status" onchange="getShippingText();">
+                <option>Kargo Durumu</option>
+                {% for key,value in order_statuses %}
+                   <option value=" {{ value.order_status_id }}">{{value.name}}</option>
+                {% endfor %}
+              </select>
+              <br>
+              {% for key,value in order_statuses %}
+                {% set im_order_id = value.order_status_id %}
+                {% set im_shipping = 'iletimerkezisms_shipping_text_'~im_order_id~'_' %}
+                {% if not iletimerkezisms[im_shipping] is empty %}
+                  {% set iletimerkezisms_shipping_text = iletimerkezisms[im_shipping] %}
+                {% else %}
+                    {% set iletimerkezisms_shipping_text = '' %}
+                {% endif %}
+                  <textarea class="display_none" style="display:none;"  id="shipping_{{ im_order_id }}" rows="10" cols="60" name="iletimerkezisms_shipping_text_{{ im_order_id }} "> {{ iletimerkezisms_shipping_text }}</textarea>
+                {% endfor %}
+            </td>
+          </tr>
+
+        </table>
+      </form>
+    </div>
+  </div>
+</div>
+{% block javascripts %}
+<script>
+function getShippingText() {
+/*  var shippingText = $('#shipping_status').val();
+  var x = document.getElementById('#shipping_'+shippingText);
+  x.style.display = "inherit";
+  alert(shippingText);
+*/
+	var none = document.getElementsByClassName('display_none');
+	for (var i = 0, max = none.length; i < max; i++) {
+    	none[i].style.display = "none";
+	}
+	var shippingText = $('#shipping_status').val();
+	var str = 'shipping_'+shippingText;
+	str = str.replace(/\s+/g, '');
+	var x = document.getElementById(str);
+	x.style.display = "inherit";
+
+
+//  $('.shipping_text').hide();
+//  $('#shipping_'+shippingText).show();
+
+}
+</script>
+{% endblock %}
+{{ footer }}

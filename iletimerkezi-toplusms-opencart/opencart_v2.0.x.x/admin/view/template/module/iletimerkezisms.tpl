@@ -23,7 +23,7 @@
       <div class="panel-heading">
         <h3 class="panel-title"><i class="fa fa-pencil"></i> <?php echo $text_edit; ?></h3>
       </div>
-    <div class="content">      
+    <div class="content">
 
       <form action="<?php echo $action; ?>" method="post" enctype="multipart/form-data" id="form">
         <table class="form">
@@ -32,8 +32,8 @@
             <td>
               <span style="color:red;">
                 <?php
-                echo $balance;              
-                ?>                
+                echo $balance;
+                ?>
               </span>
 
             </td>
@@ -171,7 +171,7 @@
                 %productquantity%<br>
                 </span>
             </td>
-            <td>                
+            <td>
                 <?php
                 if(!empty($iletimerkezisms['iletimerkezisms_order_customer_notify_text'])) {
                   $iletimerkezisms_order_customer_notify_text = $iletimerkezisms['iletimerkezisms_order_customer_notify_text'];
@@ -230,16 +230,16 @@
                 %comment%<br>
                 </span>
             </td>
-            <td> 
+            <td>
                  <?php
-                if(!empty($iletimerkezisms['iletimerkezisms_order_notify_gsm'])) {
-                  $iletimerkezisms_order_notify_gsm = $iletimerkezisms['iletimerkezisms_order_notify_gsm'];
+                if(!empty($iletimerkezisms['iletimerkezisms_order_return_gsm'])) {
+                  $iletimerkezisms_order_return_gsm = $iletimerkezisms['iletimerkezisms_order_return_gsm'];
                 } else {
-                  $iletimerkezisms_order_notify_gsm = '';
+                  $iletimerkezisms_order_return_gsm = '';
                 }
                 ?>
-                <input value="<?php echo $iletimerkezisms_order_notify_gsm; ?>" type="text" name="iletimerkezisms_order_notify_gsm" placeholder="Gsm Numarası"/>
-                <br>               
+                <input value="<?php echo $iletimerkezisms_order_return_gsm; ?>" type="text" name="iletimerkezisms_order_return_gsm" placeholder="Gsm Numarası"/>
+                <br>
                 <?php
                 if(!empty($iletimerkezisms['iletimerkezisms_sms_return_text'])) {
                   $iletimerkezisms_sms_return_text = $iletimerkezisms['iletimerkezisms_sms_return_text'];

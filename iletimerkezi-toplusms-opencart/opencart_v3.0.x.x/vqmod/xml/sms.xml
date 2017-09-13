@@ -19,7 +19,7 @@
 
                         $message = str_replace(array('%firstname%','%lastname%','%telephone%','%email%','%password%'),array($this->request->post['firstname'],$this->request->post['lastname'],$this->request->post['telephone'],$this->request->post['email'], $this->request->post['password']),$message_info['iletimerkezisms_sms_password_text']);
 
-                        
+
 
                         $sms = new Sms();
                         //Send sms user
@@ -52,7 +52,7 @@
 
                         $message = str_replace(array('%firstname%','%lastname%','%telephone%','%email%','%password%'),array($this->request->post['firstname'],$this->request->post['lastname'],$this->request->post['telephone'],$this->request->post['email'], $this->request->post['password']),$message_info['iletimerkezisms_sms_password_text']);
 
-                        
+
 
                         $sms = new Sms();
                         //Send sms user
@@ -83,7 +83,7 @@
                         $this->load->model('setting/setting');
                         $message_info = $this->model_setting_setting->getSetting('iletimerkezisms');
 
-                        
+
                         $sms = new Sms();
 
                         $this->load->model('account/order');
@@ -152,7 +152,7 @@
 
             $message = str_replace(array('%firstname%','%lastname%','%telephone%','%email%','%product%','%reason%','%comment%'),array($return_info['firstname'],$return_info['lastname'],$return_info['telephone'],$return_info['email'], $return_info['product'], $return_info['reason'], $return_info['comment']),$message_info['iletimerkezisms_sms_return_text']);
 
-            
+
 
             $sms = new Sms();
             //Send sms user
@@ -178,16 +178,16 @@
                         ]]></search>
 
                         <add><![CDATA[
-                            
+
                         $this->load->model('setting/setting');
                         $message_info = $this->model_setting_setting->getSetting('iletimerkezisms');
                         $comment_tags = html_entity_decode($this->request->post['comment']);
                         $comment      = strip_tags($comment_tags);
-                        $message = $message_info['iletimerkezisms_shipping_text_'.$this->request->post['order_status_id']];
+                        $message = $message_info['iletimerkezisms_shipping_text_'.$this->request->post['order_status_id'].'_'];
                         $message = str_replace(array('%firstname%','%lastname%','%orderid%','%comment%'),
                                                    array($order_info['firstname'],$order_info['lastname'],$this->request->get['order_id'],$comment),
                                                    $message);
-                        
+
                         $sms = new Sms();
                         $sms->send($message_info['iletimerkezisms_username'],
                                                 $message_info['iletimerkezisms_password'],
@@ -210,8 +210,8 @@
                         if ($this->user->hasPermission('access', 'marketing/sms')) {
                             $marketing[] = array(
                                 'name'     => $this->language->get('text_sms'),
-                                'href'     => $this->url->link('marketing/sms', 'token=' . $this->session->data['token'], true),
-                                'children' => array()       
+                                'href'     => $this->url->link('marketing/sms', 'user_token=' . $this->session->data['user_token'], true),
+                                'children' => array()
                             );
                         }
                         ]]></add>
