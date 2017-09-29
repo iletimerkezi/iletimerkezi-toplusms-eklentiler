@@ -45,6 +45,7 @@ define( 'PLUGIN_CLASS_PATH', dirname(__FILE__). '/includes' );
 // Requere settings api
 require_once PLUGIN_CLASS_PATH. '/class.settings-api.php';
 require_once PLUGIN_CLASS_PATH.'/imTickeraOptions.Class.php';
+require_once PLUGIN_CLASS_PATH.'/imSMSGateway.Class.php';
 
 
 function im_tickera_get_option( $option, $section, $default = '' ) {
@@ -80,6 +81,10 @@ class im_Tickera_SMS
       // Loads frontend scripts and styles
       add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 
+      // Add telephone field to tickera
+      add_action( 'tc_buyer_info_fields', array($this, 'im_gsm_field'));
+      //apply_filters( 'tc_buyer_info_fields', array($this, 'im_gsm_field'));
+
     }
 
     /**
@@ -88,6 +93,7 @@ class im_Tickera_SMS
      */
     function instantiate() {
       new imTickeraOptions();
+      new imSMSGateway();
     }
 
     public static function init() {
@@ -104,12 +110,12 @@ class im_Tickera_SMS
      *
      * @uses load_plugin_textdomain()
      */
-    public function localization_setup() {
+    public function localization_setup(){
       load_plugin_textdomain( 'iletimekrezisms', false, dirname( plugin_basename( __FILE__ ) ) . 'admin/languages/' );
     }
 
 
-    public function admin_enqueue_scripts() {
+    public function admin_enqueue_scripts(){
 
       wp_enqueue_style( 'admin-iletimerkezisms-styles', plugins_url( 'admin/css/admin.css', __FILE__ ), false, date( 'Ymd' ) );
       wp_enqueue_script( 'admin-iletimerkezisms-scripts', plugins_url( 'admin/js/admin.js', __FILE__ ), array( 'jquery' ), false, true );
@@ -117,6 +123,22 @@ class im_Tickera_SMS
       wp_localize_script( 'admin-iletimerkezisms-scripts', 'iletimerkezisms', array(
           'ajaxurl' => admin_url( 'admin-ajax.php' )
       ) );
+    }
+
+    public function im_gsm_field(){
+
+      $default_fields = array(
+        array(
+          'field_name'     => 'im_gsm',
+          'field_title'    => __( 'Telefon Numarası', 'tc' ),
+          'field_type'     => 'text',
+          'field_description'  => '',
+          'post_field_type'  => 'post_meta',
+          'required'       => true,
+        )
+      );
+
+      return $default_fields;//apply_filters( 'tc_buyer_info_fields', $im_gsm_field);
     }
 }
 
