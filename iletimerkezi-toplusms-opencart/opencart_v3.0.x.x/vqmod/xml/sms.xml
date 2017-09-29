@@ -218,19 +218,7 @@
 
                 </operation>
         </file>
-                <file name="admin/view/template/common/column_left.tpl">
-                <operation>
-
-                        <search position="after"><![CDATA[
-                        <li><a href="<?php echo $contact; ?>"><?php echo $text_contact; ?></a></li>
-                        ]]></search>
-
-                        <add><![CDATA[
-                         <li><a href="<?php echo $sms; ?>"><?php echo $text_sms; ?></a></li>
-                        ]]></add>
-
-                </operation>
-        </file>
+                
                 <file name="admin/language/en-gb/common/column_left.php">
                 <operation>
 
