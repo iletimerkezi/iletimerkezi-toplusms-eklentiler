@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>OnVerify Phone Verification</id>
+	<version>2.1</version>
+	<vqmver>2.X</vqmver>
+	<author>www.iletimerkezi.com</author>
+
+    <file name="catalog/controller/checkout/confirm.php">
+        <operation error="skip" info="for 1.x">
+
+        <search><![CDATA[ $this->data['payment'] = $this->getChild('payment/' . $this->session->data['payment_method']['code']);]]></search>
+        <add><![CDATA[
+        ob_start();
+        echo $this->getChild('module/phoneverification/verify');
+        $ret = ob_get_contents();
+        ob_end_clean();
+        $this->data['payment']=$ret;
+
+        ]]></add>
+        </operation>
+       <operation  error="skip" info="for 2.x">
+
+			<search position="replace"><![CDATA[$data['redirect'] = $redirect;]]></search>
+            <add><![CDATA[$data["redirect"]=$this->load->controller('module/phoneverification/verify');]]></add>
+        </operation>
+        <operation  error="skip" info="for 2.x">
+
+			<search position="replace"><![CDATA[$data['payment'] = $this->load->controller('payment/' . $this->session->data['payment_method']['code']);]]></search>
+            <add><![CDATA[$data['payment']=$this->load->controller('module/phoneverification/verify');]]></add>
+        </operation>
+
+
+    </file>
+    <file name="catalog/controller/checkout/success.php">
+	<operation  error="skip" info="invalidate session">
+			<search position="before"><![CDATA[if (isset($this->session->data['order_id'])) {]]></search>
+			<add><![CDATA[
+            $ocver = substr(VERSION,0,1);
+            if ($ocver==1) $this->getChild('module/phoneverification/success');
+            else $this->load->controller('module/phoneverification/success');
+
+
+
+			]]>
+			</add>
+			</operation>
+	</file>
+
+    <file name="admin/model/sale/order.php">
+	<operation  error="skip" info="opencart 1.X notifications">
+			<search position="after"><![CDATA[$mail->send();]]></search>
+			<add><![CDATA[
+            $ovnotify = $this->config->get('phoneverification_notifycustomer');
+
+            if ($ovnotify) {
+                $statusid = $data['order_status_id'];
+
+                    $ovnotify2 = $this->config->get("phoneverification_statustypes_{$statusid}");
+
+                if ($ovnotify2) {
+
+
+                    $ov["type"] = $ovtype = $this->config->get("phoneverification_statusnotificationtype_{$statusid}");
+                    $ovmsg = $this->config->get("phoneverification_statusmessage_{$statusid}");
+                    if (!$ovmsg) $ovmsg = $message;
+                    $ov["msg"] = $ovmsg;
+                    $ov["order_info"] = $order_info;
+
+
+                    $this->load->model('sale/phoneverification');
+                    $this->model_sale_phoneverification->request($ov);
+
+                }
+            }
+
+                        ]]>
+			</add>
+			</operation>
+	</file>
+
+
+
+    <file name="catalog/model/checkout/order.php"  error="skip">
+	<operation info="opencart 2.X notifications">
+
+			<search position="after"><![CDATA[$mail->send();]]></search>
+			<add><![CDATA[
+            $ocver = substr(VERSION,0,1);
+            if ($ocver==2) $this->load->controller('module/phoneverification/notifications',$order_info);
+
+			]]>
+			</add>
+			</operation>
+	</file>
+</modification>
