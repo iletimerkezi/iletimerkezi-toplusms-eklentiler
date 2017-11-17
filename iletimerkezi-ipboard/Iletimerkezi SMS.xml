@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin name="Iletimerkezi SMS" version_long="10000" version_human="1.0.0" author="Emarka İletisim" website="https://www.iletimerkezi.com" update_check=""><hooks><hook type="C" class="\IPS\core\modules\front\system\register" filename="reg"><![CDATA[//<?php
+
+/* To prevent PHP errors (extending class does not exist) revealing path */
+if ( !defined( '\IPS\SUITE_UNIQUE_KEY' ) )
+{
+	exit;
+}
+
+class hook31 extends _HOOK_CLASS_
+{
+
+
+	/**
+	 * Build Registration Form
+	 *
+	 * @return	\IPS\Helpers\Form
+	 */
+	static public function buildRegistrationForm()
+	{
+		try
+		{
+			$form               = call_user_func_array( 'parent::buildRegistrationForm', func_get_args() );
+			$phoneNumber        = new \IPS\Helpers\Form\Text( 'phone_number', NULL, TRUE, array( 'maxLength' => 10));
+			$phoneNumber->label = 'Cep Telefonu';
+			$form->add($phoneNumber);
+	
+	
+			$button_html = \IPS\Settings::i()->iletimerkezi_v_button;
+			$form->addHtml($button_html);
+	
+		// Send SMS
+			$custom_vrf = function($val) {
+				if($_SESSION['vcode'] != $val || $_SESSION['imphone'] != $_POST['phone_number']) {
+					throw new \InvalidArgumentException(\IPS\Settings::i()->iletimerkezi_v_dmatch);
+				}
+			};
+	
+			$vcodeForm           = new \IPS\Helpers\Form\Text( 'vcode', NULL, TRUE, array( 'maxLength' => 10), $custom_vrf);
+			$vcodeForm->label    = 'Onay Kodu';
+			$vcodeForm->formType = 'text';
+			$form->add($vcodeForm);
+	
+			$canceled_html = \IPS\Settings::i()->iletimerkezi_v_canceled;
+			$html = "<script>
+			function sendVCode() {
+				$.ajax({
+					type: 'POST',
+					url: 'index.php?app=core&module=system&controller=register&do=sms',
+					data: 'phone=' + $('#elInput_phone_number').val(),
+					success: function(ajaxResponse) {
+						var obj = ajaxResponse.split(':');
+						if(obj[0] == 'success') {
+							$('#elInput_phone_number').hide();
+							$('#vCodeID').hide();
+							$('#elInput_phone_number').after($('#elInput_phone_number').val());
+						} else {
+							$('#elInput_phone_number span').html('".$canceled_html."');
+						}
+				    }
+				});
+			}
+			</script>";
+	
+			$form->addHtml($html);
+	
+			return $form;
+		}
+		catch ( \RuntimeException $e )
+		{
+			if ( method_exists( get_parent_class(), __FUNCTION__ ) )
+			{
+				return call_user_func_array( 'parent::' . __FUNCTION__, func_get_args() );
+			}
+			else
+			{
+				throw $e;
+			}
+		}
+	}
+
+	public function sms() {
+		try
+		{
+	
+			$username = \IPS\Settings::i()->iletimerkezi_username;
+			$pass     = \IPS\Settings::i()->iletimerkezi_password;
+			$sender   = \IPS\Settings::i()->iletimerkezi_sender;
+	
+			$_SESSION['vcode']   = rand(100000, 999999);
+			$_SESSION['imphone'] = $_POST['phone'];
+			$vcode               = $_SESSION['vcode'];
+	
+			$xml = "<request>
+						<authentication>
+							<username>".$username."</username>
+							<password>".$pass."</password>
+						</authentication>
+						<order>
+							<sender>".$sender."</sender>
+							<sendDateTime></sendDateTime>
+							<message>
+								<text><![CDATA[Onay kodu: ".$vcode." ]]]]><![CDATA[></text>
+								<receipents><number>".$_SESSION['imphone']."</number></receipents>
+							</message>
+						</order>
+					</request>";
+	
+			$ch = curl_init();
+	        curl_setopt($ch, CURLOPT_URL, 'http://api.iletimerkezi.com/v1/send-sms');
+	        curl_setopt($ch, CURLOPT_POST, 1);
+	        curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
+	        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST,2);
+	        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER,0);
+	        curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+	        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: text/xml']);
+	        curl_setopt($ch, CURLOPT_HEADER, 0);
+	        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+	        curl_setopt($ch, CURLOPT_TIMEOUT, 120);
+	
+	        $result = curl_exec($ch);
+	
+	        preg_match_all('|\<code\>.*\<\/code\>|U', $result, $matches, PREG_PATTERN_ORDER);
+	        if(isset($matches[0])&&isset($matches[0][0])) {
+	            if( $matches[0][0] == '<code>200</code>' ) {
+	                die('success:');
+	            }
+	        }
+	        die('fail:');
+		}
+		catch ( \RuntimeException $e )
+		{
+			if ( method_exists( get_parent_class(), __FUNCTION__ ) )
+			{
+				return call_user_func_array( 'parent::' . __FUNCTION__, func_get_args() );
+			}
+			else
+			{
+				throw $e;
+			}
+		}
+	}
+}
+]]></hook></hooks><settings><setting><key>iletimerkezi_username</key><default/></setting><setting><key>iletimerkezi_password</key><default/></setting><setting><key>iletimerkezi_sender</key><default/></setting><setting><key>iletimerkezi_v_button</key><default><![CDATA[<button id="vCodeID" class="ipsButton ipsButton_primary ipsButton_large ipsButton_fullWidth" type="button" onclick="javascript:sendVCode();">Onay Kodu Gönder</button>]]></default></setting><setting><key>iletimerkezi_v_canceled</key><default>Doğrulama kodunu gönderemedik, lütfen telefon numaranızı kontrol ediniz.</default></setting><setting><key>iletimerkezi_v_dmatch</key><default>Onay kodunu doğru girdiğinize emin olunuz.</default></setting></settings><tasks/><widgets/><htmlFiles/><cssFiles/><jsFiles/><resourcesFiles/><lang/><versions/></plugin>
