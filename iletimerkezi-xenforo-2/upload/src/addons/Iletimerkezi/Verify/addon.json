@@ -1,0 +1,14 @@
+{
+    "legacy_addon_id": "",
+    "title": "Iletimerkezi/Verify",
+    "description": "Verify user mobile phone",
+    "version_id": 1000010,
+    "version_string": "1.0.0 Alpha",
+    "dev": "",
+    "dev_url": "",
+    "faq_url": "",
+    "support_url": "",
+    "extra_urls": [],
+    "require": [],
+    "icon": "fa-shield"
+}

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<options>
+  <option option_id="iletimerkezi_password" edit_format="textbox" data_type="string">
+    <default_value/>
+    <relation group_id="Iletimerkezi" display_order="2"/>
+  </option>
+  <option option_id="iletimerkezi_sender" edit_format="textbox" data_type="string">
+    <default_value/>
+    <relation group_id="Iletimerkezi" display_order="2"/>
+  </option>
+  <option option_id="iletimerkezi_username" edit_format="textbox" data_type="string">
+    <default_value/>
+    <relation group_id="Iletimerkezi" display_order="1"/>
+  </option>
+  <option option_id="iletimerkezi_verify_group" edit_format="callback" data_type="string">
+    <default_value/>
+    <edit_format_params>Iletimerkezi\Verify\VerifiedGroups::renderOption</edit_format_params>
+    <relation group_id="Iletimerkezi" display_order="105"/>
+  </option>
+</options>

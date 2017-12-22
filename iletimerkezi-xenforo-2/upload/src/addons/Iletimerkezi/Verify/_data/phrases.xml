@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<phrases>
+  <phrase title="iletimerkezi_message_text" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Doğrulama kodunuz: %s]]></phrase>
+  <phrase title="iletimerkezi_verify_error" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Onay kodunuzu doğru girmelisiniz.]]></phrase>
+  <phrase title="option.iletimerkezi_password" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Şifreniz]]></phrase>
+  <phrase title="option.iletimerkezi_sender" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Başlık]]></phrase>
+  <phrase title="option.iletimerkezi_username" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[GSM Numaranız]]></phrase>
+  <phrase title="option.iletimerkezi_verify_group" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Grup]]></phrase>
+  <phrase title="option_explain.iletimerkezi_password" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[]]></phrase>
+  <phrase title="option_explain.iletimerkezi_sender" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[]]></phrase>
+  <phrase title="option_explain.iletimerkezi_username" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[]]></phrase>
+  <phrase title="option_explain.iletimerkezi_verify_group" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[]]></phrase>
+  <phrase title="option_group.Iletimerkezi" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[İletimerkezi SMS]]></phrase>
+  <phrase title="option_group_description.Iletimerkezi" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[]]></phrase>
+</phrases>
