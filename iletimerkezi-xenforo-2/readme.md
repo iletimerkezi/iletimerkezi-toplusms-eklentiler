@@ -14,11 +14,20 @@
 <span id="vcode_verify_desc" style="display:none;">Cep telefonunuza gelen onay kodunu aşağıya girin.</span>
 <input id="vcode" style="display:none;" type="text" class="input" name="vcode">
 <script>
+window.onload = function() {
+  if($('html').attr('data-app') == 'admin') {
+    $('#vcodeSend').hide();
+  }
+}
+
 function sendVCode() {
+
     $('#vcodeSend').hide();
     $('#vcode_verify_error_desc').hide();
+
     var gsm_number = $('.field_iletimerkezi_gsm').val();
     var xfToken    = $("input[name='_xfToken']").val();
+
     $.ajax({
         type: "POST",
         url: 'index.php?register/verify',
@@ -27,12 +36,15 @@ function sendVCode() {
             if(obj == 'success') {
                 $('#vcode_verify_desc').show();
                 $('#vcode').show();
+
             } else {
                 $('#vcode_verify_error_desc').show();
                 $('#vcodeSend').show();
+
             }
         }
     });
+
 }
 </script>
 ```

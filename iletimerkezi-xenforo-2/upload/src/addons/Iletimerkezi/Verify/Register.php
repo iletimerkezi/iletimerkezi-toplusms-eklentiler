@@ -22,12 +22,11 @@ class Register extends XFCP_Register {
         }
     }
 
-    public function actionRegister() {
-
+    public function actionRegister()
+    {
         $session = $this->app()->session();
-        $vcode   = $session->get('vcode');
-
-        if($_POST['vcode'] != $vcode) {
+        $is_verified = $this->isVerified();
+        if(!$is_verified) {
             return $this->error(\XF::phrase('iletimerkezi_verify_error'));
         }
 
@@ -35,16 +34,45 @@ class Register extends XFCP_Register {
         if(get_class($result) == 'XF\Mvc\Reply\Error') {
             return $result;
         } else {
-            $options  = \XF::options();
 
-            $UGC = $this->app()->service('XF:User\UserGroupChange');
-            $UGC->addUserGroupChange($session->get('userId'), rand(100000, 999999), [$options->iletimerkezi_verify_group]);
+            error_log('IS Verified :: '.var_export($is_verified,1));
+            if($is_verified) {
+                error_log('1 - IS Verified :: '.var_export($this->isVerified(),1));
+                $options = \XF::options();
+                $UGC     = $this->app()->service('XF:User\UserGroupChange');
+                $UGC->addUserGroupChange($session->get('userId'), rand(100000, 999999), [$options->iletimerkezi_verify_group]);
+                error_log('2 - IS Verified :: '.var_export($this->isVerified(),1));
+            }
 
             return $result;
         }
     }
 
-    private function sendSMS($to, $msg) {
+    private function isVerified()
+    {
+
+        $session = $this->app()->session();
+        $vcode   = $session->get('vcode');
+
+        if(is_null($vcode) || empty($vcode))
+            return false;
+
+        if(is_null($_POST['vcode']) || empty($_POST['vcode']))
+            return false;
+
+        if(strlen($_POST['vcode']) != 6 || strlen($vcode) != 6)
+            return false;
+
+        if($_POST['vcode'] == $vcode) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    private function sendSMS($to, $msg)
+    {
 
         $options  = \XF::options();
         $username = $options->iletimerkezi_username;
@@ -85,7 +113,7 @@ class Register extends XFCP_Register {
 
         $result = curl_exec($ch);
         error_log('XML ::: '.$xml);
-        error_log('RESULT ::: '.var_export($result, 1));
+        // error_log('RESULT ::: '.var_export($result, 1));
 
         preg_match_all('|\<code\>.*\<\/code\>|U', $result, $matches, PREG_PATTERN_ORDER);
         if(isset($matches[0]) && isset($matches[0][0])) {

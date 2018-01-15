@@ -1,7 +1,7 @@
 {
-    "src/addons/Iletimerkezi/Verify/Account.php": "4746cd039ec4ac737e8637d4a2e8280738370f7285430ccdfa1d7dfe7ad5e756",
+    "src/addons/Iletimerkezi/Verify/Account.php": "4f18e535aacdf816612ccfb3ea75bda408862dd55eaad905fe8f758ca74f5e31",
     "src/addons/Iletimerkezi/Verify/addon.json": "880556ba09902c8ab69cb4b91e983864f902b082854c3801e1c12872620d62a1",
-    "src/addons/Iletimerkezi/Verify/Register.php": "773b35861b537005d5cbb9dd87015be997ab9b645b3ce018ad778430c0ae77a0",
+    "src/addons/Iletimerkezi/Verify/Register.php": "f5769d84ffc2cf6257e479a00a38335deb4728f14cc981cee0f98791abe4b6fb",
     "src/addons/Iletimerkezi/Verify/Setup.php": "46aab48bc82261a8ad42570d2622e42b8ed5faf0267931dbf17bf993c008314f",
     "src/addons/Iletimerkezi/Verify/VerifiedGroups.php": "5ceffba9c77584d8acc910ceef35c151625547e5a572418bf3614bcdf67ee960",
     "src/addons/Iletimerkezi/Verify/_data/class_extensions.xml": "81469a2c06bf503c91a48f91b70dae8f2f839becdcf1368969673afa0d73de0d",
