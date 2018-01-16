@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <phrases>
+  <phrase title="iletimerkezi_already_member_text" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Bu telefon numarası şu an kullanımda.]]></phrase>
   <phrase title="iletimerkezi_message_text" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Doğrulama kodunuz: %s]]></phrase>
   <phrase title="iletimerkezi_verify_error" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Onay kodunuzu doğru girmelisiniz.]]></phrase>
   <phrase title="option.iletimerkezi_password" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Şifreniz]]></phrase>

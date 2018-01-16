@@ -28,23 +28,28 @@ function sendVCode() {
     var gsm_number = $('.field_iletimerkezi_gsm').val();
     var xfToken    = $("input[name='_xfToken']").val();
 
+    if($('html').attr('data-template') == 'account_details') {
+      var url = 'account/verify';
+    } else {
+      var url = 'register/verify';
+    }
+
     $.ajax({
         type: "POST",
-        url: 'index.php?register/verify',
+        url: 'index.php?'+url,
         data: 'gsm_number=' + gsm_number + '&_xfToken=' + xfToken,
         success: function(obj) {
-            if(obj == 'success') {
+            var status = obj.split(':');
+            if(status[0] == 'success') {
                 $('#vcode_verify_desc').show();
                 $('#vcode').show();
-
             } else {
+                $('#vcode_verify_error_desc').html(status[1]);
                 $('#vcode_verify_error_desc').show();
                 $('#vcodeSend').show();
-
             }
         }
     });
-
 }
 </script>
 ```
