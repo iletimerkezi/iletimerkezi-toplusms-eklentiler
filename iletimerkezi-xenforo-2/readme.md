@@ -29,14 +29,14 @@ function sendVCode() {
     var xfToken    = $("input[name='_xfToken']").val();
 
     if($('html').attr('data-template') == 'account_details') {
-      var url = 'account/verify';
+      var url = XF.config.url.fullBase + 'account/verify';
     } else {
-      var url = 'register/verify';
+      var url = XF.config.url.fullBase + 'register/verify';
     }
 
     $.ajax({
         type: "POST",
-        url: 'index.php?'+url,
+        url: url,
         data: 'gsm_number=' + gsm_number + '&_xfToken=' + xfToken,
         success: function(obj) {
             var status = obj.split(':');
