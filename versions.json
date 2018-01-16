@@ -30,6 +30,7 @@
 		"prestashop": {
 			"title": "Prestashop",
 			"versions": [
+				"ps1.7.x",
 				"ps1.4.x",
 				"ps1.x.x"
 			],
