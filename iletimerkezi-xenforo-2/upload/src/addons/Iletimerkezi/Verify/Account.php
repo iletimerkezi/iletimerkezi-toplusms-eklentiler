@@ -32,20 +32,23 @@ class Account extends XFCP_Account {
 
         if ($this->isPost())
         {
-            $session   = $this->app()->session();
-            $userField = $this->repository('XF:UserField');
-            $uFV       = $userField->getUserFieldValues($session->get('userId'));
+            if(isset($_POST['custom_fields']['iletimerkezi_gsm'])) {
 
-            if($uFV['iletimerkezi_gsm'] != $_POST['custom_fields']['iletimerkezi_gsm']) {
-                if(!$this->isVerified()) {
-                    return $this->error(\XF::phrase('iletimerkezi_verify_error'));
+                $session   = $this->app()->session();
+                $userField = $this->repository('XF:UserField');
+                $uFV       = $userField->getUserFieldValues($session->get('userId'));
+
+                if($uFV['iletimerkezi_gsm'] != $_POST['custom_fields']['iletimerkezi_gsm']) {
+                    if(!$this->isVerified()) {
+                        return $this->error(\XF::phrase('iletimerkezi_verify_error'));
+                    }
                 }
-            }
 
-            if($this->isVerified()) {
-                $options = \XF::options();
-                $UGC     = $this->app()->service('XF:User\UserGroupChange');
-                $UGC->addUserGroupChange($session->get('userId'), rand(100000, 999999), [$options->iletimerkezi_verify_group]);
+                if($this->isVerified()) {
+                    $options = \XF::options();
+                    $UGC     = $this->app()->service('XF:User\UserGroupChange');
+                    $UGC->addUserGroupChange($session->get('userId'), rand(100000, 999999), [$options->iletimerkezi_verify_group]);
+                }
             }
         }
 

@@ -30,10 +30,15 @@ class Register extends XFCP_Register {
 
     public function actionRegister()
     {
-        $session     = $this->app()->session();
-        $is_verified = $this->isVerified();
-        if(!$is_verified) {
-            return $this->error(\XF::phrase('iletimerkezi_verify_error'));
+        if(isset($_POST['custom_fields']['iletimerkezi_gsm'])) {
+            $session     = $this->app()->session();
+            $is_verified = $this->isVerified();
+            if(!$is_verified) {
+                return $this->error(\XF::phrase('iletimerkezi_verify_error'));
+            }
+        } else {
+            $result = parent::actionRegister();
+            return $result;
         }
 
         $result = parent::actionRegister();
