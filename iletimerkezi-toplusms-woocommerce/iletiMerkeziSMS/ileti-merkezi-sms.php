@@ -231,10 +231,14 @@ class iletimerkezi_Order_SMS {
         //send SMS admin
         if ($this->_isAdminSMSActive() && $new_status == 'on-hold') {
           $buyer_number   = get_post_meta( $order_id, '_billing_phone', true );
+
+          $kargo_no       = get_post_meta( $order_id, 'kargo_takip_no', true );
+          $kargofirma    = get_post_meta( $order_id, 'kargo_firmasi', true );
+
           $admin_numbers = explode(',',$admin_phone_number);
           foreach ($admin_numbers as $admin_number) {
             $admin_sms_data['number']   = $admin_number;
-            $admin_sms_data['sms_body'] = $this->pharse_sms_body( $admin_sms_body, $new_status, $order_id, $ywot, $buyer_number );
+            $admin_sms_data['sms_body'] = $this->pharse_sms_body( $admin_sms_body, $new_status, $order_id, $ywot, $buyer_number, $kargo_no, $kargofirma );
             $admin_response             = iletimerkeziSMSGateway::iletimerkeziSendSMS( $admin_sms_data );
             if( $admin_response ) {
                 $order->add_order_note( __( 'Admin numarasına SMS gönderilmiştir.', 'iletimerkezisms' ) );
@@ -252,7 +256,9 @@ class iletimerkezi_Order_SMS {
         }
 
         $buyer_number = get_post_meta( $order_id, '_billing_phone', true );
-        $buyer_sms_data['sms_body'] = $this->pharse_sms_body( $buyer_sms_body, $new_status, $order_id, $ywot );
+        $kargo_no       = get_post_meta( $order_id, 'kargo_takip_no', true );
+        $kargofirma    = get_post_meta( $order_id, 'kargo_firmasi', true );
+        $buyer_sms_data['sms_body'] = $this->pharse_sms_body( $buyer_sms_body, $new_status, $order_id, $ywot, $buyer_number, $kargo_no, $kargofirma );
 
         if (!empty($buyer_sms_data['sms_body'])) {
           $buyer_sms_data['number']   = $buyer_number;
@@ -281,12 +287,13 @@ class iletimerkezi_Order_SMS {
       return iletimerkezisms_get_option('force_sms', 'iletimerkezisms_general', 'on') == 'on' ? true : false;
     }
 
-    public function pharse_sms_body( $content, $order_status, $order_id, $ywot, $number )
+    public function pharse_sms_body( $content, $order_status, $order_id, $ywot, $number, $kargo_no, $kargofirma )
     {
       $order = $order_id;
       $ywot_carrier_name = $ywot['ywot_carrier_name'][0];
       $ywot_pick_up_date = $ywot['ywot_pick_up_date'][0];
       $ywot_tracking_code = $ywot['ywot_tracking_code'][0];
+      
       $order_total = $order_amount. ' '. get_post_meta( $order_id, '_order_currency', true );
 
       $filter_status = $this->filter_order_status($order_status);
@@ -297,6 +304,8 @@ class iletimerkezi_Order_SMS {
           '[ywot_pick_up_date]',
           '[ywot_tracking_code]',
           '[buyer_number]',
+          '[kargo_no]',
+          '[kargofirma]'
       );
       $replace = array(
           $order,
@@ -304,7 +313,9 @@ class iletimerkezi_Order_SMS {
           $ywot_carrier_name,
           $ywot_pick_up_date,
           $ywot_tracking_code,
-          $number
+          $number,
+          $kargo_no,
+          $kargofirma
       );
 
       $body = str_replace( $find, $replace, $content );
